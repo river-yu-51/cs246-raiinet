@@ -1,8 +1,22 @@
 export module Display;
 
-export class Display {
+import Observer;
+import Board;
+
+export class Display : public Observer {
+    Board *board;
     int currentPlayer;
     bool isAlternating;
+protected:
+    virtual void drawBoard() = 0;
 public:
-    virtual void notify() = 0;
+    Display(Board *board, int currentPlayer, bool isAlternating);
+
+    int getCurrentPlayer();
+    bool getIsAlternating();
+
+    void setCurrentPlayer(int);
+    void setIsAlternating(bool);
+
+    void notify() override;
 };

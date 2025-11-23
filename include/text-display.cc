@@ -3,6 +3,7 @@ export module TextDisplay;
 import Display;
 
 export class TextDisplay : public Display {
+    void drawBoard() override;
 public:
-    void notify() override;
+    TextDisplay(Board *board, int currentPlayer, bool isAlternating);
 };
