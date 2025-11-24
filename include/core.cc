@@ -66,20 +66,24 @@ export class Player {
     std::vector<Ability*> abilities;
     std::map<Ability*, int> usage;
     bool isEliminated;
+    bool isWon;
     int downloadedData;
     int downloadedViruses;
 public:
-    Player(int, std::vector<Link*>, std::vector<Ability*>, std::map<Ability*, int>, bool, int, int);
+    Player(int, std::vector<Link*>, std::vector<Ability*>, std::map<Ability*, int>, bool, bool, int, int);
 
     void useAbility(Ability*);
     void moveLink(Link*);
     void download(Link*);
 
     int getPlayerNum();
-    void generateLinks();
+    void generateLinks(int);
     Link *getLink(int);
     int getDataCount();
     int getVirusCount();
+    bool getIsEliminated();
+    bool getIsWon();
+    void checkWinLose();
 };
 
 export class Board : public Subject {
