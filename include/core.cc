@@ -35,15 +35,17 @@ public:
 
 export class Link {
     Player *player;
+    char type;
     int strength;
     Tile *tile;
     int distance; // number of "moves per move"
     bool immune;
     bool downloaded;
 public:
-    Link(Player*, int, Tile*, int, bool, bool);
+    Link(Player*, char, int, Tile*, int, bool, bool);
 
     Player *getPlayer();
+    char getType();
     int getStrength();
     Tile *getTile();
     bool isImmune();
@@ -55,21 +57,7 @@ public:
     void setImmune(bool);
     void setDownloaded(bool);
 
-    virtual void download() = 0;
-};
-
-export class Data : public Link {
-public:
-    Data(Player*, int, Tile*, int, bool, bool);
-
-    void download() override;
-};
-
-export class Virus : public Link {
-public:
-    Virus(Player*, int, Tile*, int, bool, bool);
-
-    void download() override;
+    void download();
 };
 
 export class Player {

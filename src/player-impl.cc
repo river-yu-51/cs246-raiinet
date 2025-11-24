@@ -24,9 +24,9 @@ void Player::moveLink(Link *link) {
 }
 
 void Player::download(Link *link) {
-    if (dynamic_cast<Data*>(link)) {
+    if (link->getType() == 'D' ) {
         downloadedData++;
-    } else if (dynamic_cast<Virus*>(link)) {
+    } else if (link->getType() == 'V') {
         downloadedViruses++;
     }
 }
