@@ -3,7 +3,6 @@ module Subject;
 import <algorithm>;
 
 import Observer;
-import Subject;
 
 void Subject::notifyObservers() {
     for (auto *observer : observers) { observer->notify(); }

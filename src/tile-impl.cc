@@ -1,7 +1,5 @@
 module Core;
 
-import Core;
-
 Tile::Tile(Link *link, int firewallPlayer, bool isPort, bool isWalled, char symbol)
     : link{link}, firewallPlayer{firewallPlayer}, isPort{isPort}, isWalled{isWalled}, symbol{symbol} {}
 

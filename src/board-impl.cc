@@ -3,7 +3,6 @@ module Core;
 import <vector>;
 
 import Subject;
-import Core;
 
 Board::Board(std::vector<std::vector<Tile*>> grid) : grid{std::move(grid)} {}
 

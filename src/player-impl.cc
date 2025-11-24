@@ -4,9 +4,6 @@ import <string>;
 import <vector>;
 import <map>;
 
-import Core;
-import Abilities;
-
 Player::Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities,
                std::map<Ability*, int> usage, bool isEliminated,
                int downloadedData, int downloadedViruses)

@@ -43,6 +43,7 @@ export class Link {
 public:
     Link(Player*, int, Tile*, int, bool, bool);
 
+    Player *getPlayer();
     int getStrength();
     Tile *getTile();
     bool isImmune();
