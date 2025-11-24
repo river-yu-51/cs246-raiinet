@@ -76,7 +76,7 @@ public:
     void download(Link*);
 
     int getPlayerNum();
-    void generateLinks();
+    void generateLinks(int);
     Link *getLink(int);
     int getDataCount();
     int getVirusCount();
