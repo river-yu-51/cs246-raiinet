@@ -29,7 +29,7 @@ int main() {
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            grid[i][j] = new Tile{nullptr, -1, false, false, '.'};
+            grid[i][j] = new Tile{i, j, '.', false, false, nullptr, -1};
         }
     }
 
@@ -39,4 +39,16 @@ int main() {
     TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now
     board->attach(textDisplay);
     game->startGame(0);
+
+    while (!game->getIsGameOver()) {
+        // Game loop logic here
+        game->gameOver(players[0]); // testing purposes lol
+    }
+
+
+    // Cleanup
+    for (auto player : players) { delete player; }
+    delete board;
+    delete textDisplay;
+    delete game;
 }
