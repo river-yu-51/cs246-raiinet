@@ -1,5 +1,5 @@
 export module Abilities;
-// contains: derived ability classes
+// contains: derived ability classes 
 
 import <vector>;
 import <string>;
