@@ -1,12 +1,12 @@
 export module Game;
+// contains: Game
 
 import <vector>;
 import <string>;
 
-import Board;
-import Player;
-import Link;
-import Ability;
+import Core;
+import Abilities;
+import Display;
 
 export class Game {
     Board *board;
@@ -27,6 +27,6 @@ public:
     int getMoveNumber();
     bool getHasStarted();
     bool getIsGameOver();
-    
+
     void gameOver();
 };

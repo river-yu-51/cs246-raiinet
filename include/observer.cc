@@ -1,4 +1,5 @@
 export module Observer;
+// contains: Observer
 
 export class Observer {
 public:
