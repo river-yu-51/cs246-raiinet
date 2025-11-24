@@ -1,9 +1,11 @@
 module Core;
 
-Link::Link(Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded)
-    : player{player}, strength{strength}, tile{tile}, distance{distance}, immune{immune}, downloaded{downloaded} {}
+Link::Link(Player *player, char type, int strength, Tile *tile, int distance, bool immune, bool downloaded)
+    : player{player}, type{type}, strength{strength}, tile{tile}, distance{distance}, immune{immune}, downloaded{downloaded} {}
 
 Player *Link::getPlayer() { return player; }
+
+char Link::getType() { return type; }
 
 int Link::getStrength() { return strength; }
 
