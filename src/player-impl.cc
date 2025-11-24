@@ -32,6 +32,10 @@ void Player::download(Link *link) {
     }
 }
 
+std::vector<Link*> &Player::getLinks() { return links; }
+
+std::vector<Ability*> &Player::getAbilities() { return abilities; }
+
 int Player::getPlayerNum() { return playerNum; }
 
 void Player::generateLinks(int playerNum) {
