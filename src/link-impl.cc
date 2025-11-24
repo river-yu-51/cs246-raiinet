@@ -1,6 +1,6 @@
 module Core;
 
-import Core;
+//import Core;
 
 Link::Link(Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded)
     : player{player}, strength{strength}, tile{tile}, distance{distance}, immune{immune}, downloaded{downloaded} {}

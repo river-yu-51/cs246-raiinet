@@ -5,7 +5,7 @@ import <string>;
 
 import Core;
 import Abilities;
-import Game;
+//import Game;
 
 Game::Game(Board *board, std::vector<Player*> players, int moveNumber,
            bool hasStarted, bool isGameOver)

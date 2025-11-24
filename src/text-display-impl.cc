@@ -3,7 +3,7 @@ module Display;
 import <iostream>;
 
 import Core;
-import Display;
+//import Display;
 
 TextDisplay::TextDisplay(Board *board, int currentPlayer, bool isAlternating)
     : Display{board, currentPlayer, isAlternating} {}

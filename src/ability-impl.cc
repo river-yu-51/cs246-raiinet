@@ -1,6 +1,6 @@
 module Abilities;
 
 import Core;
-import Abilities;
+//import Abilities;
 
 Player *Ability::getPlayer() { return player; }

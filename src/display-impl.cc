@@ -1,6 +1,6 @@
 module Display;
 
-import Display;
+//import Display;
 import Core;
 
 Display::Display(Board *board, int currentPlayer, bool isAlternating)

@@ -4,7 +4,7 @@ import <string>;
 import <vector>;
 import <map>;
 
-import Core;
+//import Core;
 import Abilities;
 
 Player::Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities,
