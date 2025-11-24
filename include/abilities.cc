@@ -1,42 +1,10 @@
 export module Abilities;
-// contains: AbilityType, AbilityParam, Ability, AbilityFactory, and all derived Ability classes
+// contains: derived ability classes
 
 import <vector>;
 import <string>;
 
 import Core;
-
-export enum class AbilityType {
-    LinkBoost,
-    Firewall,
-    Download,
-    Polarize,
-    Scan,
-    LevelUp,
-    SwapPos,
-    Immunity,
-    Wall
-};
-
-export struct AbilityParam {
-    Player *player;
-    Link *primaryLink;
-    Link *secondaryLink;
-    Tile *targetTile;
-};
-
-export class Ability {
-    Player *player;
-public:
-    Player *getPlayer();
-    virtual void activate(AbilityParam) = 0;
-};
-
-export class AbilityFactory {
-public:
-    Ability *createAbility(Player*, AbilityType);
-};
-
 
 export class Download : public Ability {
 public:

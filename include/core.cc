@@ -7,6 +7,10 @@ import <map>;
 
 import Subject;
 
+export class Link;
+export class Player;
+export class Ability;
+
 export class Tile {
     Link *link;
     int firewallPlayer;
@@ -99,3 +103,35 @@ public:
 
     void setTile(int, int, Tile*);
 };
+
+export enum class AbilityType {
+    LinkBoost,
+    Firewall,
+    Download,
+    Polarize,
+    Scan,
+    LevelUp,
+    SwapPos,
+    Immunity,
+    Wall
+};
+
+export struct AbilityParam {
+    Player *player;
+    Link *primaryLink;
+    Link *secondaryLink;
+    Tile *targetTile;
+};
+
+export class Ability {
+    Player *player;
+public:
+    Player *getPlayer();
+    virtual void activate(AbilityParam) = 0;
+};
+
+export class AbilityFactory {
+public:
+    Ability *createAbility(Player*, AbilityType);
+};
+
