@@ -50,12 +50,6 @@ public:
     Tile *getTile();
     bool isImmune();
     bool isDownloaded();
-    
-    void setValue(int);
-    void setTile(Tile*);
-    void setDistance(int);
-    void setImmune(bool);
-    void setDownloaded(bool);
 
     void setValue(int value);
     void setTile(Tile *tile);
