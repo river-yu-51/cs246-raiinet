@@ -57,7 +57,6 @@ public:
     void setImmune(bool);
     void setDownloaded(bool);
 
-<<<<<<< HEAD
     void setValue(int value);
     void setTile(Tile *tile);
     void setDistance(int distance);
@@ -79,9 +78,6 @@ public:
     Virus(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
 
     void download() override;
-=======
-    void download();
->>>>>>> parent of f52e0e4 (added iswon/iseliminated function)
 };
 
 export class Player {
@@ -94,19 +90,17 @@ export class Player {
     int downloadedData;
     int downloadedViruses;
 public:
-<<<<<<< HEAD
     Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities, std::map<Ability*, int> usage, bool isEliminated, int downloadedData, int downloadedViruses);
-=======
-    Player(int, std::vector<Link*>, std::vector<Ability*>, std::map<Ability*, int>, bool, bool, int, int);
->>>>>>> parent of f52e0e4 (added iswon/iseliminated function)
 
     void useAbility(Ability*);
     void moveLink(Link*);
     void download(Link*);
 
     int getPlayerNum();
-    void generateLinks(int);
-    Link *getLink(int);
+    void generateLinks(std::istream &is, std::ostream &os);
+    std::vector<Link*> &getLinks();
+    std::vector<Ability*> &getAbilities();
+    Link *getLink(int index);
     int getDataCount();
     int getVirusCount();
     bool getIsEliminated();

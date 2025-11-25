@@ -3,12 +3,23 @@ module Core;
 import <string>;
 import <vector>;
 import <map>;
+import <string>;
+import <iostream>;
+import <algorithm>;
 
-Player::Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities,
-               std::map<Ability*, int> usage, bool isEliminated, bool isWon,
-               int downloadedData, int downloadedViruses)
-    : playerNum{playerNum}, links{links}, abilities{abilities}, usage{usage},
-      isEliminated{isEliminated}, isWon{isWon}, downloadedData{downloadedData},
+Player::Player(int playerNum,
+               std::vector<Link*> links,
+               std::vector<Ability*> abilities,
+               std::map<Ability*, int> usage,
+               bool isEliminated,
+               int downloadedData,
+               int downloadedViruses)
+    : playerNum{playerNum},
+      links{links},
+      abilities{abilities},
+      usage{usage},
+      isEliminated{isEliminated},
+      downloadedData{downloadedData},
       downloadedViruses{downloadedViruses} {}
 
 void Player::useAbility(Ability *ability) {
@@ -63,34 +74,55 @@ int Player::getDataCount() { return downloadedData; }
 int Player::getVirusCount() { return downloadedViruses; }
 bool Player::getIsEliminated() { return isEliminated; }
 
-<<<<<<< HEAD
 bool Player::getIsWon() {
     return downloadedData >= 4;
 }
 
-void Player::generateLinks(int boardSize) {
+void Player::generateLinks(std::istream &is, std::ostream &os) {
     const int NUM_LINKS = 8;
     links.clear();
 
-    // Symbol sets — player 1 uses lowercase, player 2 uses uppercase
-    const std::vector<char> p0Symbols{'a','b','c','d','e','f','g','h'};
-    const std::vector<char> p1Symbols{'A','B','C','D','E','F','G','H'};
+    const std::vector<std::vector<char>> symbolSets = {
+        {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'},
+        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'},
+        {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
+        {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+    };
+    const auto &symbols = symbolSets[playerNum % symbolSets.size()];
 
-    const std::vector<char> &symbols = ((playerNum == 0) ? p0Symbols : p1Symbols);
+    std::vector<std::string> remainingLinks = {
+        "D1", "D2", "D3", "D4",
+        "V1", "V2", "V3", "V4"
+    };
 
-    for (int i = 0; i < NUM_LINKS; i++) {
-        char sym = symbols[i];
-        int strength = (i % 4) + 1;
-
-        if (i < 4) {
-            links.emplace_back(
-                new Data(sym, this, strength, nullptr, 1, false, false)
-            );
-        } else {
-            links.emplace_back(
-                new Virus(sym, this, strength, nullptr, 1, false, false)
-            );
+    for (int i = 0; i < NUM_LINKS; ++i) {
+        os << "Available links: ";
+        for (const auto &linkStr : remainingLinks) {
+            os << linkStr << " ";
         }
+        os << "\nSelect link " << symbols[i] << ": ";
+        std::string choice;
+        is >> choice;
+
+        auto it = std::find(remainingLinks.begin(), remainingLinks.end(), choice);
+        if (it == remainingLinks.end()) {
+            os << "Invalid choice. Try again.\n";
+            --i; // retry this iteration
+            continue;
+        }
+
+        char symbol = symbols[i];
+        Link *newLink = nullptr;
+        if (choice[0] == 'D') {
+            int strength = std::stoi(choice.substr(1));
+            newLink = new Data{symbol, this, strength, nullptr, 0, false, false};
+        } else if (choice[0] == 'V') {
+            int strength = std::stoi(choice.substr(1));
+            newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
+        }
+
+        links.push_back(newLink);
+        remainingLinks.erase(it);
     }
 }
 
@@ -99,18 +131,3 @@ void Player::checkWinLose() {
         isEliminated = true;
     }
 }
-=======
-bool Player::getIsEliminated() { return isEliminated; }
-
-bool Player::getIsWon() { return isWon; }
-
-void Player::checkWinLose() { 
-    if (getVirusCount() == 4) {
-        isEliminated = true;
-    }
-    else if (getDataCount() == 4) {
-        isWon = true;
-    }
-}
-
->>>>>>> parent of f52e0e4 (added iswon/iseliminated function)
