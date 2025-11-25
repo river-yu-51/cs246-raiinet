@@ -11,6 +11,6 @@ public:
     virtual ~Subject() = default;
 
     void notifyObservers();
-    void attach(Observer *observer);
-    void detach(Observer *observer);
+    void attach(Observer*);
+    void detach(Observer*);
 };
