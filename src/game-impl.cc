@@ -62,11 +62,7 @@ bool Game::executeCommand(std::string command, Player *player) {
 }
 
 void Game::moveLink(Link *link, int x, int y) {
-    link->getTile()->setLink(nullptr);
-    Tile *destTile = board->getTile(x, y);
-    destTile->setLink(link);
-    link->setTile(destTile);
-    board->notifyObservers();
+    board->MoveLink(link, x, y);
 }
 
 void Game::useAbility(Ability *ability, const AbilityParam &param) {
@@ -339,6 +335,8 @@ int Game::getMoveNumber() { return moveNumber; }
 bool Game::getHasStarted() { return hasStarted; }
 
 bool Game::getIsGameOver() { return isGameOver; }
+
+void Game::setMoveNumber(int n) { moveNumber = n; }
 
 void Game::gameOver(Player *winner) {
     isGameOver = true;

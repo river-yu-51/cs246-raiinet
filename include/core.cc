@@ -20,13 +20,13 @@ export class Tile {
     Link *link;
     int firewallPlayer;
 public:
-    Tile(int, int, char, bool, bool, Link*, int);
+    Tile(int x, int y, char symbol, bool isPort, bool isWalled, Link *link, int firewallPlayer);
 
-    void setSymbol(char);
-    void setFirewallPlayer(int);
-    void setIsWalled(bool);
-    void setIsPort(bool);
-    void setLink(Link*);
+    void setSymbol(char symbol);
+    void setFirewallPlayer(int firewallPlayer);
+    void setIsWalled(bool isWalled);
+    void setIsPort(bool isPort);
+    void setLink(Link* link);
 
     int getX();
     int getY();
@@ -46,7 +46,7 @@ export class Link {
     bool immune;
     bool downloaded;
 public:
-    Link(char, Player*, int, Tile*, int, bool, bool);
+    Link(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
 
     Player *getPlayer();
     int getStrength();
@@ -55,25 +55,25 @@ public:
     bool isDownloaded();
     char getSymbol();
 
-    void setValue(int);
-    void setTile(Tile*);
-    void setDistance(int);
-    void setImmune(bool);
-    void setDownloaded(bool);
+    void setValue(int value);
+    void setTile(Tile *tile);
+    void setDistance(int distance);
+    void setImmune(bool immune);
+    void setDownloaded(bool downloaded);
 
     virtual void download() = 0;
 };
 
 export class Data : public Link {
 public:
-    Data(char, Player*, int, Tile*, int, bool, bool);
+    Data(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
 
     void download() override;
 };
 
 export class Virus : public Link {
 public:
-    Virus(char, Player*, int, Tile*, int, bool, bool);
+    Virus(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
 
     void download() override;
 };
@@ -87,30 +87,36 @@ export class Player {
     int downloadedData;
     int downloadedViruses;
 public:
-    Player(int, std::vector<Link*>, std::vector<Ability*>, std::map<Ability*, int>, bool, int, int);
+    Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities, std::map<Ability*, int> usage, bool isEliminated, int downloadedData, int downloadedViruses);
 
-    void useAbility(Ability*);
-    void moveLink(Link*);
-    void download(Link*);
+    // void useAbility(Ability*);
+    // void moveLink(Link*);
+    void download(Link* link);
 
     int getPlayerNum();
-    void generateLinks();
+    void generateLinks(int boardSize);
     std::vector<Link*> &getLinks();
     std::vector<Ability*> &getAbilities();
-    Link *getLink(int);
+    Link *getLink(int index);
     int getDataCount();
     int getVirusCount();
+
+    bool getIsEliminated();
+    bool getIsWon();
+    void checkWinLose();
 };
 
 export class Board : public Subject {
     std::vector<std::vector<Tile*>> grid;
 public:
-    Board(std::vector<std::vector<Tile*>>);
+    Board(std::vector<std::vector<Tile*>> grid);
 
-    Tile *getTile(int, int);
+    Tile *getTile(int x, int y);
     std::vector<std::vector<Tile*>> &getGrid();
 
-    void setTile(int, int, Tile*);
+    void MoveLink(Link *link, int x, int y);
+
+    void setTile(int x, int y, Tile* tile);
 };
 
 export enum class AbilityType {
@@ -125,7 +131,7 @@ export enum class AbilityType {
     Wall
 };
 
-export std::ostream &operator<<(std::ostream&, AbilityType);
+export std::ostream &operator<<(std::ostream &os, AbilityType type);
 
 export struct AbilityParam {
     Player *player;
@@ -138,10 +144,10 @@ export class Ability {
     Player *player;
     AbilityType type;
 public:
-    Ability(Player*, AbilityType);
+    Ability(Player *player, AbilityType type);
 
     Player *getPlayer();
     AbilityType getType();
-    virtual void activate(AbilityParam) = 0;
+    virtual void activate(AbilityParam param) = 0;
 };
 
