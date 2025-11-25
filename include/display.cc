@@ -19,8 +19,8 @@ public:
     int getCurrentPlayer();
     bool getIsAlternating();
 
-    void setCurrentPlayer(int);
-    void setIsAlternating(bool);
+    void setCurrentPlayer(int currentPlayer);
+    void setIsAlternating(bool isAlternating);
 
     void notify() override;
 };

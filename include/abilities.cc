@@ -6,47 +6,61 @@ import <string>;
 
 import Core;
 
+export class AbilityFactory {
+public:
+    Ability *createAbility(Player *player, AbilityType type);
+};
+
 export class Download : public Ability {
 public:
-    void activate(AbilityParam) override;
+    Download(Player* player) : Ability{player, AbilityType::Download} {}
+    void activate(AbilityParam param) override;
 };
 
 export class Firewall : public Ability {
 public:
-    void activate(AbilityParam) override;
+    Firewall(Player* player) : Ability{player, AbilityType::Firewall} {}
+    void activate(AbilityParam param) override;
 };
 
 export class Immunity : public Ability {
 public:
-    void activate(AbilityParam) override;
+    Immunity(Player* player) : Ability{player, AbilityType::Immunity} {}
+    void activate(AbilityParam param) override;
 };
 
 export class LevelUp : public Ability {
 public:
-    void activate(AbilityParam) override;
+    LevelUp(Player* player) : Ability{player, AbilityType::LevelUp} {}
+    void activate(AbilityParam param) override;
 };
 
 export class LinkBoost : public Ability {
 public:
-    void activate(AbilityParam) override;
+    LinkBoost(Player* player) : Ability{player, AbilityType::LinkBoost} {}
+    void activate(AbilityParam param) override;
 };
 
 export class Polarize : public Ability {
 public:
-    void activate(AbilityParam) override;
+    Polarize(Player* player) : Ability{player, AbilityType::Polarize} {}
+    void activate(AbilityParam param) override;
 };
 
 export class Scan : public Ability {
 public:
-    void activate(AbilityParam) override;
+    Scan(Player* player) : Ability{player, AbilityType::Scan} {}
+    void activate(AbilityParam param) override;
 };
 
 export class SwapPos : public Ability {
 public:
-    void activate(AbilityParam) override;
+    SwapPos(Player* player) : Ability{player, AbilityType::SwapPos} {}
+    void activate(AbilityParam param) override;
 };
 
 export class Wall : public Ability {
 public:
-    void activate(AbilityParam) override;
+    Wall(Player* player) : Ability{player, AbilityType::Wall} {}
+    void activate(AbilityParam param) override;
 };
