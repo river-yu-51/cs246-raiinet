@@ -38,7 +38,8 @@ int main() {
     Game *game = new Game{board, players, 0, false, false};
 
     for (auto player : players) {
-        player->generateLinks(rows);
+        cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
+        player->generateLinks(cin, cout);
     }
 
     TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now

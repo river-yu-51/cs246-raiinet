@@ -40,14 +40,14 @@ bool Game::executeCommand(std::string command, Player *player) {
         return executeMoveCommand(A, dir, player);
     } else if (action == "abilities") {
         executeAbilitiesCommand(player);
-        return true;
+        return false;
     } else if (action == "ability") {
         int abilityIndex;
         iss >> abilityIndex;
         return executeAbilityUseCommand(abilityIndex, player, iss);
     } else if (action == "board") {
         executeBoardCommand(player);
-        return true;
+        return false;
     } else if (action == "sequence") {
         std::string filename;
         iss >> filename;
