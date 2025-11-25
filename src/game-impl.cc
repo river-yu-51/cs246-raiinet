@@ -1,14 +1,10 @@
 module Game;
 
-import <sstream>;
-import <fstream>;
-import <iostream>;
 import <vector>;
 import <string>;
 
 import Core;
 import Abilities;
-import Display;
 
 Game::Game(Board *board, std::vector<Player*> players, int moveNumber,
            bool hasStarted, bool isGameOver)
@@ -304,26 +300,12 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
     return false;
 }
 
-void Game::executeBoardCommand(Player *player) {
-    // draw board for player
+void Game::moveLink(Link *link) {
+    // logic to move link
 }
 
-void Game::executeQuitCommand() {
-    isGameOver = true;
-    std::cout << "Game has been quit." << std::endl;
-}
-
-bool Game::executeSequenceCommand(std::string filename, Player *player) {
-    std::ifstream file{filename};
-    if (!file) {
-        std::cout << "Could not open file: " << filename << std::endl;
-        return false;
-    }
-    std::string line;
-    while (std::getline(file, line)) {
-        executeCommand(line, player);
-    }
-    return true;
+void Game::useAbility(Ability *ability) {
+    // logic to use ability
 }
 
 Board *Game::getBoard() { return board; }
@@ -336,9 +318,7 @@ bool Game::getHasStarted() { return hasStarted; }
 
 bool Game::getIsGameOver() { return isGameOver; }
 
-void Game::setMoveNumber(int n) { moveNumber = n; }
-
-void Game::gameOver(Player *winner) {
+void Game::gameOver() {
     isGameOver = true;
-    std::cout << "Game Over! Player " << winner->getPlayerNum() + 1 << " won" << std::endl;
+    // other stuff idk
 }
