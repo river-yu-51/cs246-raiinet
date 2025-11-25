@@ -97,7 +97,7 @@ public:
     void download(Link*);
 
     int getPlayerNum();
-    void generateLinks(std::istream &is, std::ostream &os);
+    void generateLinks(int boardSize);
     std::vector<Link*> &getLinks();
     std::vector<Ability*> &getAbilities();
     Link *getLink(int index);
