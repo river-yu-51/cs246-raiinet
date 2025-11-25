@@ -1,4 +1,6 @@
-module Core;
+module Abilities;
+
+import Core;
 
 Ability *AbilityFactory::createAbility(Player *player, AbilityType type) {
     switch (type) {
@@ -22,4 +24,4 @@ Ability *AbilityFactory::createAbility(Player *player, AbilityType type) {
             return new Wall{player};
     }
     return nullptr;
-}
+};
