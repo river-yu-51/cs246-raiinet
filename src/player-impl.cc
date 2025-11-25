@@ -4,19 +4,11 @@ import <string>;
 import <vector>;
 import <map>;
 
-Player::Player(int playerNum,
-               std::vector<Link*> links,
-               std::vector<Ability*> abilities,
-               std::map<Ability*, int> usage,
-               bool isEliminated,
-               int downloadedData,
-               int downloadedViruses)
-    : playerNum{playerNum},
-      links{links},
-      abilities{abilities},
-      usage{usage},
-      isEliminated{isEliminated},
-      downloadedData{downloadedData},
+Player::Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities,
+               std::map<Ability*, int> usage, bool isEliminated, bool isWon,
+               int downloadedData, int downloadedViruses)
+    : playerNum{playerNum}, links{links}, abilities{abilities}, usage{usage},
+      isEliminated{isEliminated}, isWon{isWon}, downloadedData{downloadedData},
       downloadedViruses{downloadedViruses} {}
 
 void Player::useAbility(Ability *ability) {
@@ -71,6 +63,7 @@ int Player::getDataCount() { return downloadedData; }
 int Player::getVirusCount() { return downloadedViruses; }
 bool Player::getIsEliminated() { return isEliminated; }
 
+<<<<<<< HEAD
 bool Player::getIsWon() {
     return downloadedData >= 4;
 }
@@ -106,3 +99,18 @@ void Player::checkWinLose() {
         isEliminated = true;
     }
 }
+=======
+bool Player::getIsEliminated() { return isEliminated; }
+
+bool Player::getIsWon() { return isWon; }
+
+void Player::checkWinLose() { 
+    if (getVirusCount() == 4) {
+        isEliminated = true;
+    }
+    else if (getDataCount() == 4) {
+        isWon = true;
+    }
+}
+
+>>>>>>> parent of f52e0e4 (added iswon/iseliminated function)
