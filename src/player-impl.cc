@@ -77,7 +77,7 @@ void Player::generateLinks(std::istream &is, std::ostream &os) {
         auto it = std::find(remainingLinks.begin(), remainingLinks.end(), choice);
         if (it == remainingLinks.end()) {
             os << "Invalid choice. Try again.\n";
-            --i; // retry this iteration
+            --i; // retry
             continue;
         }
 
