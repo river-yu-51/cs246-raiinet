@@ -20,7 +20,7 @@ int main() {
     vector<Player*> players;
     for (int i = 0; i < playerCount; ++i) {
         // For simplicity, players have no links or abilities initially
-        players.push_back(new Player{i, {}, {}, {}, false, 0, 0});
+        players.push_back(new Player{i, {}, {}, {}, false, false, 0, 0});
     }
     int rows = (playerCount == 2) ? 8 : 10;
     int cols = rows;

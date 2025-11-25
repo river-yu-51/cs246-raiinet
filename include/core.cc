@@ -57,7 +57,28 @@ public:
     void setImmune(bool);
     void setDownloaded(bool);
 
-    void download();
+    void setValue(int value);
+    void setTile(Tile *tile);
+    void setDistance(int distance);
+    void setImmune(bool immune);
+    void setDownloaded(bool downloaded);
+    virtual string getType = 0;
+    virtual void download() = 0;
+};
+
+export class Data : public Link {
+public:
+    Data(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
+
+    string getType() override;
+    void download() override;
+};
+
+export class Virus : public Link {
+public:
+    Virus(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
+    string getType() override;
+    void download() override;
 };
 
 export class Player {
@@ -70,7 +91,7 @@ export class Player {
     int downloadedData;
     int downloadedViruses;
 public:
-    Player(int, std::vector<Link*>, std::vector<Ability*>, std::map<Ability*, int>, bool, bool, int, int);
+    Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities, std::map<Ability*, int> usage, bool isEliminated, bool isWon, int downloadedData, int downloadedViruses);
 
     void useAbility(Ability*);
     void moveLink(Link*);
