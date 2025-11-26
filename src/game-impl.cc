@@ -14,10 +14,79 @@ Game::Game(Board *board, std::vector<Player*> players, int moveNumber,
     : board{board}, players{players}, moveNumber{moveNumber},
       hasStarted{hasStarted}, isGameOver{isGameOver} {}
 
+void Game::initializeGame(int playerCount) {
+    // for now - only 2 player mode
+    if (playerCount != 2) {
+        std::cerr << "initializeGame: only 2-player mode implemented.\n";
+        return;
+    }
+
+    auto &grid = board->getGrid();
+    int rows = grid.size();
+    if (rows == 0) return;
+    int cols = grid[0].size();
+
+    int topRow = 0;
+    int bottomRow = rows - 1;
+
+    int portCol1 = cols / 2 - 1;
+    int portCol2 = cols / 2;
+
+    // set ports
+    std::vector<int> portRows = {topRow, bottomRow};
+    std::vector<int> portCols = {portCol1, portCol2};
+
+    for (int r : portRows) {
+        for (int c : portCols) {
+            Tile *tile = board->getTile(r, c);
+            tile->setIsPort(true);
+            tile->setSymbol('#');
+        }
+    }
+
+    // place starting symbols
+    const std::vector<std::vector<char>> symbolSets = {
+        {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'},
+        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'},
+        {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
+        {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+    };
+
+    const auto &p1Symbols = symbolSets[players[0]->getPlayerNum() % symbolSets.size()];
+    const auto &p2Symbols = symbolSets[players[1]->getPlayerNum() % symbolSets.size()];
+
+    {
+        int mainRow = topRow;
+        int altRow  = topRow + 1;
+        for (int i = 0; i < (int)p1Symbols.size() && i < cols; ++i) {
+            int c = i;
+            int r = board->getTile(mainRow, c)->getIsPort() ? altRow : mainRow;
+            Tile *t = board->getTile(r, c);
+            t->setSymbol(p1Symbols[i]);
+            // DO NOT setLink yet – will be attached when links are created
+        }
+    }
+
+    {
+        int mainRow = bottomRow;
+        int altRow  = bottomRow - 1;
+        for (int i = 0; i < (int)p2Symbols.size() && i < cols; ++i) {
+            int c = i;
+            int r = board->getTile(mainRow, c)->getIsPort() ? altRow : mainRow;
+            Tile *t = board->getTile(r, c);
+            t->setSymbol(p2Symbols[i]);
+            // DO NOT setLink yet
+        }
+    }
+
+    board->notifyObservers();
+}
+
 void Game::startGame(int startingPlayer) {
     hasStarted = true;
     moveNumber = 0;
-    // other stuff idk
+    // All board geometry should already be set up by initializeGame,
+    // and link->tile attachments should be done when players choose placements
 }
 
 bool Game::executeCommand(std::string command, Player *player) {
@@ -70,17 +139,19 @@ void Game::useAbility(Ability *ability, const AbilityParam &param) {
 
 bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
     for (Link *link : player->getLinks()) {
-        if (link->getSymbol() == A) {
-            int x = link->getTile()->getX();
-            int y = link->getTile()->getY();
+        if (link->getSymbol() == A && link->getTile()) {
+            int x = link->getTile()->getX(); // row
+            int y = link->getTile()->getY(); // col
+
+            // up/down should change row (x), left/right change col (y)
             if (dir == "up") {
-                y -= 1;
-            } else if (dir == "down") {
-                y += 1;
-            } else if (dir == "left") {
                 x -= 1;
-            } else if (dir == "right") {
+            } else if (dir == "down") {
                 x += 1;
+            } else if (dir == "left") {
+                y -= 1;
+            } else if (dir == "right") {
+                y += 1;
             } else {
                 std::cout << "Invalid direction." << std::endl;
                 return false;
@@ -338,13 +409,9 @@ void Game::executeQuitCommand() {
 }
 
 Board *Game::getBoard() { return board; }
-
 Player *Game::getPlayer(int playerNum) { return players[playerNum]; }
-
 int Game::getMoveNumber() { return moveNumber; }
-
 bool Game::getHasStarted() { return hasStarted; }
-
 bool Game::getIsGameOver() { return isGameOver; }
 
 void Game::gameOver() {

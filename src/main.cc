@@ -13,10 +13,15 @@ import Subject;
 
 using namespace std;
 
+void clearConsole() {
+    // ANSI escape code to clear screen
+    cout << "\033[2J\033[1;1H";
+}
+
 int main() {
     int playerCount = 0;
-    while (playerCount != 2 && playerCount != 4) {
-        cout << "Enter number of players (2 or 4): ";
+    while (playerCount != 2  /*&& playerCount != 4 */) {
+        cout << "Enter number of players [ONLY 2]: ";
         cin >> playerCount;
     }
     vector<Player*> players;
@@ -24,7 +29,8 @@ int main() {
         // For simplicity, players have no links or abilities initially
         players.push_back(new Player{i, {}, {}, {}, false, false, 0, 0});
     }
-    int rows = (playerCount == 2) ? 8 : 10;
+
+    int rows = 8; // 2 player default
     int cols = rows;
 
     vector<vector<Tile*>> grid(rows, vector<Tile*>(cols, nullptr));
@@ -38,12 +44,20 @@ int main() {
     Board *board = new Board{grid};
     Game *game = new Game{board, players, 0, false, false};
 
+    TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now
+    board->attach(textDisplay);
+
+    game->initializeGame(playerCount);
+    clearConsole();
+    textDisplay->drawBoard();
+
     for (auto player : players) {
         cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
         player->generateLinks(cin, cout);
+        cout << endl;
+        clearConsole();
+        board->notifyObservers();
     }
 
-    TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now
-    board->attach(textDisplay);
     game->startGame(0);
 }

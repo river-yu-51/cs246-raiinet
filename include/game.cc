@@ -29,6 +29,8 @@ public:
     bool getHasStarted();
     bool getIsGameOver();
 
+    void initializeGame(int playerCount);
+
     bool executeMoveCommand(char A, std::string dir, Player *player);
     void executeAbilitiesCommand(Player *player);
     bool executeAbilityUseCommand(int abilityIndex, Player *player, std::istream &in);
