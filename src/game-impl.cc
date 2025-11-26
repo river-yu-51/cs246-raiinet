@@ -90,8 +90,7 @@ void Game::startGame(int startingPlayer) {
 }
 
 bool Game::executeCommand(std::string command, Player *player) {
-    if (!hasStarted || isGameOver) return false;
-
+    //if (!hasStarted || isGameOver) return false;
     std::istringstream iss{command};
     std::string action;
     iss >> action;
@@ -100,7 +99,6 @@ bool Game::executeCommand(std::string command, Player *player) {
         std::cout << "Please enter a command." << std::endl;
         return false;
     }
-
     if (action == "move") {
         char A;
         std::string dir;
@@ -117,13 +115,41 @@ bool Game::executeCommand(std::string command, Player *player) {
         executeBoardCommand(player);
         return false;
     } else if (action == "sequence") {
+        std::cout << "sequence";
         std::string filename;
         iss >> filename;
         return executeSequenceCommand(filename, player);
     } else if (action == "quit") {
         executeQuitCommand();
         return true;
-    } else {
+    } else if (action == "link1") {
+        std::string order;
+        iss >> order;
+        std::cout << order;
+        if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
+            std::cout<< "Invalid command." << std::endl;
+            return false;
+        }
+    } else if (action == "link2") {
+        std::string order;
+        std::string order;
+        iss >> order;
+        std::cout << order;
+        if (!getPlayer(2)->generateLinks(order, std::cout, board)) {
+            std::cout<< "Invalid command." << std::endl;
+            return false;
+        }
+    } else if (action == "ability1") {
+        std::string order;
+        iss >> order;
+        // ability 1 ordering
+    } else if (action == "ability2") {
+        std::string order;
+        iss >> order;
+        // ability 2 ordering
+    }
+
+    else {
         std::cout << "Invalid command." << std::endl;
         return false;
     }

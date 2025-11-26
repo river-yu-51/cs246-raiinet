@@ -46,17 +46,24 @@ int main() {
 
     TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now
     board->attach(textDisplay);
+    textDisplay->drawBoard();
+
 
     game->initializeGame(playerCount);
+    while (!game->getIsGameOver()) {
+    std::string command;
+    std::getline(cin, command);
+    game->executeCommand(command, game->getPlayer(0));
+    }
     clearConsole();
-    // textDisplay->drawBoard();
+
 
     for (auto player : players) {
         displayInfo(cout, game->getPlayer(0), player->getPlayerNum() == 0);
         board->notifyObservers();
         displayInfo(cout, game->getPlayer(1), player->getPlayerNum() == 1);
-        cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
-        player->generateLinks(cin, cout, board);
+        // cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
+        // player->generateLinks(cin, cout, board);
         cout << endl;
         clearConsole();
     }

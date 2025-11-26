@@ -62,7 +62,11 @@ int Player::getDataCount() { return downloadedData; }
 
 int Player::getVirusCount() { return downloadedViruses; }
 
-void Player::generateLinks(std::istream &is, std::ostream &os, Board *board) {
+bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
+
+    if (order.size() != 16) {
+        return false;
+    }
     const int NUM_LINKS = 8;
     links.clear();
 
@@ -72,65 +76,89 @@ void Player::generateLinks(std::istream &is, std::ostream &os, Board *board) {
         {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
         {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
-    const auto &symbols = symbolSets[playerNum % symbolSets.size()];
-
-    std::vector<std::string> remainingLinks = {
-        "D1", "D2", "D3", "D4",
-        "V1", "V2", "V3", "V4"
-    };
-
-    for (int i = 0; i < NUM_LINKS; ++i) {
-        os << "Available links: ";
-        for (const auto &linkStr : remainingLinks) {
-            os << linkStr << " ";
-        }
-        os << "\nSelect link " << symbols[i] << ": ";
-
-        std::string choice;
-        is >> choice;
-
-        auto it = std::find(remainingLinks.begin(), remainingLinks.end(), choice);
-        if (it == remainingLinks.end()) {
-            os << "Invalid choice. Try again.\n";
-            --i; // retry
-            continue;
-        }
-
-        char symbol = symbols[i];
+    std::cout << playerNum;
+    const auto &symbols = symbolSets[(playerNum - 1) % symbolSets.size()];
+    int i = 0;
+    while (i+1 < order.length()) {
+        std::cout << " i " << i << std::endl;
         Link *newLink = nullptr;
-        int strength = std::stoi(choice.substr(1));
-
-        if (choice[0] == 'D') {
+        char letter = order[i];
+        int strength = order[i + 1] - '0';
+        std::cout << "Pair: " << letter << strength << "\n";
+        char symbol = symbolSets[(playerNum - 1) % symbolSets.size()][i/2];
+        std::cout << symbol << std::endl;
+        if (letter == 'D') {
             newLink = new Data{symbol, this, strength, nullptr, 0, false, false};
-        } else if (choice[0] == 'V') {
-            newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
+            // data
         }
+        else if (letter == 'V') {
+            newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
+            // virus
+        }
+        i += 2; // move to next pair
+
+    // std::vector<std::string> remainingLinks = {
+    //     "D1", "D2", "D3", "D4",
+    //     "V1", "V2", "V3", "V4"
+    // };
+
+    // for (int i = 0; i < NUM_LINKS; ++i) {
+    //     os << "Available links: ";
+    //     for (const auto &linkStr : remainingLinks) {
+    //         os << linkStr << " ";
+    //     }
+    //     os << "\nSelect link " << symbols[i] << ": ";
+
+    //     std::string choice;
+    //     is >> choice;
+
+    //     auto it = std::find(remainingLinks.begin(), remainingLinks.end(), choice);
+    //     if (it == remainingLinks.end()) {
+    //         os << "Invalid choice. Try again.\n";
+    //         --i; // retry
+    //         continue;
+    //     }
+
+    //     char symbol = symbols[i];
+    //     Link *newLink = nullptr;
+    //     int strength = std::stoi(choice.substr(1));
+
+    //     if (choice[0] == 'D') {
+    //         newLink = new Data{symbol, this, strength, nullptr, 0, false, false};
+    //     } else if (choice[0] == 'V') {
+    //         newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
+    //     }
 
         Tile *tileForSymbol = nullptr;
         auto &grid = board->getGrid();
         for (auto &row : grid) {
             for (Tile *t : row) {
+                std::cout << t->getSymbol();
                 if (t->getSymbol() == symbol) {
+                    std::cout << "found symbol " << symbol << std::endl;
                     tileForSymbol = t;
                     break;
                 }
             }
-            if (tileForSymbol) break;
         }
+
 
         if (!tileForSymbol) {
             os << "Internal error: no tile for symbol " << symbol << "\n";
             delete newLink;
-            --i;
+            i -= 2;
             continue;
         }
-
+        std::cout<< "newlink";
         tileForSymbol->setLink(newLink);
+        std::cout<< "set tile";
         newLink->setTile(tileForSymbol);
-
+        std::cout<< "push back";
         links.push_back(newLink);
-        remainingLinks.erase(it);
     }
+    std::cout<<"done";
+
+    return true;
 }
 
 void Player::checkWinLose() {
