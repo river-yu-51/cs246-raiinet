@@ -2,6 +2,7 @@ export module Display;
 // contains: Display, TextDisplay, GraphicsDisplay
 
 import <iostream>;
+import <vector>;
 
 import Observer;
 import Core;
@@ -11,8 +12,6 @@ protected:
     Board *board;
     int currentPlayer;
     bool isAlternating;
-
-    virtual void drawBoard() = 0;
 
 public:
     Display(Board *board, int currentPlayer, bool isAlternating);
@@ -24,20 +23,26 @@ public:
     void setIsAlternating(bool isAlternating);
 
     void notify() override;   // NOTE: no parameters
+
+    virtual void drawBoard() = 0;
 };
 
 export class TextDisplay : public Display {
-    void drawBoard() override;
+
 public:
     TextDisplay(Board *board, int currentPlayer, bool isAlternating);
 
+    void drawBoard() override;
 };
 
 export class GraphicsDisplay : public Display {
-    void drawBoard() override;
+    
 public:
     GraphicsDisplay(Board *board, int currentPlayer, bool isAlternating);
 
+    void drawBoard() override;
 };
 
-export void displayInfo(std::ostream &os, Player *player, bool revealLinks);
+export void displayWall(std::ostream &os, int n);
+export void displayLinkSummary(std::ostream &os, const std::vector<Link*> &link, bool reveal);
+export void displayInfo(std::ostream &os, Player *player, bool reveal);
