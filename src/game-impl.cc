@@ -132,6 +132,7 @@ bool Game::executeCommand(std::string command, Player *player) {
             std::cout<< "Invalid command." << std::endl;
             return false;
         }
+        return true;
     } else if (action == "link2") {
         std::string order;
         iss >> order;
@@ -140,6 +141,7 @@ bool Game::executeCommand(std::string command, Player *player) {
             std::cout<< "Invalid command." << std::endl;
             return false;
         }
+        return true;
     } else if (action == "ability1") {
         std::string order;
         iss >> order;
