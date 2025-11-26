@@ -11,7 +11,7 @@ Player::Player(int playerNum,
                std::vector<Link*> links,
                std::vector<Ability*> abilities,
                std::map<Ability*, int> usage,
-               bool isEliminated,
+               bool isEliminated, bool isWon,
                int downloadedData,
                int downloadedViruses)
     : playerNum{playerNum},
@@ -38,9 +38,9 @@ void Player::moveLink(Link *link) {
 void Player::download(Link *link) {
     if (!link) return;
 
-    if (dynamic_cast<Data*>(link)) {
+    if (link->getType() == "data") {
         downloadedData++;
-    } else if (dynamic_cast<Virus*>(link)) {
+    } else if (link->getType() == "virus") {
         downloadedViruses++;
     }
 }
@@ -51,16 +51,16 @@ std::vector<Link*> &Player::getLinks() { return links; }
 
 std::vector<Ability*> &Player::getAbilities() { return abilities; }
 
-Link *Player::getLink(int index) { return links[index]; }
+Link *Player::getLink(int index) { 
+    if (index < 0 || index >= links.size()) {
+        return nullptr;
+    }
+    return links[index]; 
+}
 
 int Player::getDataCount() { return downloadedData; }
 
 int Player::getVirusCount() { return downloadedViruses; }
-bool Player::getIsEliminated() { return isEliminated; }
-
-bool Player::getIsWon() {
-    return downloadedData >= 4;
-}
 
 void Player::generateLinks(std::istream &is, std::ostream &os) {
     const int NUM_LINKS = 8;
@@ -114,4 +114,10 @@ void Player::checkWinLose() {
     if (downloadedViruses >= 4) {
         isEliminated = true;
     }
+    else if (downloadedData >= 4) {
+        isWon = true;
+    }
 }
+
+bool Player::getIsWon() { return isWon; }
+bool Player::getIsEliminated() { return isEliminated; }
