@@ -16,6 +16,8 @@ export class Game {
     bool hasStarted;
     bool isGameOver;
 public:
+    bool initL1 = false, initL2 = false, initA1 = false, initA2 = false;
+
     Game(Board *board, std::vector<Player*> players, int moveNumber, bool hasStarted, bool isGameOver);
 
     void startGame(int);

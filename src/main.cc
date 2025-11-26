@@ -49,13 +49,26 @@ int main() {
 
 
     game->initializeGame(playerCount);
-    while (!game->getIsGameOver()) {
-        std::string command;
-        std::getline(cin, command);
-        game->executeCommand(command, game->getPlayer(0));
-    }
+
     clearConsole();
     cin.ignore();
+
+    while (game->initL1 == false || game->initL2 == false || game->initA1 == false || game->initA2 == false) {
+        clearConsole();
+        cout << "Current board setup:" << endl;
+        textDisplay->drawBoard();
+        cout << "Enter link and ability setup commands for both players. " << endl;
+        cout << "Remaining: " << endl;
+        if (game->initL1 == false) { cout << "* Player 1 links " << endl; }
+        if (game->initL2 == false) { cout << "* Player 2 links " << endl; }
+        if (game->initA1 == false) { cout << "* Player 1 abilities " << endl; }
+        if (game->initA2 == false) { cout << "* Player 2 abilities " << endl; }
+        string command;
+        getline(cin, command);
+        game->executeCommand(command, game->getPlayer(0));
+    }
+
+    clearConsole();
 
     while (!game->getIsGameOver()) {
         Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
@@ -64,16 +77,6 @@ int main() {
         getline(cin, command);
         game->executeCommand(command, currentPlayer);
     }
-
-    // for (auto player : players) {
-    //     displayInfo(cout, game->getPlayer(0), player->getPlayerNum() == 0);
-    //     board->notifyObservers();
-    //     displayInfo(cout, game->getPlayer(1), player->getPlayerNum() == 1);
-    //     cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
-    //     player->generateLinks(cin, cout, board);
-    //     cout << endl;
-    //     clearConsole();
-    // }
 
     game->startGame(0);
 
