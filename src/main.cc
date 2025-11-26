@@ -51,15 +51,27 @@ int main() {
     clearConsole();
     // textDisplay->drawBoard();
 
-    for (auto player : players) {
-        displayInfo(cout, game->getPlayer(0), player->getPlayerNum() == 0);
-        board->notifyObservers();
-        displayInfo(cout, game->getPlayer(1), player->getPlayerNum() == 1);
-        cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
-        player->generateLinks(cin, cout, board);
-        cout << endl;
-        clearConsole();
+    cin.ignore();
+
+    while (!game->getIsGameOver()) {
+        Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
+        cout << "Player " << currentPlayer->getPlayerNum() + 1 << "'s turn. Enter command: ";
+        string command;
+        getline(cin, command);
+        game->executeCommand(command, currentPlayer);
     }
 
+    // for (auto player : players) {
+    //     displayInfo(cout, game->getPlayer(0), player->getPlayerNum() == 0);
+    //     board->notifyObservers();
+    //     displayInfo(cout, game->getPlayer(1), player->getPlayerNum() == 1);
+    //     cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
+    //     player->generateLinks(cin, cout, board);
+    //     cout << endl;
+    //     clearConsole();
+    // }
+
     game->startGame(0);
+
+    delete game;
 }
