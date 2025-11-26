@@ -1,5 +1,7 @@
 module Display;
 
+import <iostream>;
+
 import Core;
 
 Display::Display(Board *board, int currentPlayer, bool isAlternating)
@@ -13,4 +15,8 @@ void Display::setCurrentPlayer(int current) { currentPlayer = current; }
 
 void Display::setIsAlternating(bool alternating) { isAlternating = alternating; }
 
-void Display::notify() { drawBoard(); }
+void Display::notify() {
+    // Board changed → redraw
+    drawBoard();
+}
+

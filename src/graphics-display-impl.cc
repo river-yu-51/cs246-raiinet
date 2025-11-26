@@ -8,7 +8,5 @@ GraphicsDisplay::GraphicsDisplay(Board *board, int currentPlayer, bool isAlterna
     : Display{board, currentPlayer, isAlternating} {}
 
 void GraphicsDisplay::drawBoard() {
-    const auto &grid = board->getGrid();
-
-    // draw stuff
+    // nothing yet
 }

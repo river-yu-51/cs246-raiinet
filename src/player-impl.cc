@@ -62,7 +62,7 @@ int Player::getDataCount() { return downloadedData; }
 
 int Player::getVirusCount() { return downloadedViruses; }
 
-void Player::generateLinks(std::istream &is, std::ostream &os) {
+void Player::generateLinks(std::istream &is, std::ostream &os, Board *board) {
     const int NUM_LINKS = 8;
     links.clear();
 
@@ -85,6 +85,7 @@ void Player::generateLinks(std::istream &is, std::ostream &os) {
             os << linkStr << " ";
         }
         os << "\nSelect link " << symbols[i] << ": ";
+
         std::string choice;
         is >> choice;
 
@@ -97,13 +98,35 @@ void Player::generateLinks(std::istream &is, std::ostream &os) {
 
         char symbol = symbols[i];
         Link *newLink = nullptr;
+        int strength = std::stoi(choice.substr(1));
+
         if (choice[0] == 'D') {
-            int strength = std::stoi(choice.substr(1));
             newLink = new Data{symbol, this, strength, nullptr, 0, false, false};
         } else if (choice[0] == 'V') {
-            int strength = std::stoi(choice.substr(1));
             newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
         }
+
+        Tile *tileForSymbol = nullptr;
+        auto &grid = board->getGrid();
+        for (auto &row : grid) {
+            for (Tile *t : row) {
+                if (t->getSymbol() == symbol) {
+                    tileForSymbol = t;
+                    break;
+                }
+            }
+            if (tileForSymbol) break;
+        }
+
+        if (!tileForSymbol) {
+            os << "Internal error: no tile for symbol " << symbol << "\n";
+            delete newLink;
+            --i;
+            continue;
+        }
+
+        tileForSymbol->setLink(newLink);
+        newLink->setTile(tileForSymbol);
 
         links.push_back(newLink);
         remainingLinks.erase(it);

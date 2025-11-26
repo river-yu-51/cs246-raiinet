@@ -13,6 +13,7 @@ protected:
     bool isAlternating;
 
     virtual void drawBoard() = 0;
+
 public:
     Display(Board *board, int currentPlayer, bool isAlternating);
 
@@ -22,19 +23,21 @@ public:
     void setCurrentPlayer(int currentPlayer);
     void setIsAlternating(bool isAlternating);
 
-    void notify() override;
+    void notify() override;   // NOTE: no parameters
 };
 
 export class TextDisplay : public Display {
+    void drawBoard() override;
 public:
     TextDisplay(Board *board, int currentPlayer, bool isAlternating);
 
-    void drawBoard() override;
 };
 
 export class GraphicsDisplay : public Display {
+    void drawBoard() override;
 public:
     GraphicsDisplay(Board *board, int currentPlayer, bool isAlternating);
 
-    void drawBoard() override;
 };
+
+export void displayInfo(std::ostream &os, Player *player, bool revealLinks);

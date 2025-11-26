@@ -49,14 +49,13 @@ int main() {
 
     game->initializeGame(playerCount);
     clearConsole();
-    textDisplay->drawBoard();
 
     for (auto player : players) {
+        board->notifyObservers();
         cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
-        player->generateLinks(cin, cout);
+        player->generateLinks(cin, cout, board);
         cout << endl;
         clearConsole();
-        board->notifyObservers();
     }
 
     game->startGame(0);

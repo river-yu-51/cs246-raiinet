@@ -374,18 +374,24 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
     return false;
 }
 
-void Game::executeBoardCommand(Player *player) {
-    const auto &grid = board->getGrid();
-    for (const auto &row : grid) {
-        for (const auto &tile : row) {
-            if (tile->getLink()) {
-                std::cout << tile->getLink()->getSymbol();
-            } else {
-                std::cout << tile->getSymbol();
-            }
-        }
-        std::cout << std::endl;
-    }
+void Game::executeBoardCommand(Player *viewer) {
+    // assume players[0] is Player 1, players[1] is Player 2
+    Player *p1 = players[0];
+    Player *p2 = players[1];
+
+    bool viewerIsP1 = (viewer == p1);
+    bool viewerIsP2 = (viewer == p2);
+
+    // Top: Player 1 info (reveal if viewer is P1)
+    displayInfo(std::cout, p1, viewerIsP1);
+
+    // Middle: board
+    std::cout << "========\n";
+    board->notifyObservers();    // TextDisplay::drawBoard()
+    std::cout << "========\n";
+
+    // Bottom: Player 2 info (reveal if viewer is P2)
+    displayInfo(std::cout, p2, viewerIsP2);
 }
 
 bool Game::executeSequenceCommand(std::string filename, Player *player) {
