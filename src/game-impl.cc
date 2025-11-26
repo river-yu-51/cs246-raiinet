@@ -382,15 +382,14 @@ void Game::executeBoardCommand(Player *viewer) {
     bool viewerIsP1 = (viewer == p1);
     bool viewerIsP2 = (viewer == p2);
 
-    // Top: Player 1 info (reveal if viewer is P1)
+    // player 1 info (reveal if viewer is P1)
     displayInfo(std::cout, p1, viewerIsP1);
 
-    // Middle: board
     std::cout << "========\n";
-    board->notifyObservers();    // TextDisplay::drawBoard()
+    board->notifyObservers(); // draws board
     std::cout << "========\n";
 
-    // Bottom: Player 2 info (reveal if viewer is P2)
+    // player 2 info (reveal if viewer is P2)
     displayInfo(std::cout, p2, viewerIsP2);
 }
 
@@ -419,6 +418,29 @@ Player *Game::getPlayer(int playerNum) { return players[playerNum]; }
 int Game::getMoveNumber() { return moveNumber; }
 bool Game::getHasStarted() { return hasStarted; }
 bool Game::getIsGameOver() { return isGameOver; }
+
+void Game::battle(Link *attacker, Link *defender) {
+    Link *winner = nullptr;
+    Link *loser = nullptr;
+    if (attacker->getStrength() >= defender->getStrength()) {
+        winner = attacker;
+        loser = defender;
+    } else {
+        winner = defender;
+        loser = attacker;
+    }
+    winner->getPlayer()->download(loser);
+    loser->getTile()->setLink(nullptr);
+    loser->setTile(nullptr);
+    for (auto it = loser->getPlayer()->getLinks().begin();
+         it != loser->getPlayer()->getLinks().end(); ++it) {
+        if (*it == loser) {
+            loser->getPlayer()->getLinks().erase(it);
+            break;
+        }
+    }
+    delete loser;
+}
 
 void Game::gameOver() {
     isGameOver = true;

@@ -38,5 +38,7 @@ public:
     bool executeSequenceCommand(std::string filename, Player *player);
     void executeQuitCommand();
 
+    void battle(Link *attacker, Link *defender);
+
     void gameOver();
 };

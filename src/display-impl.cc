@@ -48,7 +48,7 @@ void displayLinkSummary(std::ostream &os,
         }
 
         bool endOfRow = ((i + 1) % perRow == 0) || (i + 1 == links.size());
-        if (endOfRow) {
+        if (endOfRow && i != links.size() - 1) {
             os << '\n';
         } else {
             os << "    ";
