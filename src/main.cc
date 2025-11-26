@@ -46,14 +46,13 @@ int main() {
 
     TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now
     board->attach(textDisplay);
-    textDisplay->drawBoard();
 
 
     game->initializeGame(playerCount);
     while (!game->getIsGameOver()) {
-    std::string command;
-    std::getline(cin, command);
-    game->executeCommand(command, game->getPlayer(0));
+        std::string command;
+        std::getline(cin, command);
+        game->executeCommand(command, game->getPlayer(0));
     }
     clearConsole();
     cin.ignore();
