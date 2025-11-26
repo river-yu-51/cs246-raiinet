@@ -2,6 +2,9 @@ module Game;
 
 import <vector>;
 import <string>;
+import <iostream>;
+import <sstream>;
+import <fstream>;
 
 import Core;
 import Abilities;
@@ -300,12 +303,38 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
     return false;
 }
 
-void Game::moveLink(Link *link) {
-    // logic to move link
+void Game::executeBoardCommand(Player *player) {
+    const auto &grid = board->getGrid();
+    for (const auto &row : grid) {
+        for (const auto &tile : row) {
+            if (tile->getLink()) {
+                std::cout << tile->getLink()->getSymbol();
+            } else {
+                std::cout << tile->getSymbol();
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 
-void Game::useAbility(Ability *ability) {
-    // logic to use ability
+bool Game::executeSequenceCommand(std::string filename, Player *player) {
+    std::ifstream file{filename};
+    if (!file) {
+        std::cout << "Could not open file: " << filename << std::endl;
+        return false;
+    }
+    std::string line;
+    while (std::getline(file, line)) {
+        if (executeCommand(line, player)) {
+            return true; // quit command executed
+        }
+    }
+    return false;
+}
+
+void Game::executeQuitCommand() {
+    isGameOver = true;
+    std::cout << "Game over. Thanks for playing!" << std::endl;
 }
 
 Board *Game::getBoard() { return board; }

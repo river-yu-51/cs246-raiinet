@@ -3,6 +3,7 @@ export module Game;
 
 import <vector>;
 import <string>;
+import <iostream>;
 
 import Core;
 import Abilities;
@@ -15,18 +16,25 @@ export class Game {
     bool hasStarted;
     bool isGameOver;
 public:
-    Game(Board*, std::vector<Player*>, int, bool, bool);
+    Game(Board *board, std::vector<Player*> players, int moveNumber, bool hasStarted, bool isGameOver);
 
     void startGame(int);
-    void executeCommand(std::string, Player*);
-    void moveLink(Link*);
-    void useAbility(Ability*);
+    bool executeCommand(std::string command, Player *player);
+    void moveLink(Link *link, int x, int y);
+    void useAbility(Ability *ability, const AbilityParam &param);
 
     Board *getBoard();
-    Player *getPlayer(int);
+    Player *getPlayer(int playerNum);
     int getMoveNumber();
     bool getHasStarted();
     bool getIsGameOver();
+
+    bool executeMoveCommand(char A, std::string dir, Player *player);
+    void executeAbilitiesCommand(Player *player);
+    bool executeAbilityUseCommand(int abilityIndex, Player *player, std::istream &in);
+    void executeBoardCommand(Player *player);
+    bool executeSequenceCommand(std::string filename, Player *player);
+    void executeQuitCommand();
 
     void gameOver();
 };

@@ -1,6 +1,8 @@
 import <vector>;
 import <iostream>;
 import <string>;
+import <sstream>;
+import <fstream>;
 
 import Core;
 import Game;
@@ -29,7 +31,7 @@ int main() {
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            grid[i][j] = new Tile{nullptr, -1, false, false, '.'};
+            grid[i][j] = new Tile{nullptr, i, j, -1, false, false, '.'};
         }
     }
 

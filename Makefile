@@ -10,6 +10,8 @@ all: $(TARGET)
 $(TARGET):
 	# Precompile standard headers as header units
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header iostream
+	$(CXX) $(CXXFLAGS) -c -x c++-system-header sstream
+	$(CXX) $(CXXFLAGS) -c -x c++-system-header fstream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header vector
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header algorithm
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header map

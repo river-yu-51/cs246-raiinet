@@ -1,7 +1,7 @@
 module Core;
 
-Tile::Tile(Link *link, int firewallPlayer, bool isPort, bool isWalled, char symbol)
-    : link{link}, firewallPlayer{firewallPlayer}, isPort{isPort}, isWalled{isWalled}, symbol{symbol} {}
+Tile::Tile(Link *link, int x, int y, int firewallPlayer, bool isPort, bool isWalled, char symbol)
+    : link{link}, x{x}, y{y}, firewallPlayer{firewallPlayer}, isPort{isPort}, isWalled{isWalled}, symbol{symbol} {}
 
 void Tile::setSymbol(char sym) { symbol = sym; }
 
@@ -14,6 +14,10 @@ void Tile::setIsPort(bool port) { isPort = port; }
 void Tile::setLink(Link *l) { link = l; }
 
 Link *Tile::getLink() { return link; }
+
+int Tile::getX() { return x; }
+
+int Tile::getY() { return y; }
 
 int Tile::getFirewallPlayer() { return firewallPlayer; }
 
