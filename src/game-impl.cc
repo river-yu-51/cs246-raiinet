@@ -313,10 +313,10 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
         useAbility(ability, param);
         return true;
 
-    } else if (ability->getType() == AbilityType::LevelUp) {
+    } else if (ability->getType() == AbilityType::Upgrade) {
         Link *targetLink = nullptr;
         while (!targetLink) {
-            std::cout << "Specify link to level up (symbol): ";
+            std::cout << "Specify link to upgrade (symbol): ";
             char linkSymbol;
             in >> linkSymbol;
             for (Link *link : player->getLinks()) {

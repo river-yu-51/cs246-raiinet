@@ -6,7 +6,7 @@ Ability::Ability(Player *p) : player{p} {}
 
 void Ability::setPlayer(Player *p) { player = p; }
 
-Player *Ability::getPlayer() { return player; }
+Player *Ability::getPlayer() { return player; } 
 
 std::ostream &operator<<(std::ostream &os, AbilityType type) {
     switch (type) {
@@ -25,8 +25,8 @@ std::ostream &operator<<(std::ostream &os, AbilityType type) {
         case AbilityType::Scan:
             os << "Scan";
             break;
-        case AbilityType::LevelUp:
-            os << "LevelUp";
+        case AbilityType::Upgrade:
+            os << "Upgrade";
             break;
         case AbilityType::SwapPos:
             os << "SwapPos";

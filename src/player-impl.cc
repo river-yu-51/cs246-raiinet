@@ -1,4 +1,6 @@
 module Core;
+import Abilities;
+
 
 import <string>;
 import <vector>;
@@ -29,7 +31,7 @@ void Player::useAbility(Ability *ability) {
     usage[ability]++;
 }
 
-void Player::moveLink(Link *link) {
+void Player::moveLink(Link *link) { 
     // prompt player
     // get destination tile
     // move link to destination tile
@@ -65,6 +67,55 @@ Link *Player::getLink(int index) {
 int Player::getDataCount() { return downloadedData; }
 
 int Player::getVirusCount() { return downloadedViruses; }
+
+bool Player::generateAbilities(std::string order, std::ostream&os) {
+    if (order.size() != 5) {
+        return false;
+    }
+    const std::map<char, AbilityType> abilityMap = {
+        {'L', AbilityType::LinkBoost},
+        {'F', AbilityType::Firewall},
+        {'D', AbilityType::Download},
+        {'P', AbilityType::Polarize},
+        {'S', AbilityType::Scan},
+        {'U', AbilityType::Upgrade},
+        {'I', AbilityType::Immunity},
+        {'W', AbilityType::Wall}
+    };
+    for (char c : order) {
+        auto it = abilityMap.find(c);
+        if (it == abilityMap.end()) {
+            std::cout << "Invalid ability code: " << c << std::endl;
+            return false;
+        }
+        AbilityFactory factory;  
+        Ability* ability = factory.createAbility(this, it->second); // idk
+            if (usage.find(ability) == usage.end()) {
+                usage[ability] = 1;
+                abilities.push_back(ability);
+        } else if (usage[ability] < 2) {
+            usage[ability]++;
+            abilities.push_back(ability);
+        } else {
+            os << "Ability " << c << " already at max usage." << std::endl;
+            delete ability;
+            return false;
+        }
+    }
+    // check if ability exists in usage
+    // if exist, check < 2 -> add 1
+    // if not exist, add and usage = 1
+    return true;
+    // l -> link boost
+    // f -> firewall
+    // d -> download
+    // p -> polarize
+    // s -> scan
+    // u -> upgrade
+    // i -> immunity
+    // w -> wall
+}
+
 
 bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
 

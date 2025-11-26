@@ -76,19 +76,19 @@ int main() {
     //     clearConsole();
     // }
     if (!game->gameReady()) {
-        if (!getAbility1) {
-            game->setAbility1 = true;
+        if (!game->getAbility1()) {
+            game->setAbility1(true);
         }
-        if (!getAbility2) {
-            game->setAbility2 = true;
+        if (!game->getAbility2()) {
+            game->setAbility2(true);
         }
-        if (!getLinks1) {
-            game->getPlayer(1)->generateLinks(order, std::cout, board);
-            game->Links1 = true;
+        if (!game->getLinks1()) {
+            game->getPlayer(1)->generateLinks("V1V2V3V4D1D2D3D4", std::cout, board);
+            game->setLinks1(true);
         }
-        if (!getLinks2) {
-            game->getPlayer(2)->generateLinks(order, std::cout, board);
-            game->setLinks2 = true;
+        if (!game->getLinks2()) {
+            game->getPlayer(2)->generateLinks("V1V2V3V4D1D2D3D4", std::cout, board);
+            game->setLinks2(true);
         }
     }
     game->startGame(0);
