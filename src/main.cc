@@ -75,7 +75,22 @@ int main() {
     //     cout << endl;
     //     clearConsole();
     // }
-
+    if (!game->gameReady()) {
+        if (!getAbility1) {
+            game->setAbility1 = true;
+        }
+        if (!getAbility2) {
+            game->setAbility2 = true;
+        }
+        if (!getLinks1) {
+            game->getPlayer(1)->generateLinks(order, std::cout, board);
+            game->Links1 = true;
+        }
+        if (!getLinks2) {
+            game->getPlayer(2)->generateLinks(order, std::cout, board);
+            game->setLinks2 = true;
+        }
+    }
     game->startGame(0);
 
     delete game;

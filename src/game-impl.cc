@@ -132,6 +132,7 @@ bool Game::executeCommand(std::string command, Player *player) {
             std::cout<< "Invalid command." << std::endl;
             return false;
         }
+        p1Links = true;
     } else if (action == "link2") {
         std::string order;
         iss >> order;
@@ -140,14 +141,17 @@ bool Game::executeCommand(std::string command, Player *player) {
             std::cout<< "Invalid command." << std::endl;
             return false;
         }
+        p2Links = true;
     } else if (action == "ability1") {
         std::string order;
         iss >> order;
         // ability 1 ordering
+        p1Ability = true;
     } else if (action == "ability2") {
         std::string order;
         iss >> order;
         // ability 2 ordering
+        p2Ability = true;
     }
 
     else {
@@ -495,6 +499,18 @@ void Game::battle(Link *attacker, Link *defender) {
     loser->getTile()->setLink(winner);
 
     winner->getPlayer()->download(loser);
+}
+
+bool Game::getAbility1() { return p1Ability; }
+bool Game::getAbility2() { return p2Ability; }
+bool Game::getLinks1() { return p1Links; }
+bool Game::getLinks2() { return p2Links; }
+void Game::setAbility1(bool set) { p1Ability = set; }
+void Game::setAbility2(bool set) { p2Ability = set; }
+void Game::setLinks1(bool set) { p1Links = set; }
+void Game::setLinks2(bool set) { p2Links = set; }
+bool Game::gameReady() {
+    return p1Ability && p2Ability && p1Links && p2Links;
 }
 
 void Game::gameOver() {
