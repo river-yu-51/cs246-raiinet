@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType SwapPos::getType() { return type; }
+void SwapPos::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType SwapPos::getType() { return AbilityType::SwapPos; }

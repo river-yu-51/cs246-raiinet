@@ -52,7 +52,7 @@ std::vector<Link*> &Player::getLinks() { return links; }
 std::vector<Ability*> &Player::getAbilities() { return abilities; }
 
 Link *Player::getLink(int index) { 
-    if (index < 0 || index >= links.size()) {
+    if (index < 0 || index >= static_cast<int>(links.size())) {
         return nullptr;
     }
     return links[index]; 

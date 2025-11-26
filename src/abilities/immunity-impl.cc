@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType Immunity::getType() { return type; }
+void Immunity::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType Immunity::getType() { return AbilityType::Immunity; }

@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType Firewall::getType() { return type; }
+void Firewall::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType Firewall::getType() { return AbilityType::Firewall; }

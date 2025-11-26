@@ -15,7 +15,7 @@ void Board::setTile(int x, int y, Tile *tile) {
     notifyObservers();
 }
 
-void Board::MoveLink(Link *link, int x, int y) {
+void Board::moveLink(Link *link, int x, int y) {
     link->getTile()->setLink(nullptr);
     Tile *newTile = getTile(x, y);
     newTile->setLink(link);

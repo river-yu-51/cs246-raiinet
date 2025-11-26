@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType Wall::getType() { return type; }
+void Wall::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType Wall::getType() { return AbilityType::Wall; }

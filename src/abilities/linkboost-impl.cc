@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType LinkBoost::getType() { return type; }
+void LinkBoost::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType LinkBoost::getType() { return AbilityType::LinkBoost; }

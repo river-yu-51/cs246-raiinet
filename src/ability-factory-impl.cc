@@ -1,4 +1,4 @@
-module Core;
+module Abilities;
 
 Ability *AbilityFactory::createAbility(Player *player, AbilityType type) {
     switch (type) {

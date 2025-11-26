@@ -15,7 +15,7 @@ bool Link::isImmune() { return immune; }
 
 bool Link::isDownloaded() { return downloaded; }
 
-void Link::setValue(int val) { strength = val; }
+void Link::setStrength(int val) { strength = val; }
 
 void Link::setTile(Tile *t) { tile = t; }
 

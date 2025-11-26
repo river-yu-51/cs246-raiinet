@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType LevelUp::getType() { return type; }
+void LevelUp::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType LevelUp::getType() { return AbilityType::LevelUp; }

@@ -46,6 +46,8 @@ export class Link {
     bool immune;
     bool downloaded;
 public:
+    virtual ~Link() = default;
+
     Link(Player *player, char symbol, int strength, Tile *tile, int distance, bool immune, bool downloaded);
 
     Player *getPlayer();
@@ -55,7 +57,7 @@ public:
     bool isImmune();
     bool isDownloaded();
 
-    void setValue(int value);
+    void setStrength(int value);
     void setTile(Tile *tile);
     void setDistance(int distance);
     void setImmune(bool immune);
@@ -116,7 +118,7 @@ public:
 
     void setTile(int x, int y, Tile *tile);
 
-    void MoveLink(Link *link, int x, int y);
+    void moveLink(Link *link, int x, int y);
 };
 
 export enum class AbilityType {
@@ -143,14 +145,13 @@ export struct AbilityParam {
 export class Ability {
     Player *player;
 public:
-    Player *getPlayer();
-    virtual void activate(AbilityParam param) = 0;
+    Ability(Player *player);
 
+    virtual ~Ability() = default;
+
+    void setPlayer(Player *p);
+    Player *getPlayer();
+
+    virtual void activate(AbilityParam param) = 0;
     virtual AbilityType getType() = 0;
 };
-
-export class AbilityFactory {
-public:
-    Ability *createAbility(Player *player, AbilityType type);
-};
-

@@ -61,7 +61,7 @@ bool Game::executeCommand(std::string command, Player *player) {
 }
 
 void Game::moveLink(Link *link, int x, int y) {
-    board->MoveLink(link, x, y);
+    board->moveLink(link, x, y);
 }
 
 void Game::useAbility(Ability *ability, const AbilityParam &param) {

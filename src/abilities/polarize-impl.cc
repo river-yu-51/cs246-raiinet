@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
-AbilityType Polarize::getType() { return type; }
+void Polarize::activate(AbilityParam param) {
+    // implementation needed
+}
 
-
+AbilityType Polarize::getType() { return AbilityType::Polarize; }

@@ -5,6 +5,9 @@ import <string>;
 
 import Core;
 
-AbilityType Download::getType() { return type; }
+void Download::activate(AbilityParam param) {
+    // implementation needed
+}
 
+AbilityType Download::getType() { return AbilityType::Download; }
 
