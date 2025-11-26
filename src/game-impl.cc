@@ -134,7 +134,6 @@ bool Game::executeCommand(std::string command, Player *player) {
         }
     } else if (action == "link2") {
         std::string order;
-        std::string order;
         iss >> order;
         std::cout << order;
         if (!getPlayer(2)->generateLinks(order, std::cout, board)) {
