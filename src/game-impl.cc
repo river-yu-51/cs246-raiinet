@@ -95,6 +95,8 @@ bool Game::executeCommand(std::string command, Player *player) {
     std::string action;
     iss >> action;
 
+    std::cout << "EXECUTING " << command << std::endl;
+
     if (!iss) {
         std::cout << "Please enter a command." << std::endl;
         return false;
@@ -155,8 +157,34 @@ bool Game::executeCommand(std::string command, Player *player) {
     }
 }
 
-void Game::moveLink(Link *link, int x, int y) {
-    board->moveLink(link, x, y);
+bool Game::moveLink(Link *link, int x, int y) {
+    if (x == -1 && link->getPlayer()->getPlayerNum() == 1) {
+        players[1]->download(link);
+    } else if (x == board->getGrid().size() && link->getPlayer()->getPlayerNum() == 0) {
+        players[0]->download(link);
+    }
+
+    Tile *targetTile = board->getTile(x, y);
+
+    if (!targetTile || targetTile->getIsWalled() || targetTile->getLink()->getPlayer() == link->getPlayer()) {
+        std::cout << "Illegal move!" << std::endl;
+        return false;
+    }
+
+    if (targetTile->getLink()) {
+        battle(link, targetTile->getLink());
+    } else if (targetTile->getIsPort()) {
+        // 2 player ports for now
+        if (targetTile->getX() == 0) {
+            players[0]->download(link);
+        } else {
+            players[1]->download(link);
+        }
+    } else {
+        board->moveLink(link, x, y);
+    }
+
+    return true;
 }
 
 void Game::useAbility(Ability *ability, const AbilityParam &param) {
@@ -408,15 +436,14 @@ void Game::executeBoardCommand(Player *viewer) {
     bool viewerIsP1 = (viewer == p1);
     bool viewerIsP2 = (viewer == p2);
 
-    // Top: Player 1 info (reveal if viewer is P1)
+    // player 1 info (reveal if viewer is P1)
     displayInfo(std::cout, p1, viewerIsP1);
 
-    // Middle: board
     std::cout << "========\n";
-    board->notifyObservers();    // TextDisplay::drawBoard()
+    board->notifyObservers(); // draws board
     std::cout << "========\n";
 
-    // Bottom: Player 2 info (reveal if viewer is P2)
+    // player 2 info (reveal if viewer is P2)
     displayInfo(std::cout, p2, viewerIsP2);
 }
 
@@ -445,6 +472,31 @@ Player *Game::getPlayer(int playerNum) { return players[playerNum]; }
 int Game::getMoveNumber() { return moveNumber; }
 bool Game::getHasStarted() { return hasStarted; }
 bool Game::getIsGameOver() { return isGameOver; }
+
+void Game::battle(Link *attacker, Link *defender) {
+    Link *winner = nullptr;
+    Link *loser = nullptr;
+    if (attacker->getStrength() >= defender->getStrength()) {
+        winner = attacker;
+        loser = defender;
+    } else {
+        winner = defender;
+        loser = attacker;
+    }
+    loser->getTile()->setLink(nullptr);
+    loser->setTile(nullptr);
+    for (auto it = loser->getPlayer()->getLinks().begin();
+         it != loser->getPlayer()->getLinks().end(); ++it) {
+        if (*it == loser) {
+            loser->getPlayer()->getLinks().erase(it);
+            break;
+        }
+    }
+    winner->setTile(loser->getTile());
+    loser->getTile()->setLink(winner);
+
+    winner->getPlayer()->download(loser);
+}
 
 void Game::gameOver() {
     isGameOver = true;

@@ -64,6 +64,7 @@ public:
     void setImmune(bool immune);
     void setDownloaded(bool downloaded);
     virtual std::string getType() = 0;
+
     virtual void download() = 0;
 };
 

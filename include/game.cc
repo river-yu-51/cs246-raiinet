@@ -20,7 +20,7 @@ public:
 
     void startGame(int);
     bool executeCommand(std::string command, Player *player);
-    void moveLink(Link *link, int x, int y);
+    bool moveLink(Link *link, int x, int y);
     void useAbility(Ability *ability, const AbilityParam &param);
 
     Board *getBoard();
@@ -37,6 +37,8 @@ public:
     void executeBoardCommand(Player *player);
     bool executeSequenceCommand(std::string filename, Player *player);
     void executeQuitCommand();
+
+    void battle(Link *attacker, Link *defender);
 
     void gameOver();
 };
