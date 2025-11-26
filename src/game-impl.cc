@@ -90,11 +90,11 @@ void Game::startGame(int startingPlayer) {
 }
 
 bool Game::executeCommand(std::string command, Player *player) {
-    if (!hasStarted || isGameOver) return false;
-
     std::istringstream iss{command};
     std::string action;
     iss >> action;
+
+    std::cout << "EXECUTING " << command << std::endl;
 
     if (!iss) {
         std::cout << "Please enter a command." << std::endl;
@@ -129,8 +129,34 @@ bool Game::executeCommand(std::string command, Player *player) {
     }
 }
 
-void Game::moveLink(Link *link, int x, int y) {
-    board->moveLink(link, x, y);
+bool Game::moveLink(Link *link, int x, int y) {
+    if (x == -1 && link->getPlayer()->getPlayerNum() == 1) {
+        players[1]->download(link);
+    } else if (x == board->getGrid().size() && link->getPlayer()->getPlayerNum() == 0) {
+        players[0]->download(link);
+    }
+
+    Tile *targetTile = board->getTile(x, y);
+
+    if (!targetTile || targetTile->getIsWalled() || targetTile->getLink()->getPlayer() == link->getPlayer()) {
+        std::cout << "Illegal move!" << std::endl;
+        return false;
+    }
+
+    if (targetTile->getLink()) {
+        battle(link, targetTile->getLink());
+    } else if (targetTile->getIsPort()) {
+        // 2 player ports for now
+        if (targetTile->getX() == 0) {
+            players[0]->download(link);
+        } else {
+            players[1]->download(link);
+        }
+    } else {
+        board->moveLink(link, x, y);
+    }
+
+    return true;
 }
 
 void Game::useAbility(Ability *ability, const AbilityParam &param) {
@@ -429,7 +455,6 @@ void Game::battle(Link *attacker, Link *defender) {
         winner = defender;
         loser = attacker;
     }
-    winner->getPlayer()->download(loser);
     loser->getTile()->setLink(nullptr);
     loser->setTile(nullptr);
     for (auto it = loser->getPlayer()->getLinks().begin();
@@ -439,7 +464,10 @@ void Game::battle(Link *attacker, Link *defender) {
             break;
         }
     }
-    delete loser;
+    winner->setTile(loser->getTile());
+    loser->getTile()->setLink(winner);
+
+    winner->getPlayer()->download(loser);
 }
 
 void Game::gameOver() {

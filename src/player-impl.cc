@@ -43,6 +43,10 @@ void Player::download(Link *link) {
     } else if (link->getType() == "virus") {
         downloadedViruses++;
     }
+
+    checkWinLose();
+
+    delete link;
 }
 
 int Player::getPlayerNum() { return playerNum; }
