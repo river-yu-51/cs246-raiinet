@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void LevelUp::activate(AbilityParam param) {
-    // implementation of LevelUp ability activation
-}
+AbilityType LevelUp::getType() { return type; }
+
+

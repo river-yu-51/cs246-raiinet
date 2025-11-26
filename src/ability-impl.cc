@@ -1,21 +1,36 @@
 module Core;
 
-Ability::Ability(Player *player, AbilityType type) : player{player}, type{type} {}
-
 Player *Ability::getPlayer() { return player; }
-AbilityType Ability::getType() { return type; }
 
 std::ostream &operator<<(std::ostream &os, AbilityType type) {
-    switch(type) {
-        case AbilityType::Download: return os << "Download";
-        case AbilityType::Firewall: return os << "Firewall";
-        case AbilityType::Immunity: return os << "Immunity";
-        case AbilityType::LevelUp: return os << "LevelUp";
-        case AbilityType::LinkBoost: return os << "LinkBoost";
-        case AbilityType::Polarize: return os << "Polarize";
-        case AbilityType::Scan: return os << "Scan";
-        case AbilityType::SwapPos: return os << "SwapPos";
-        case AbilityType::Wall: return os << "Wall";
+    switch (type) {
+        case AbilityType::LinkBoost:
+            os << "LinkBoost";
+            break;
+        case AbilityType::Firewall:
+            os << "Firewall";
+            break;
+        case AbilityType::Download:
+            os << "Download";
+            break;
+        case AbilityType::Polarize:
+            os << "Polarize";
+            break;
+        case AbilityType::Scan:
+            os << "Scan";
+            break;
+        case AbilityType::LevelUp:
+            os << "LevelUp";
+            break;
+        case AbilityType::SwapPos:
+            os << "SwapPos";
+            break;
+        case AbilityType::Immunity:
+            os << "Immunity";
+            break;
+        case AbilityType::Wall:
+            os << "Wall";
+            break;
     }
-    return os << "Unknown ability type";
+    return os;
 }

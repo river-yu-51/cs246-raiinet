@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void Wall::activate(AbilityParam param) {
-    // implementation of Wall ability activation
-}
+AbilityType Wall::getType() { return type; }
+
+

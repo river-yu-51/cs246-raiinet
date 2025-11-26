@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void Immunity::activate(AbilityParam param) {
-    // implementation of Immunity ability activation
-}
+AbilityType Immunity::getType() { return type; }
+
+

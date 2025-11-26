@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void Download::activate(AbilityParam param) {
-    // implementation of Download ability activation
-}
+AbilityType Download::getType() { return type; }
+
+

@@ -1,14 +1,13 @@
 module Game;
 
-import <sstream>;
-import <fstream>;
-import <iostream>;
 import <vector>;
 import <string>;
+import <iostream>;
+import <sstream>;
+import <fstream>;
 
 import Core;
 import Abilities;
-import Display;
 
 Game::Game(Board *board, std::vector<Player*> players, int moveNumber,
            bool hasStarted, bool isGameOver)
@@ -40,14 +39,14 @@ bool Game::executeCommand(std::string command, Player *player) {
         return executeMoveCommand(A, dir, player);
     } else if (action == "abilities") {
         executeAbilitiesCommand(player);
-        return true;
+        return false;
     } else if (action == "ability") {
         int abilityIndex;
         iss >> abilityIndex;
         return executeAbilityUseCommand(abilityIndex, player, iss);
     } else if (action == "board") {
         executeBoardCommand(player);
-        return true;
+        return false;
     } else if (action == "sequence") {
         std::string filename;
         iss >> filename;
@@ -305,12 +304,17 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
 }
 
 void Game::executeBoardCommand(Player *player) {
-    // draw board for player
-}
-
-void Game::executeQuitCommand() {
-    isGameOver = true;
-    std::cout << "Game has been quit." << std::endl;
+    const auto &grid = board->getGrid();
+    for (const auto &row : grid) {
+        for (const auto &tile : row) {
+            if (tile->getLink()) {
+                std::cout << tile->getLink()->getSymbol();
+            } else {
+                std::cout << tile->getSymbol();
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 
 bool Game::executeSequenceCommand(std::string filename, Player *player) {
@@ -321,9 +325,16 @@ bool Game::executeSequenceCommand(std::string filename, Player *player) {
     }
     std::string line;
     while (std::getline(file, line)) {
-        executeCommand(line, player);
+        if (executeCommand(line, player)) {
+            return true; // quit command executed
+        }
     }
-    return true;
+    return false;
+}
+
+void Game::executeQuitCommand() {
+    isGameOver = true;
+    std::cout << "Game over. Thanks for playing!" << std::endl;
 }
 
 Board *Game::getBoard() { return board; }
@@ -336,9 +347,7 @@ bool Game::getHasStarted() { return hasStarted; }
 
 bool Game::getIsGameOver() { return isGameOver; }
 
-void Game::setMoveNumber(int n) { moveNumber = n; }
-
-void Game::gameOver(Player *winner) {
+void Game::gameOver() {
     isGameOver = true;
-    std::cout << "Game Over! Player " << winner->getPlayerNum() + 1 << " won" << std::endl;
+    // other stuff idk
 }

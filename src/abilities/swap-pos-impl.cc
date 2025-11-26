@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void SwapPos::activate(AbilityParam param) {
-    // implementation of SwapPos ability activation
-}
+AbilityType SwapPos::getType() { return type; }
+
+

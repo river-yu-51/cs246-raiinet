@@ -6,61 +6,74 @@ import <string>;
 
 import Core;
 
-export class AbilityFactory {
-public:
-    Ability *createAbility(Player *player, AbilityType type);
-};
-
 export class Download : public Ability {
+    AbilityType type = AbilityType::Download;
 public:
-    Download(Player* player) : Ability{player, AbilityType::Download} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class Firewall : public Ability {
+    AbilityType type = AbilityType::Firewall;
 public:
-    Firewall(Player* player) : Ability{player, AbilityType::Firewall} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class Immunity : public Ability {
+    AbilityType type = AbilityType::Immunity;
 public:
-    Immunity(Player* player) : Ability{player, AbilityType::Immunity} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class LevelUp : public Ability {
+    AbilityType type = AbilityType::LevelUp;
 public:
-    LevelUp(Player* player) : Ability{player, AbilityType::LevelUp} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class LinkBoost : public Ability {
+    AbilityType type = AbilityType::LinkBoost;
 public:
-    LinkBoost(Player* player) : Ability{player, AbilityType::LinkBoost} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class Polarize : public Ability {
+    AbilityType type = AbilityType::Polarize;
 public:
-    Polarize(Player* player) : Ability{player, AbilityType::Polarize} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class Scan : public Ability {
+    AbilityType type = AbilityType::Scan;
 public:
-    Scan(Player* player) : Ability{player, AbilityType::Scan} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class SwapPos : public Ability {
+    AbilityType type = AbilityType::SwapPos;
 public:
-    SwapPos(Player* player) : Ability{player, AbilityType::SwapPos} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };
 
 export class Wall : public Ability {
+    AbilityType type = AbilityType::Wall;
 public:
-    Wall(Player* player) : Ability{player, AbilityType::Wall} {}
     void activate(AbilityParam param) override;
+
+    AbilityType getType() override;
 };

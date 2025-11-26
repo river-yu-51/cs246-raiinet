@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void Scan::activate(AbilityParam param) {
-    // implementation of Scan ability activation
-}
+AbilityType Scan::getType() { return type; }
+
+

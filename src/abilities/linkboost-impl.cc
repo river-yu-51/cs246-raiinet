@@ -1,7 +1,10 @@
 module Abilities;
 
+import <vector>;
+import <string>;
+
 import Core;
 
-void LinkBoost::activate(AbilityParam param) {
-    // implementation of LinkBoost ability activation
-}
+AbilityType LinkBoost::getType() { return type; }
+
+
