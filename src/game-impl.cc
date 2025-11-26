@@ -127,20 +127,20 @@ bool Game::executeCommand(std::string command, Player *player) {
     } else if (action == "link1") {
         std::string order;
         iss >> order;
-        std::cout << order;
         if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
-            std::cout<< "Invalid command." << std::endl;
+            std::cout << "Invalid command." << std::endl;
             return false;
         }
+        initL1 = true;
         return true;
     } else if (action == "link2") {
         std::string order;
         iss >> order;
-        std::cout << order;
         if (!getPlayer(2)->generateLinks(order, std::cout, board)) {
-            std::cout<< "Invalid command." << std::endl;
+            std::cout << "Invalid command." << std::endl;
             return false;
         }
+        initL2 = true;
         return true;
     } else if (action == "ability1") {
         std::string order;
@@ -154,8 +154,8 @@ bool Game::executeCommand(std::string command, Player *player) {
 
     else {
         std::cout << "Invalid command." << std::endl;
-        return false;
     }
+    return false;
 }
 
 bool Game::moveLink(Link *link, int x, int y) {
