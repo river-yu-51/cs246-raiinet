@@ -209,10 +209,19 @@ bool Game::moveLink(Link *link, int x, int y) {
     if (targetTile->getLink()) {
         battle(link, targetTile->getLink());
     } else if (targetTile->getIsPort()) {
-        if (targetTile->getX() == 0) {
-            players[0]->download(link);
+        int portSideOwner = (targetTile->getX() == 0 ? 0 : 1);  // top row -> player 0, bottom row -> player 1
+        int mover = link->getPlayer()->getPlayerNum();
+
+        if (mover == portSideOwner) {
+            std::cout << "Invalid move: cannot enter own server port." << std::endl;
+            return false;
         } else {
-            players[1]->download(link);
+            Tile *cur = link->getTile();
+            if (cur) {
+                cur->setLink(nullptr);
+            }
+            link->setTile(nullptr);
+            link->getPlayer()->download(link);
         }
     } else {
         board->moveLink(link, x, y);
