@@ -124,7 +124,7 @@ bool Game::executeCommand(std::string command, Player *player) {
     } else if (action == "quit") {
         executeQuitCommand();
         return true;
-    } else if (action == "link1") {
+    } else if (action == "-link1") {
         std::string order;
         iss >> order;
         if (!getPlayer(0)->generateLinks(order, std::cout, board)) {
@@ -133,7 +133,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         }
         initL1 = true;
         return true;
-    } else if (action == "link2") {
+    } else if (action == "-link2") {
         std::string order;
         iss >> order;
         if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
@@ -142,7 +142,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         }
         initL2 = true;
         return true;
-    } else if (action == "ability1") {
+    } else if (action == "-ability1") {
         std::string order;
         iss >> order;
         if (!generateAbilitiesForPlayer(getPlayer(0), order)) {
@@ -151,7 +151,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         }
         initA1 = true;
         return true;
-    } else if (action == "ability2") {
+    } else if (action == "-ability2") {
         std::string order;
         iss >> order;
         if (!generateAbilitiesForPlayer(getPlayer(1), order)) {
