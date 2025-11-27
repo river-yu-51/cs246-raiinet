@@ -145,7 +145,6 @@ bool Game::executeCommand(std::string command, Player *player) {
     } else if (action == "ability1") {
         std::string order;
         iss >> order;
-        // ability 1 ordering
     } else if (action == "ability2") {
         std::string order;
         iss >> order;

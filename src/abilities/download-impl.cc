@@ -6,7 +6,7 @@ import <string>;
 import Core;
 
 void Download::activate(AbilityParam param) {
-    Link *target = param.link1;
+    Link *target = param.primaryLink;
     if (!target) return;
 
     Tile *tile = target->getTile();

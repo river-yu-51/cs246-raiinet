@@ -6,8 +6,8 @@ import <string>;
 import Core;
 
 void SwapPos::activate(AbilityParam param) {
-    Link *a = param.link1;
-    Link *b = param.link2;
+    Link *a = param.primaryLink;
+    Link *b = param.secondaryLink;
 
     if (!a || !b) return;
 

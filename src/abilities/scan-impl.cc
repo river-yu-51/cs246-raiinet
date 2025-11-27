@@ -7,7 +7,7 @@ import <iostream>;
 import Core;
 
 void Scan::activate(AbilityParam param) {
-    Link *target = param.link1;
+    Link *target = param.primaryLink;
     if (!target) return;
 
     std::cout << "Scan: Link " << target->getSymbol()

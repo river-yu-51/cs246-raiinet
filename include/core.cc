@@ -57,6 +57,7 @@ public:
     Tile *getTile();
     bool isImmune();
     bool isDownloaded();
+    int getDistance();
 
     void setStrength(int value);
     void setTile(Tile *tile);
@@ -141,7 +142,7 @@ export struct AbilityParam {
     Player *player;
     Link *primaryLink;
     Link *secondaryLink;
-    Tile *targetTile;
+    Tile *tile;
 };
 
 export class Ability {

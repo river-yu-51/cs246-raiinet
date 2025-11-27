@@ -1,4 +1,4 @@
-CXX      := g++14
+CXX      := g++-14
 CXXFLAGS := -std=c++20 -fmodules-ts -Wall -g
 
 TARGET := raiinet

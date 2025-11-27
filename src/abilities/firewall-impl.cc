@@ -17,7 +17,7 @@ void Firewall::activate(AbilityParam param) {
 
     
     if (owner == 0) t->setSymbol('m');
-    else            t->setSymbol('w');
+    else t->setSymbol('w');
 }
 
 AbilityType Firewall::getType() { 
