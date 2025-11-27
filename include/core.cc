@@ -101,6 +101,7 @@ public:
 
     int getPlayerNum();
     bool generateLinks(std::string order, std::ostream &os, Board *board);
+    bool generateAbilities(std::string order, std::ostream &os);
     std::vector<Link*> &getLinks();
     std::vector<Ability*> &getAbilities();
     Link *getLink(int index);

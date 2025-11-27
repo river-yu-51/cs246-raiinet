@@ -15,6 +15,10 @@ export class Game {
     int moveNumber;
     bool hasStarted;
     bool isGameOver;
+    bool p1Ability;
+    bool p2Ability;
+    bool p1Links;
+    bool p2Links;
 public:
     bool initL1 = false, initL2 = false, initA1 = false, initA2 = false;
 
@@ -41,6 +45,14 @@ public:
     void executeQuitCommand();
 
     void battle(Link *attacker, Link *defender);
-
+    bool getAbility1();
+    bool getAbility2();
+    bool getLinks1();
+    bool getLinks2();
+    void setAbility1(bool set);
+    void setAbility2(bool set);
+    void setLinks1(bool set);
+    void setLinks2(bool set);
+    bool gameReady();
     void gameOver();
 };

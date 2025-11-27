@@ -6,7 +6,7 @@ Ability::Ability(Player *p) : player{p} {}
 
 void Ability::setPlayer(Player *p) { player = p; }
 
-Player *Ability::getPlayer() { return player; }
+Player *Ability::getPlayer() { return player; } 
 
 std::ostream &operator<<(std::ostream &os, AbilityType type) {
     switch (type) {
