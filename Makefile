@@ -47,7 +47,7 @@ $(TARGET):
 	$(CXX) $(CXXFLAGS) -c src/abilities/swap-pos-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/polarize-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/wall-impl.cc
-	$(CXX) $(CXXFLAGS) -c src/abilities/levelup-impl.cc
+	$(CXX) $(CXXFLAGS) -c src/abilities/upgrade-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/linkboost-impl.cc
 
 	# main last

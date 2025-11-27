@@ -130,7 +130,7 @@ export enum class AbilityType {
     Download,
     Polarize,
     Scan,
-    LevelUp,
+    Upgrade,
     SwapPos,
     Immunity,
     Wall

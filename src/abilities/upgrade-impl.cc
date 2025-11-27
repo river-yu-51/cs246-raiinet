@@ -5,9 +5,9 @@ import <string>;
 
 import Core;
 
-LevelUp::LevelUp(Player *player) : Ability(player) {}
+Upgrade::Upgrade(Player *player) : Ability(player) {}
 
-void LevelUp::activate(AbilityParam param) {
+void Upgrade::activate(AbilityParam param) {
     Link *target = param.primaryLink;
     if (!target) return;
 
@@ -16,4 +16,4 @@ void LevelUp::activate(AbilityParam param) {
     target->setStrength(target->getStrength() + 1);
 }
 
-AbilityType LevelUp::getType() { return AbilityType::LevelUp; }
+AbilityType Upgrade::getType() { return AbilityType::Upgrade; }

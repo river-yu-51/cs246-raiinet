@@ -8,8 +8,8 @@ Ability *AbilityFactory::createAbility(Player *player, AbilityType type) {
             return new Firewall{player};
         case AbilityType::Immunity:
             return new Immunity{player};
-        case AbilityType::LevelUp:
-            return new LevelUp{player};
+        case AbilityType::Upgrade:
+            return new Upgrade{player};
         case AbilityType::LinkBoost:
             return new LinkBoost{player};
         case AbilityType::Polarize:
