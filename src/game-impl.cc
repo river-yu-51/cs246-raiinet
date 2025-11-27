@@ -89,7 +89,7 @@ void Game::startGame(int startingPlayer) {
     // and link->tile attachments should be done when players choose placements
 }
 
-bool Game::executeCommand(std::string command, Player *player) {
+bool Game::executeCommand(std::string command, Player *player, std::string order) {
     //if (!hasStarted || isGameOver) return false;
     std::istringstream iss{command};
     std::string action;
@@ -125,39 +125,45 @@ bool Game::executeCommand(std::string command, Player *player) {
         executeQuitCommand();
         return true;
     } else if (action == "-link1") {
-        std::string order;
-        iss >> order;
+        // std::string order;
+        // iss >> order;
         if (!getPlayer(0)->generateLinks(order, std::cout, board)) {
+            std::cout << "hello";
+            std::cout << order;
             std::cout << "Invalid link order." << std::endl;
             return false;
         }
+        p1Links = true;
         initL1 = true;
         return true;
     } else if (action == "-link2") {
-        std::string order;
-        iss >> order;
+        // std::string order;
+        // iss >> order;
         if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
             std::cout << "Invalid link order." << std::endl;
             return false;
         }
+        p2Links = true;
         initL2 = true;
         return true;
     } else if (action == "-ability1") {
-        std::string order;
-        iss >> order;
+        // std::string order;
+        // iss >> order;
         if (!generateAbilitiesForPlayer(getPlayer(0), order)) {
             std::cout << "Invalid ability string." << std::endl;
             return false;
         }
+        p1Ability = true;
         initA1 = true;
         return true;
     } else if (action == "-ability2") {
-        std::string order;
-        iss >> order;
+        // std::string order;
+        // iss >> order;
         if (!generateAbilitiesForPlayer(getPlayer(1), order)) {
             std::cout << "Invalid ability string." << std::endl;
             return false;
         }
+        p2Ability = true;
         initA2 = true;
         return true;
     }

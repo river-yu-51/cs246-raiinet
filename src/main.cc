@@ -27,7 +27,7 @@ void drawGameState(Game *game, Display *display, ostream &os) {
     displayInfo(os, game->getPlayer(1), currentPlayer == game->getPlayer(1));
 }
 
-int main() {
+int main(int argc, char * argv[]) {
     int playerCount = 0;
     while (playerCount != 2  /*&& playerCount != 4 */) {
         cout << "Enter number of players [ONLY 2]: ";
@@ -62,18 +62,27 @@ int main() {
     clearConsole();
     cin.ignore();
 
-    while (game->initL1 == false || game->initL2 == false || game->initA1 == false || game->initA2 == false) {
-        clearConsole();
-        drawGameState(game, textDisplay, cout);
-        cout << "Enter link and ability setup commands for both players. " << endl;
-        cout << "Remaining: " << endl;
-        if (game->initL1 == false) { cout << "* Player 1 links " << endl; }
-        if (game->initL2 == false) { cout << "* Player 2 links " << endl; }
-        if (game->initA1 == false) { cout << "* Player 1 abilities " << endl; }
-        if (game->initA2 == false) { cout << "* Player 2 abilities " << endl; }
-        string command;
-        getline(cin, command);
-        game->executeCommand(command, game->getPlayer(0));
+    std::string command;
+    std::string order;
+    for (int i = 1; i+1 < argc; i+=2) {
+        command = argv[i];
+        order = argv[i+1];
+        game->executeCommand(command, game->getPlayer(0), order);
+    }
+
+    if (!game->gameReady()) {
+        if (!game->getAbility1()) {
+            game->executeCommand("LFDSP", game->getPlayer(0));
+        }
+        if (!game->getAbility2()) {
+            game->executeCommand("LFDSP", game->getPlayer(1));
+        }
+        if (!game->getLinks1()) {
+            game->executeCommand("V1V2V3V4D1D2D3D4", game->getPlayer(0));
+        }
+        if (!game->getLinks2()) {
+            game->executeCommand("V1V2V3V4D1D2D3D4", game->getPlayer(1));
+        }
     }
     
     game->startGame(0);
@@ -88,13 +97,17 @@ int main() {
         bool endTurn = false;
         while (!endTurn) {
             cout << "Player " << currentPlayer->getPlayerNum() + 1 << "'s turn. Enter command: ";
+
+            
             getline(cin, command);
 
             endTurn = game->executeCommand(command, currentPlayer);
         }
+        
 
         game->incrementMoveNumber();
     }
+
 
     
 

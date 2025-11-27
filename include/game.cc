@@ -25,7 +25,7 @@ public:
     Game(Board *board, std::vector<Player*> players, int moveNumber, bool hasStarted, bool isGameOver);
 
     void startGame(int);
-    bool executeCommand(std::string command, Player *player);
+    bool executeCommand(std::string command, Player *player, std::string order = "");
     bool moveLink(Link *link, int x, int y);
     void useAbility(Ability *ability, const AbilityParam &param);
 
