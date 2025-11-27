@@ -72,16 +72,16 @@ int main(int argc, char * argv[]) {
 
     if (!game->gameReady()) {
         if (!game->getAbility1()) {
-            game->executeCommand("LFDSP", game->getPlayer(0));
+            game->executeCommand("-ability1", game->getPlayer(0), "LFDSP");
         }
         if (!game->getAbility2()) {
-            game->executeCommand("LFDSP", game->getPlayer(1));
+            game->executeCommand("-ability2", game->getPlayer(1), "LFDSP");
         }
         if (!game->getLinks1()) {
-            game->executeCommand("V1V2V3V4D1D2D3D4", game->getPlayer(0));
+            game->executeCommand("-link1", game->getPlayer(0), "V1V2V3V4D1D2D3D4");
         }
         if (!game->getLinks2()) {
-            game->executeCommand("V1V2V3V4D1D2D3D4", game->getPlayer(1));
+            game->executeCommand("-link2", game->getPlayer(1), "V1V2V3V4D1D2D3D4");
         }
     }
     
