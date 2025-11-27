@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+SwapPos::SwapPos(Player *player) : Ability(player) {}
+
 void SwapPos::activate(AbilityParam param) {
     Link *a = param.primaryLink;
     Link *b = param.secondaryLink;
@@ -16,7 +18,7 @@ void SwapPos::activate(AbilityParam param) {
 
     if (!tileA || !tileB) return;
 
-    // rmeove from tiles
+    // remove from tiles
     tileA->setLink(nullptr);
     tileB->setLink(nullptr);
 

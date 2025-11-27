@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+LevelUp::LevelUp(Player *player) : Ability(player) {}
+
 void LevelUp::activate(AbilityParam param) {
     Link *target = param.primaryLink;
     if (!target) return;

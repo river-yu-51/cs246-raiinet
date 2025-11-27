@@ -99,3 +99,5 @@ public:
 
     AbilityType getType() override;
 };
+
+export bool generateAbilitiesForPlayer(Player *player, std::string order);

@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+Polarize::Polarize(Player *player) : Ability(player) {}
+
 void Polarize::activate(AbilityParam param) {
     // Link *target = param.primaryLink;
     // if (!target) return;

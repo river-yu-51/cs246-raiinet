@@ -82,7 +82,7 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
         {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
 
-    const auto &symbols = symbolSets[(playerNum - 1) % symbolSets.size()];
+    const auto &symbols = symbolSets[playerNum];
 
     for (int i = 0; i < 2*NUM_LINKS; i += 2) {
         char letter = order[i];
@@ -134,12 +134,8 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
 }
 
 void Player::checkWinLose() {
-    if (downloadedViruses >= 4) {
-        isEliminated = true;
-    }
-    else if (downloadedData >= 4) {
-        isWon = true;
-    }
+    if (downloadedViruses >= 4) { isEliminated = true; }
+    else if (downloadedData >= 4) { isWon = true; }
 }
 
 bool Player::getIsWon() { return isWon; }

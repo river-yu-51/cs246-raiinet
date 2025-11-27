@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+Firewall::Firewall(Player *player) : Ability(player) {}
+
 void Firewall::activate(AbilityParam param) {
     Tile *t = param.tile;
     if (!t) return;

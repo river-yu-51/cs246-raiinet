@@ -12,7 +12,6 @@ protected:
     Board *board;
     int currentPlayer;
     bool isAlternating;
-
 public:
     Display(Board *board, int currentPlayer, bool isAlternating);
 

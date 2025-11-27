@@ -127,7 +127,7 @@ bool Game::executeCommand(std::string command, Player *player) {
     } else if (action == "link1") {
         std::string order;
         iss >> order;
-        if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
+        if (!getPlayer(0)->generateLinks(order, std::cout, board)) {
             std::cout << "Invalid command." << std::endl;
             return false;
         }
@@ -136,7 +136,7 @@ bool Game::executeCommand(std::string command, Player *player) {
     } else if (action == "link2") {
         std::string order;
         iss >> order;
-        if (!getPlayer(2)->generateLinks(order, std::cout, board)) {
+        if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
             std::cout << "Invalid command." << std::endl;
             return false;
         }
@@ -145,10 +145,21 @@ bool Game::executeCommand(std::string command, Player *player) {
     } else if (action == "ability1") {
         std::string order;
         iss >> order;
+        if (!generateAbilitiesForPlayer(getPlayer(0), order)) {
+            std::cout << "Invalid command." << std::endl;
+            return false;
+        }
+        initA1 = true;
+        return true;
     } else if (action == "ability2") {
         std::string order;
         iss >> order;
-        // ability 2 ordering
+        if (!generateAbilitiesForPlayer(getPlayer(1), order)) {
+            std::cout << "Invalid command." << std::endl;
+            return false;
+        }
+        initA2 = true;
+        return true;
     }
 
     else {
@@ -166,8 +177,18 @@ bool Game::moveLink(Link *link, int x, int y) {
 
     Tile *targetTile = board->getTile(x, y);
 
-    if (!targetTile || targetTile->getIsWalled() || targetTile->getLink()->getPlayer() == link->getPlayer()) {
-        std::cout << "Illegal move!" << std::endl;
+    if (!targetTile) {
+        std::cout << "Invalid move: out of bounds." << std::endl;
+        return false;
+    }
+
+    if (targetTile->getIsWalled()) {
+        std::cout << "Invalid move: tile is walled." << std::endl;
+        return false;
+    }
+
+    if (targetTile->getLink() && targetTile->getLink()->getPlayer() == link->getPlayer()) {
+        std::cout << "Invalid move: cannot attack own link." << std::endl;
         return false;
     }
 
@@ -455,9 +476,9 @@ bool Game::executeSequenceCommand(std::string filename, Player *player) {
     }
     std::string line;
     while (std::getline(file, line)) {
-        if (executeCommand(line, player)) {
-            return true; // quit command executed
-        }
+        executeCommand(line, player);
+
+        if (isGameOver) { return true; } // stop if game over
     }
     return false;
 }
@@ -476,6 +497,7 @@ bool Game::getIsGameOver() { return isGameOver; }
 void Game::battle(Link *attacker, Link *defender) {
     Link *winner = nullptr;
     Link *loser = nullptr;
+
     if (attacker->getStrength() >= defender->getStrength()) {
         winner = attacker;
         loser = defender;
@@ -483,19 +505,26 @@ void Game::battle(Link *attacker, Link *defender) {
         winner = defender;
         loser = attacker;
     }
-    loser->getTile()->setLink(nullptr);
-    loser->setTile(nullptr);
-    for (auto it = loser->getPlayer()->getLinks().begin();
-         it != loser->getPlayer()->getLinks().end(); ++it) {
+
+    Tile *tile = loser->getTile();
+    if (tile) {
+        tile->setLink(nullptr);
+    }
+
+    auto &loserLinks = loser->getPlayer()->getLinks();
+    for (auto it = loserLinks.begin(); it != loserLinks.end(); ++it) {
         if (*it == loser) {
-            loser->getPlayer()->getLinks().erase(it);
+            loserLinks.erase(it);
             break;
         }
     }
-    winner->setTile(loser->getTile());
-    loser->getTile()->setLink(winner);
 
-    winner->getPlayer()->download(loser);
+    if (tile) {
+        winner->setTile(tile);
+        tile->setLink(winner);
+    }
+
+    winner->getPlayer()->download(loser);  // will delete loser
 }
 
 void Game::gameOver() {
