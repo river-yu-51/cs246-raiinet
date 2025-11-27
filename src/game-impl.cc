@@ -440,19 +440,33 @@ void Game::executeBoardCommand(Player *viewer) {
     displayInfo(std::cout, p2, viewerIsP2);
 }
 
-bool Game::executeSequenceCommand(std::string filename, Player *player) {
+bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) {
     std::ifstream file{filename};
+
     if (!file) {
         std::cout << "Could not open file: " << filename << std::endl;
         return false;
     }
-    std::string line;
-    while (std::getline(file, line)) {
-        executeCommand(line, player);
 
-        if (isGameOver) { return true; } // stop if game over
+    Player *currentPlayer = startingPlayer;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        bool endTurn = executeCommand(line, currentPlayer);
+
+        if (isGameOver) { return true; }
+
+        if (endTurn) {
+            // swap to the other player
+            int idx = currentPlayer->getPlayerNum();   // 0 or 1
+            currentPlayer = players[1 - idx];
+            incrementMoveNumber();
+        }
     }
-    return false;
+
+    return true;
 }
 
 void Game::executeQuitCommand() {
@@ -467,36 +481,26 @@ bool Game::getHasStarted() { return hasStarted; }
 bool Game::getIsGameOver() { return isGameOver; }
 
 void Game::battle(Link *attacker, Link *defender) {
-    Link *winner = nullptr;
-    Link *loser = nullptr;
+    Tile *attackerTile = attacker->getTile();
+    Tile *defenderTile = defender->getTile();
 
-    if (attacker->getStrength() >= defender->getStrength()) {
-        winner = attacker;
-        loser = defender;
-    } else {
-        winner = defender;
-        loser = attacker;
-    }
+    bool successfulAttack = (attacker->getStrength() >= defender->getStrength());
 
-    Tile *tile = loser->getTile();
-    if (tile) {
-        tile->setLink(nullptr);
-    }
-
-    auto &loserLinks = loser->getPlayer()->getLinks();
-    for (auto it = loserLinks.begin(); it != loserLinks.end(); ++it) {
-        if (*it == loser) {
-            loserLinks.erase(it);
-            break;
+    if (successfulAttack) {
+        auto &defenderPlayerLinks = defender->getPlayer()->getLinks();
+        for (auto it = defenderPlayerLinks.begin(); it != defenderPlayerLinks.end(); ++it) {
+            if (*it == defender) {
+                defenderPlayerLinks.erase(it);
+                break;
+            }
         }
-    }
 
-    if (tile) {
-        winner->setTile(tile);
-        tile->setLink(winner);
-    }
+        attackerTile->setLink(nullptr);
+        attacker->setTile(defenderTile);
+        defenderTile->setLink(attacker);
 
-    winner->getPlayer()->download(loser);  // will delete loser
+        attacker->getPlayer()->download(defender);  // will delete defender
+    }
 }
 
 bool Game::getAbility1() { return p1Ability; }
