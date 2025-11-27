@@ -16,8 +16,6 @@ Ability *AbilityFactory::createAbility(Player *player, AbilityType type) {
             return new Polarize{player};
         case AbilityType::Scan:
             return new Scan{player};
-        case AbilityType::SwapPos:
-            return new SwapPos{player};
         case AbilityType::Wall:
             return new Wall{player};
     }

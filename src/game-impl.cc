@@ -95,7 +95,7 @@ bool Game::executeCommand(std::string command, Player *player) {
     std::string action;
     iss >> action;
 
-    std::cout << "EXECUTING " << command << std::endl;
+    // std::cout << "EXECUTING " << command << std::endl;
 
     if (!iss) {
         std::cout << "Please enter a command." << std::endl;
@@ -128,7 +128,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         std::string order;
         iss >> order;
         if (!getPlayer(0)->generateLinks(order, std::cout, board)) {
-            std::cout << "Invalid command." << std::endl;
+            std::cout << "Invalid link order." << std::endl;
             return false;
         }
         initL1 = true;
@@ -137,7 +137,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         std::string order;
         iss >> order;
         if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
-            std::cout << "Invalid command." << std::endl;
+            std::cout << "Invalid link order." << std::endl;
             return false;
         }
         initL2 = true;
@@ -146,7 +146,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         std::string order;
         iss >> order;
         if (!generateAbilitiesForPlayer(getPlayer(0), order)) {
-            std::cout << "Invalid command." << std::endl;
+            std::cout << "Invalid ability string." << std::endl;
             return false;
         }
         initA1 = true;
@@ -155,7 +155,7 @@ bool Game::executeCommand(std::string command, Player *player) {
         std::string order;
         iss >> order;
         if (!generateAbilitiesForPlayer(getPlayer(1), order)) {
-            std::cout << "Invalid command." << std::endl;
+            std::cout << "Invalid ability string." << std::endl;
             return false;
         }
         initA2 = true;
@@ -368,45 +368,6 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
         useAbility(ability, param);
         return true;
 
-    } else if (ability->getType() == AbilityType::SwapPos) {
-        Link *firstLink = nullptr;
-        while (!firstLink) {
-            std::cout << "Specify first link to swap (symbol): ";
-            char linkSymbol;
-            in >> linkSymbol;
-            for (Link *link : player->getLinks()) {
-                if (link->getSymbol() == linkSymbol) {
-                    firstLink = link;
-                    break;
-                }
-            }
-            if (!firstLink) {
-                std::cout << "Link not found." << std::endl;
-            }
-        }
-        Link *secondLink = nullptr;
-        while (!secondLink) {
-            std::cout << "Specify second link to swap (symbol): ";
-            char linkSymbol;
-            in >> linkSymbol;
-            for (auto &row : board->getGrid()) {
-                for (Tile *tile : row) {
-                    Link *link = tile->getLink();
-                    if (link && link->getSymbol() == linkSymbol) {
-                        secondLink = link;
-                        break;
-                    }
-                }
-                if (secondLink) break;
-            }
-            if (!secondLink) {
-                std::cout << "Link not found." << std::endl;
-            }
-        }
-        AbilityParam param{player, firstLink, secondLink, nullptr};
-        useAbility(ability, param);
-        return true;
-
     } else if (ability->getType() == AbilityType::Immunity) {
         Link *targetLink = nullptr;
         while (!targetLink) {
@@ -460,9 +421,7 @@ void Game::executeBoardCommand(Player *viewer) {
     // player 1 info (reveal if viewer is P1)
     displayInfo(std::cout, p1, viewerIsP1);
 
-    std::cout << "========\n";
     board->notifyObservers(); // draws board
-    std::cout << "========\n";
 
     // player 2 info (reveal if viewer is P2)
     displayInfo(std::cout, p2, viewerIsP2);
@@ -535,6 +494,9 @@ void Game::setAbility1(bool set) { p1Ability = set; }
 void Game::setAbility2(bool set) { p2Ability = set; }
 void Game::setLinks1(bool set) { p1Links = set; }
 void Game::setLinks2(bool set) { p2Links = set; }
+
+void Game::incrementMoveNumber() { moveNumber++; }
+
 bool Game::gameReady() {
     return p1Ability && p2Ability && p1Links && p2Links;
 }

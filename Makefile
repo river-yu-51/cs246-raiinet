@@ -34,6 +34,7 @@ $(TARGET):
 	$(CXX) $(CXXFLAGS) -c src/player-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/board-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/ability-impl.cc
+	$(CXX) $(CXXFLAGS) -c src/ability-factory-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/display-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/text-display-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/game-impl.cc
@@ -44,7 +45,6 @@ $(TARGET):
 	$(CXX) $(CXXFLAGS) -c src/abilities/firewall-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/immunity-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/scan-impl.cc
-	$(CXX) $(CXXFLAGS) -c src/abilities/swap-pos-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/polarize-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/wall-impl.cc
 	$(CXX) $(CXXFLAGS) -c src/abilities/upgrade-impl.cc

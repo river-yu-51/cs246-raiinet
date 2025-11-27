@@ -80,16 +80,6 @@ public:
     AbilityType getType() override;
 };
 
-export class SwapPos : public Ability {
-    AbilityType type = AbilityType::SwapPos;
-public:
-    SwapPos(Player *player) : Ability(player) {}
-
-    void activate(AbilityParam param) override;
-
-    AbilityType getType() override;
-};
-
 export class Wall : public Ability {
     AbilityType type = AbilityType::Wall;
 public:

@@ -28,9 +28,6 @@ std::ostream &operator<<(std::ostream &os, AbilityType type) {
         case AbilityType::Upgrade:
             os << "Upgrade";
             break;
-        case AbilityType::SwapPos:
-            os << "SwapPos";
-            break;
         case AbilityType::Immunity:
             os << "Immunity";
             break;
