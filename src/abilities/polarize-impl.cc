@@ -7,7 +7,7 @@ import Core;
 
 Polarize::Polarize(Player *player) : Ability(player) {}
 
-void Polarize::activate(AbilityParam param) {
+bool Polarize::activate(AbilityParam param) {
     // Link *target = param.primaryLink;
     // if (!target) return;
 
@@ -39,6 +39,8 @@ void Polarize::activate(AbilityParam param) {
     // }
 
     // owner->addLink(replacement);
+
+    return true;
 }
 
 AbilityType Polarize::getType() { 

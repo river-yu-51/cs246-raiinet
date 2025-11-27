@@ -7,8 +7,10 @@ import Core;
 
 Immunity::Immunity(Player *player) : Ability(player) {}
 
-void Immunity::activate(AbilityParam param) {
+bool Immunity::activate(AbilityParam param) {
     // implementation needed
+
+    return true;
 }
 
 AbilityType Immunity::getType() { return AbilityType::Immunity; }

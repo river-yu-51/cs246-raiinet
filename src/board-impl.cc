@@ -20,5 +20,10 @@ void Board::moveLink(Link *link, int x, int y) {
     Tile *dest = getTile(x, y);
     dest->setLink(link);
     link->setTile(dest);
+
+    if (link->getTile()->getFirewallPlayer() != link->getPlayerNum()) {
+        // reveal link, auto-download if virus
+    }
+
     notifyObservers();
 }
