@@ -7,19 +7,13 @@ import Core;
 
 Firewall::Firewall(Player *player) : Ability(player) {}
 
-void Firewall::activate(AbilityParam param) {
-    Tile *t = param.tile;
-    if (!t) return;
+bool Firewall::activate(AbilityParam param) {
+    Tile *tile = param.tile;
+    if (!tile) return false;
 
-    int owner = param.player->getPlayerNum();
-
-    
-    t->setIsWalled(true);
-    t->setFirewallPlayer(owner);
-
-    
-    if (owner == 0) t->setSymbol('m');
-    else t->setSymbol('w');
+    tile->setFirewallPlayer(param.player->getPlayerNum());
+    tile->setSymbol(param.player->getPlayerNum() == 0 ? 'm' : 'w');
+    return true;
 }
 
 AbilityType Firewall::getType() { 

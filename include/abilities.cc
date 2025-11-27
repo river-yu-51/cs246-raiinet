@@ -15,7 +15,7 @@ export class Download : public Ability {
 public:
     Download(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -25,7 +25,7 @@ export class Firewall : public Ability {
 public:
     Firewall(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -35,7 +35,7 @@ export class Immunity : public Ability {
 public:
     Immunity(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -45,7 +45,7 @@ export class Upgrade : public Ability {
 public:
     Upgrade(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -55,7 +55,7 @@ export class LinkBoost : public Ability {
 public:
     LinkBoost(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -65,7 +65,7 @@ export class Polarize : public Ability {
 public:
     Polarize(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -75,7 +75,7 @@ export class Scan : public Ability {
 public:
     Scan(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };
@@ -85,7 +85,7 @@ export class Wall : public Ability {
 public:
     Wall(Player *player) : Ability(player) {}
 
-    void activate(AbilityParam param) override;
+    bool activate(AbilityParam param) override;
 
     AbilityType getType() override;
 };

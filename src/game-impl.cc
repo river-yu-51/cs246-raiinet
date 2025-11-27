@@ -112,7 +112,49 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
     } else if (action == "ability") {
         int abilityIndex;
         iss >> abilityIndex;
-        return executeAbilityUseCommand(abilityIndex, player, iss);
+        if (abilityIndex < 0 || abilityIndex > static_cast<int>(player->getAbilities().size()) - 1) {
+            std::cout << "Ability index out of bounds." << std::endl;
+            return false;
+        }
+        Ability *targetAbility = player->getAbilities()[abilityIndex];
+        if (!targetAbility->isAvailable()) {
+            std::cout << "Ability already used." << std::endl;
+            return false;
+        } else {
+            switch(targetAbility->getType()) {
+                case AbilityType::Download: {
+                    int x, y;
+                    iss >> x >> y;
+                    Tile *tile = board->getTile(x, y);
+                    if (!tile) {
+                        std::cout << "Invalid tile coordinates." << std::endl;
+                        return false;
+                    }
+                    Link *link = tile->getLink();
+                    if (!link) {
+                        std::cout << "No link on specified tile." << std::endl;
+                        return false;
+                    }
+
+                    AbilityParam param{player, link, nullptr, nullptr};
+                    return targetAbility->activate(param);
+                }
+                case AbilityType::Firewall: {
+                    int x, y;
+                    iss >> x >> y;
+                    Tile *tile = board->getTile(x, y);
+                    if (!tile) {
+                        std::cout << "Invalid tile coordinates." << std::endl;
+                        return false;
+                    }
+
+                    AbilityParam param{player, nullptr, nullptr, tile};
+                    return targetAbility->activate(param);
+                }
+            }
+            return false;
+        }
+        return false;
     } else if (action == "board") {
         executeBoardCommand(player);
         return false;
@@ -276,28 +318,6 @@ bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istre
     Ability *ability = player->getAbilities()[abilityIndex - 1];
 
     if (ability->getType() == AbilityType::Download) {
-        Link *targetLink = nullptr;
-        while (!targetLink) {
-            std::cout << "Specify link to download (symbol): ";
-            char linkSymbol;
-            in >> linkSymbol;
-            for (auto &row : board->getGrid()) {
-                for (Tile *tile : row) {
-                    Link *link = tile->getLink();
-                    if (link && link->getSymbol() == linkSymbol) {
-                        targetLink = link;
-                        break;
-                    }
-                }
-                if (targetLink) break;
-            }
-            if (!targetLink) {
-                std::cout << "Link not found." << std::endl;
-            }
-        }
-        AbilityParam param{player, targetLink, nullptr, nullptr};
-        useAbility(ability, param);
-        return true;
 
     } else if (ability->getType() == AbilityType::Firewall) {
         Tile *targetTile = nullptr;

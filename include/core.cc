@@ -147,6 +147,7 @@ export struct AbilityParam {
 
 export class Ability {
     Player *player;
+    bool available = true;
 public:
     Ability(Player *player);
 
@@ -155,6 +156,8 @@ public:
     void setPlayer(Player *p);
     Player *getPlayer();
 
-    virtual void activate(AbilityParam param) = 0;
+    virtual bool activate(AbilityParam param) = 0;
     virtual AbilityType getType() = 0;
+
+    bool isAvailable() { return available; }
 };
