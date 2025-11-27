@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+Immunity::Immunity(Player *player) : Ability(player) {}
+
 void Immunity::activate(AbilityParam param) {
     // implementation needed
 }

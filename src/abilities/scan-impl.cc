@@ -6,8 +6,10 @@ import <iostream>;
 
 import Core;
 
+Scan::Scan(Player *player) : Ability(player) {}
+
 void Scan::activate(AbilityParam param) {
-    Link *target = param.link1;
+    Link *target = param.primaryLink;
     if (!target) return;
 
     std::cout << "Scan: Link " << target->getSymbol()

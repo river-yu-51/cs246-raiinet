@@ -5,8 +5,10 @@ import <string>;
 
 import Core;
 
+Download::Download(Player *player) : Ability(player) {}
+
 void Download::activate(AbilityParam param) {
-    Link *target = param.link1;
+    Link *target = param.primaryLink;
     if (!target) return;
 
     Tile *tile = target->getTile();

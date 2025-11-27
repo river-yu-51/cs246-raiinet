@@ -5,11 +5,13 @@ import <string>;
 
 import Core;
 
+LinkBoost::LinkBoost(Player *player) : Ability(player) {}
+
 void LinkBoost::activate(AbilityParam param) {
-    Link *target = param.link1;
+    Link *target = param.primaryLink;
     if (!target) return;
 
-    target->setBoosted(true);
+    target->setDistance(target->getDistance() + 1);
 }
 
 AbilityType LinkBoost::getType() { 

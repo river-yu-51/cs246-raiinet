@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+Firewall::Firewall(Player *player) : Ability(player) {}
+
 void Firewall::activate(AbilityParam param) {
     Tile *t = param.tile;
     if (!t) return;
@@ -17,7 +19,7 @@ void Firewall::activate(AbilityParam param) {
 
     
     if (owner == 0) t->setSymbol('m');
-    else            t->setSymbol('w');
+    else t->setSymbol('w');
 }
 
 AbilityType Firewall::getType() { 
