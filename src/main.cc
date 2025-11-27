@@ -85,9 +85,12 @@ int main() {
         Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
 
         string command;
-        while (!game->executeCommand(command, currentPlayer)) {
+        bool endTurn = false;
+        while (!endTurn) {
             cout << "Player " << currentPlayer->getPlayerNum() + 1 << "'s turn. Enter command: ";
             getline(cin, command);
+
+            endTurn = game->executeCommand(command, currentPlayer);
         }
 
         game->incrementMoveNumber();

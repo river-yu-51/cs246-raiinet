@@ -169,25 +169,33 @@ bool Game::executeCommand(std::string command, Player *player) {
 }
 
 bool Game::moveLink(Link *link, int x, int y) {
-    if (x == -1 && link->getPlayer()->getPlayerNum() == 1) {
-        players[1]->download(link);
-    } else if (x == board->getGrid().size() && link->getPlayer()->getPlayerNum() == 0) {
-        players[0]->download(link);
-    }
+    auto &grid = board->getGrid();
+    int rows = static_cast<int>(grid.size());
+    int cols = static_cast<int>(grid[0].size());
 
-    Tile *targetTile = board->getTile(x, y);
+    // top/bottom: download, left/right: out of bounds
+    if (x < 0 || x >= rows || y < 0 || y >= cols) {
+        if (x == -1 && link->getPlayer()->getPlayerNum() == 1) {
+            players[1]->download(link);
+            return true;
+        } else if (x == rows && link->getPlayer()->getPlayerNum() == 0) {
+            players[0]->download(link);
+            return true;
+        }
 
-    if (!targetTile) {
         std::cout << "Invalid move: out of bounds." << std::endl;
         return false;
     }
+
+    Tile *targetTile = board->getTile(x, y);
 
     if (targetTile->getIsWalled()) {
         std::cout << "Invalid move: tile is walled." << std::endl;
         return false;
     }
 
-    if (targetTile->getLink() && targetTile->getLink()->getPlayer() == link->getPlayer()) {
+    if (targetTile->getLink() &&
+        targetTile->getLink()->getPlayer() == link->getPlayer()) {
         std::cout << "Invalid move: cannot attack own link." << std::endl;
         return false;
     }
@@ -195,7 +203,6 @@ bool Game::moveLink(Link *link, int x, int y) {
     if (targetTile->getLink()) {
         battle(link, targetTile->getLink());
     } else if (targetTile->getIsPort()) {
-        // 2 player ports for now
         if (targetTile->getX() == 0) {
             players[0]->download(link);
         } else {
@@ -207,6 +214,7 @@ bool Game::moveLink(Link *link, int x, int y) {
 
     return true;
 }
+
 
 void Game::useAbility(Ability *ability, const AbilityParam &param) {
     ability->activate(param);
@@ -231,8 +239,7 @@ bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
                 std::cout << "Invalid direction." << std::endl;
                 return false;
             }
-            moveLink(link, x, y);
-            return true;
+            return moveLink(link, x, y);
         }
     }
     std::cout << "Link " << A << " not found." << std::endl;
