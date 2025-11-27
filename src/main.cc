@@ -46,17 +46,29 @@ int main() {
 
     TextDisplay *textDisplay = new TextDisplay{board, 0, false}; // default for now
     board->attach(textDisplay);
-    textDisplay->drawBoard();
 
 
     game->initializeGame(playerCount);
-    while (!game->getIsGameOver()) {
-    std::string command;
-    std::getline(cin, command);
-    game->executeCommand(command, game->getPlayer(0));
-    }
+
     clearConsole();
     cin.ignore();
+
+    while (game->initL1 == false || game->initL2 == false || game->initA1 == false || game->initA2 == false) {
+        clearConsole();
+        cout << "Current board setup:" << endl;
+        textDisplay->drawBoard();
+        cout << "Enter link and ability setup commands for both players. " << endl;
+        cout << "Remaining: " << endl;
+        if (game->initL1 == false) { cout << "* Player 1 links " << endl; }
+        if (game->initL2 == false) { cout << "* Player 2 links " << endl; }
+        if (game->initA1 == false) { cout << "* Player 1 abilities " << endl; }
+        if (game->initA2 == false) { cout << "* Player 2 abilities " << endl; }
+        string command;
+        getline(cin, command);
+        game->executeCommand(command, game->getPlayer(0));
+    }
+
+    clearConsole();
 
     while (!game->getIsGameOver()) {
         Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
@@ -66,31 +78,6 @@ int main() {
         game->executeCommand(command, currentPlayer);
     }
 
-    // for (auto player : players) {
-    //     displayInfo(cout, game->getPlayer(0), player->getPlayerNum() == 0);
-    //     board->notifyObservers();
-    //     displayInfo(cout, game->getPlayer(1), player->getPlayerNum() == 1);
-    //     cout << "Generating links for Player " << player->getPlayerNum() + 1 << ":\n";
-    //     player->generateLinks(cin, cout, board);
-    //     cout << endl;
-    //     clearConsole();
-    // }
-    if (!game->gameReady()) {
-        if (!game->getAbility1()) {
-            game->setAbility1(true);
-        }
-        if (!game->getAbility2()) {
-            game->setAbility2(true);
-        }
-        if (!game->getLinks1()) {
-            game->getPlayer(1)->generateLinks("V1V2V3V4D1D2D3D4", std::cout, board);
-            game->setLinks1(true);
-        }
-        if (!game->getLinks2()) {
-            game->getPlayer(2)->generateLinks("V1V2V3V4D1D2D3D4", std::cout, board);
-            game->setLinks2(true);
-        }
-    }
     game->startGame(0);
 
     delete game;

@@ -20,6 +20,8 @@ export class Game {
     bool p1Links;
     bool p2Links;
 public:
+    bool initL1 = false, initL2 = false, initA1 = false, initA2 = false;
+
     Game(Board *board, std::vector<Player*> players, int moveNumber, bool hasStarted, bool isGameOver);
 
     void startGame(int);

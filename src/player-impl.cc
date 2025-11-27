@@ -122,6 +122,7 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
     if (order.size() != 16) {
         return false;
     }
+
     const int NUM_LINKS = 8;
     links.clear();
 
@@ -131,87 +132,54 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
         {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
         {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
-    std::cout << playerNum;
+
     const auto &symbols = symbolSets[(playerNum - 1) % symbolSets.size()];
-    int i = 0;
-    while (i+1 < order.length()) {
-        std::cout << " i " << i << std::endl;
-        Link *newLink = nullptr;
+
+    for (int i = 0; i < 2*NUM_LINKS; i += 2) {
         char letter = order[i];
         int strength = order[i + 1] - '0';
-        std::cout << "Pair: " << letter << strength << "\n";
-        char symbol = symbolSets[(playerNum - 1) % symbolSets.size()][i/2];
-        std::cout << symbol << std::endl;
+        if ((letter != 'D' && letter != 'V') || strength < 1 || strength > 4) {
+            return false;
+        }
+
         if (letter == 'D') {
-            newLink = new Data{symbol, this, strength, nullptr, 0, false, false};
             // data
+            Link *newLink = new Data{symbols[i/2], this, strength, nullptr, 0, false, false};
+            links.push_back(newLink);
         }
         else if (letter == 'V') {
-            newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
             // virus
+            Link *newLink = new Virus{symbols[i/2], this, strength, nullptr, 0, false, false};
+            links.push_back(newLink);
         }
-        i += 2; // move to next pair
-
-    // std::vector<std::string> remainingLinks = {
-    //     "D1", "D2", "D3", "D4",
-    //     "V1", "V2", "V3", "V4"
-    // };
-
-    // for (int i = 0; i < NUM_LINKS; ++i) {
-    //     os << "Available links: ";
-    //     for (const auto &linkStr : remainingLinks) {
-    //         os << linkStr << " ";
-    //     }
-    //     os << "\nSelect link " << symbols[i] << ": ";
-
-    //     std::string choice;
-    //     is >> choice;
-
-    //     auto it = std::find(remainingLinks.begin(), remainingLinks.end(), choice);
-    //     if (it == remainingLinks.end()) {
-    //         os << "Invalid choice. Try again.\n";
-    //         --i; // retry
-    //         continue;
-    //     }
-
-    //     char symbol = symbols[i];
-    //     Link *newLink = nullptr;
-    //     int strength = std::stoi(choice.substr(1));
-
-    //     if (choice[0] == 'D') {
-    //         newLink = new Data{symbol, this, strength, nullptr, 0, false, false};
-    //     } else if (choice[0] == 'V') {
-    //         newLink = new Virus{symbol, this, strength, nullptr, 0, false, false};
-    //     }
 
         Tile *tileForSymbol = nullptr;
         auto &grid = board->getGrid();
         for (auto &row : grid) {
             for (Tile *t : row) {
-                std::cout << t->getSymbol();
-                if (t->getSymbol() == symbol) {
-                    std::cout << "found symbol " << symbol << std::endl;
+                if (t->getSymbol() == symbols[i/2]) {
                     tileForSymbol = t;
                     break;
                 }
             }
+            if (tileForSymbol) {
+                break;
+            }
         }
-
 
         if (!tileForSymbol) {
-            os << "Internal error: no tile for symbol " << symbol << "\n";
-            delete newLink;
-            i -= 2;
-            continue;
+            os << "Internal error: no tile for symbol " << symbols[i/2] << "\n";
+            return false;
         }
-        std::cout<< "newlink";
-        tileForSymbol->setLink(newLink);
-        std::cout<< "set tile";
-        newLink->setTile(tileForSymbol);
-        std::cout<< "push back";
-        links.push_back(newLink);
+
+        links.back()->setTile(tileForSymbol);
+        tileForSymbol->setLink(links.back());
+
+        std::cout << "Placed link " << links.back()->getSymbol() << " of type "
+             << (letter == 'D' ? "Data" : "Virus") << " with strength "
+             << strength << " at (" << tileForSymbol->getX() << ", "
+             << tileForSymbol->getY() << ")\n";
     }
-    std::cout<<"done";
 
     return true;
 }

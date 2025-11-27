@@ -6,7 +6,20 @@ import <string>;
 import Core;
 
 void Firewall::activate(AbilityParam param) {
-    // implementation needed
+    Tile *t = param.tile;
+    if (!t) return;
+
+    int owner = param.player->getPlayerNum();
+
+    
+    t->setIsWalled(true);
+    t->setFirewallPlayer(owner);
+
+    
+    if (owner == 0) t->setSymbol('m');
+    else            t->setSymbol('w');
 }
 
-AbilityType Firewall::getType() { return AbilityType::Firewall; }
+AbilityType Firewall::getType() { 
+    return AbilityType::Firewall; 
+}

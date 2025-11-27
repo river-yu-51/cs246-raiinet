@@ -18,6 +18,12 @@ void Board::setTile(int x, int y, Tile *tile) {
 void Board::moveLink(Link *link, int x, int y) {
     link->getTile()->setLink(nullptr);
     Tile *newTile = getTile(x, y);
+
+    // wall check
+    if (dest->getIsWalled() && !link->isBoosted()) {
+        std::cout << "Movement blocked by wall." << std::endl;
+        return;
+    }
     newTile->setLink(link);
     link->setTile(newTile);
     notifyObservers();

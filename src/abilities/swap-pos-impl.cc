@@ -6,7 +6,29 @@ import <string>;
 import Core;
 
 void SwapPos::activate(AbilityParam param) {
-    // implementation needed
+    Link *a = param.link1;
+    Link *b = param.link2;
+
+    if (!a || !b) return;
+
+    Tile *tileA = a->getTile();
+    Tile *tileB = b->getTile();
+
+    if (!tileA || !tileB) return;
+
+    // rmeove from tiles
+    tileA->setLink(nullptr);
+    tileB->setLink(nullptr);
+
+    // swap tiles
+    a->setTile(tileB);
+    b->setTile(tileA);
+
+    //place back onto board
+    tileB->setLink(a);
+    tileA->setLink(b);
 }
 
-AbilityType SwapPos::getType() { return AbilityType::SwapPos; }
+AbilityType SwapPos::getType() {
+    return AbilityType::SwapPos;
+}

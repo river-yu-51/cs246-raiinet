@@ -6,7 +6,15 @@ import <string>;
 import Core;
 
 void Download::activate(AbilityParam param) {
-    // implementation needed
+    Link *target = param.link1;
+    if (!target) return;
+
+    Tile *tile = target->getTile();
+    if (tile) {
+        tile->setLink(nullptr);
+    }
+
+    target->download();
 }
 
 AbilityType Download::getType() { return AbilityType::Download; }
