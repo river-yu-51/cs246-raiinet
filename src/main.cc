@@ -20,7 +20,6 @@ void clearConsole() {
 
 void drawGameState(Game *game, Display *display, ostream &os) {
     os << "Current game state:" << endl;
-    clearConsole();
     Player *currentPlayer = game->getPlayer(game->getMoveNumber() % 2);
 
     displayInfo(os, game->getPlayer(0), currentPlayer == game->getPlayer(0));
@@ -76,19 +75,25 @@ int main() {
         getline(cin, command);
         game->executeCommand(command, game->getPlayer(0));
     }
+    
+    game->startGame(0);
 
     while (!game->getIsGameOver()) {
         clearConsole();
         drawGameState(game, textDisplay, cout);
 
         Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
-        cout << "Player " << currentPlayer->getPlayerNum() + 1 << "'s turn. Enter command: ";
+
         string command;
-        getline(cin, command);
-        game->executeCommand(command, currentPlayer);
+        while (!game->executeCommand(command, currentPlayer)) {
+            cout << "Player " << currentPlayer->getPlayerNum() + 1 << "'s turn. Enter command: ";
+            getline(cin, command);
+        }
+
+        game->incrementMoveNumber();
     }
 
-    game->startGame(0);
+    
 
     delete game;
 }

@@ -53,6 +53,7 @@ public:
     void setAbility2(bool set);
     void setLinks1(bool set);
     void setLinks2(bool set);
+    void incrementMoveNumber();
     bool gameReady();
     void gameOver();
 };

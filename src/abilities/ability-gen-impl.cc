@@ -6,53 +6,46 @@ import <map>;
 
 import Core;
 
-bool isValidAbilityOrder(const std::string &order) {
-    if (order.size() != 5) {
-        return false;
-    }
-
-    std::vector<char> abilityChars = {'D', 'F', 'I', 'L', 'P', 'S', 'U', 'W'};
-    std::map<char, int> counts;
-    for (char c : abilityChars) {
-        counts[c] = 0;
-    }
-
-    for (char c : order) {
-        if (counts.find(c) == counts.end()) { return false; }
-        counts[c]++;
-        if (counts[c] > 2) { return false; }
-    }
-
-    return true;
-}
-
 bool generateAbilitiesForPlayer(Player *player, std::string order) {
-    if (!isValidAbilityOrder(order)) { return false; }
+    if (order.size() != 5) { return false; }
 
+    const std::map<char, AbilityType> abilityMap = {
+        {'L', AbilityType::LinkBoost},
+        {'F', AbilityType::Firewall},
+        {'D', AbilityType::Download},
+        {'P', AbilityType::Polarize},
+        {'S', AbilityType::Scan},
+        {'U', AbilityType::Upgrade},
+        {'I', AbilityType::Immunity},
+        {'W', AbilityType::Wall}
+    };
+
+    // keep track of how many times each letter appears
+    std::map<char, int> counts;
     std::vector<Ability*> abilities;
+    abilities.reserve(order.size());
 
     for (char c : order) {
-        if (c == 'D') {
-            abilities.push_back(new Download{player});
-        } else if (c == 'L') {
-            abilities.push_back(new LinkBoost{player});
-        } else if (c == 'U') {
-            abilities.push_back(new Upgrade{player});
-        } else if (c == 'I') {
-            abilities.push_back(new Immunity{player});
-        } else if (c == 'F') {
-            abilities.push_back(new Firewall{player});
-        } else if (c == 'S') {
-            abilities.push_back(new Scan{player});
-        } else if (c == 'P') {
-            abilities.push_back(new Polarize{player});
-        } else if (c == 'W') {
-            abilities.push_back(new Wall{player});
-        } else {
+        auto it = abilityMap.find(c);
+        if (it == abilityMap.end()) {
+            // invalid letter, clean up any abilities we've already allocated
+            for (Ability *a : abilities) { delete a; }
             return false;
         }
+
+        counts[c]++;
+        if (counts[c] > 2) {
+            // more than 2 of the same ability
+            for (Ability *a : abilities) { delete a; }
+            return false;
+        }
+
+        AbilityFactory factory;
+        Ability *ability = factory.createAbility(player, it->second);
+        abilities.push_back(ability);
     }
 
+    // if we get here, the order is valid; assign to the player
     player->getAbilities() = abilities;
     return true;
 }

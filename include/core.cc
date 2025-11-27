@@ -132,7 +132,6 @@ export enum class AbilityType {
     Polarize,
     Scan,
     Upgrade,
-    SwapPos,
     Immunity,
     Wall
 };
