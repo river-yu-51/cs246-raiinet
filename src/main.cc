@@ -18,6 +18,16 @@ void clearConsole() {
     cout << "\033[2J\033[1;1H";
 }
 
+void drawGameState(Game *game, Display *display, ostream &os) {
+    os << "Current game state:" << endl;
+    clearConsole();
+    Player *currentPlayer = game->getPlayer(game->getMoveNumber() % 2);
+
+    displayInfo(os, game->getPlayer(0), currentPlayer == game->getPlayer(0));
+    game->getBoard()->notifyObservers();
+    displayInfo(os, game->getPlayer(1), currentPlayer == game->getPlayer(1));
+}
+
 int main() {
     int playerCount = 0;
     while (playerCount != 2  /*&& playerCount != 4 */) {
@@ -55,8 +65,7 @@ int main() {
 
     while (game->initL1 == false || game->initL2 == false || game->initA1 == false || game->initA2 == false) {
         clearConsole();
-        cout << "Current board setup:" << endl;
-        textDisplay->drawBoard();
+        drawGameState(game, textDisplay, cout);
         cout << "Enter link and ability setup commands for both players. " << endl;
         cout << "Remaining: " << endl;
         if (game->initL1 == false) { cout << "* Player 1 links " << endl; }
@@ -68,9 +77,10 @@ int main() {
         game->executeCommand(command, game->getPlayer(0));
     }
 
-    clearConsole();
-
     while (!game->getIsGameOver()) {
+        clearConsole();
+        drawGameState(game, textDisplay, cout);
+
         Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
         cout << "Player " << currentPlayer->getPlayerNum() + 1 << "'s turn. Enter command: ";
         string command;

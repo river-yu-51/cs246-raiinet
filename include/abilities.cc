@@ -40,10 +40,10 @@ public:
     AbilityType getType() override;
 };
 
-export class LevelUp : public Ability {
-    AbilityType type = AbilityType::LevelUp;
+export class Upgrade : public Ability {
+    AbilityType type = AbilityType::Upgrade;
 public:
-    LevelUp(Player *player) : Ability(player) {}
+    Upgrade(Player *player) : Ability(player) {}
 
     void activate(AbilityParam param) override;
 
@@ -99,3 +99,5 @@ public:
 
     AbilityType getType() override;
 };
+
+export bool generateAbilitiesForPlayer(Player *player, std::string order);

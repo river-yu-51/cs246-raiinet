@@ -66,11 +66,26 @@ int Player::getDataCount() { return downloadedData; }
 
 int Player::getVirusCount() { return downloadedViruses; }
 
-bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
+bool isValidLinkOrder(const std::string order) {
+    if (order.length() != 16) { return false; }
 
-    if (order.size() != 16) {
+    std::vector<std::string> pairs;
+
+    for (int i = 0; i < 16; i += 2) { pairs.push_back(order.substr(i, 2)); }
+
+    std::sort(pairs.begin(), pairs.end());
+
+    if (pairs != std::vector<std::string>{
+        "D1", "D2", "D3", "D4",
+        "V1", "V2", "V3", "V4"
+    }) {
         return false;
     }
+    return true;
+}
+
+bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
+    if (!isValidLinkOrder(order)) { return false; }
 
     const int NUM_LINKS = 8;
     links.clear();
@@ -82,7 +97,7 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
         {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
 
-    const auto &symbols = symbolSets[(playerNum - 1) % symbolSets.size()];
+    const auto &symbols = symbolSets[playerNum];
 
     for (int i = 0; i < 2*NUM_LINKS; i += 2) {
         char letter = order[i];
@@ -134,12 +149,8 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
 }
 
 void Player::checkWinLose() {
-    if (downloadedViruses >= 4) {
-        isEliminated = true;
-    }
-    else if (downloadedData >= 4) {
-        isWon = true;
-    }
+    if (downloadedViruses >= 4) { isEliminated = true; }
+    else if (downloadedData >= 4) { isWon = true; }
 }
 
 bool Player::getIsWon() { return isWon; }

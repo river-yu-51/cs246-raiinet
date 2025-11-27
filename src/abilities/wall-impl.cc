@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+Wall::Wall(Player *player) : Ability(player) {}
+
 void Wall::activate(AbilityParam param) {
     Tile *t = param.tile;
     if (!t) return;

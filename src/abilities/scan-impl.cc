@@ -6,6 +6,8 @@ import <iostream>;
 
 import Core;
 
+Scan::Scan(Player *player) : Ability(player) {}
+
 void Scan::activate(AbilityParam param) {
     Link *target = param.primaryLink;
     if (!target) return;

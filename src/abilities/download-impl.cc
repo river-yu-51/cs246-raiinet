@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+Download::Download(Player *player) : Ability(player) {}
+
 void Download::activate(AbilityParam param) {
     Link *target = param.primaryLink;
     if (!target) return;

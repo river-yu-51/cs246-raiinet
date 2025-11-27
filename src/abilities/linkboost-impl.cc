@@ -5,6 +5,8 @@ import <string>;
 
 import Core;
 
+LinkBoost::LinkBoost(Player *player) : Ability(player) {}
+
 void LinkBoost::activate(AbilityParam param) {
     Link *target = param.primaryLink;
     if (!target) return;
