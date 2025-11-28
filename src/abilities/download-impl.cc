@@ -19,25 +19,7 @@ bool Download::activate(AbilityParam param) {
         return false;
     }
 
-    // 1. Detach link from its tile
-    Tile *tile = target->getTile();
-    if (tile) {
-        tile->setLink(nullptr);
-        target->setTile(nullptr);
-    }
-
-    // 2. Remove link from its owner's links vector
-    Player *owner = target->getPlayer();
-    auto &ownerLinks = owner->getLinks();
-    for (auto it = ownerLinks.begin(); it != ownerLinks.end(); ++it) {
-        if (*it == target) {
-            ownerLinks.erase(it);
-            break;
-        }
-    }
-
     caster->download(target);
-
     return true;
 }
 
