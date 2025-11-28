@@ -17,10 +17,10 @@ void Wall::activate(AbilityParam param) {
 
     int owner = param.player->getPlayerNum();
     if (owner == 0){
-        t->setSymbol('#');
+        t->setSymbol('M');
     } 
     else{
-         t->setSymbol('@');
+         t->setSymbol('W');
     }        
 }
 

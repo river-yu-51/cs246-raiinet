@@ -10,7 +10,9 @@ Scan::Scan(Player *player) : Ability(player) {}
 
 void Scan::activate(AbilityParam param) {
     Link *target = param.primaryLink;
-    if (!target) return;
+    if (!target) return false;
+    // check if immune, do nothing
+
 
     std::cout << "Scan: Link " << target->getSymbol()
               << " is a " << target->getType()
