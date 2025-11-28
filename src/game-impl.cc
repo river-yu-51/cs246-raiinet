@@ -381,16 +381,17 @@ bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
         if (link->getSymbol() == A && link->getTile()) {
             int x = link->getTile()->getX(); // row
             int y = link->getTile()->getY(); // col
+            int dist = link->getDistance();
 
             // up/down should change row (x), left/right change col (y)
             if (dir == "up") {
-                x -= 1;
+                x -= dist;
             } else if (dir == "down") {
-                x += 1;
+                x += dist;
             } else if (dir == "left") {
-                y -= 1;
+                y -= dist;
             } else if (dir == "right") {
-                y += 1;
+                y += dist;
             } else {
                 std::cout << "Invalid direction." << std::endl;
                 return false;
