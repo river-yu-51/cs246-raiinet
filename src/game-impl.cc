@@ -137,9 +137,23 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     }
 
                     AbilityParam param{player, link, nullptr, nullptr};
+                    
                     return targetAbility->activate(param);
                 }
-                case AbilityType::Firewall: {
+                case AbilityType::LinkBoost: {
+                    char c;
+                    iss >> c;
+                    std::cout << c;
+                    Link *l = getLink(c);
+                    if (!l) {
+                        std::cout << "Invalid link symbol." << std::endl;
+                        return false;
+                    }
+                    AbilityParam param{player, l, nullptr, nullptr};
+                    targetAbility->setAvailable(false);
+                    return targetAbility->activate(param);
+                }
+                case AbilityType::Firewall: { // not done
                     int x, y;
                     iss >> x >> y;
                     Tile *tile = board->getTile(x, y);
@@ -149,7 +163,81 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     }
 
                     AbilityParam param{player, nullptr, nullptr, tile};
+                    targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
+                }
+                case AbilityType::Immunity: {
+                    char c;
+                    iss >> c;
+                    std::cout << c;
+                    Link *l = getLink(c);
+                    if (!l) {
+                        std::cout << "Invalid link symbol." << std::endl;
+                        return false;
+                    }
+                    AbilityParam param{player, l, nullptr, nullptr};
+                    targetAbility->setAvailable(false);
+                    return targetAbility->activate(param);
+                }
+                case AbilityType::Polarize: { // not done
+                    char c;
+                    iss >> c;
+                    std::cout << c;
+                    Link *l = getLink(c);
+                    if (!l) {
+                        std::cout << "Invalid link symbol." << std::endl;
+                        return false;
+                    }
+                    AbilityParam param{player, l, nullptr, nullptr};
+                    targetAbility->setAvailable(false);
+                    return targetAbility->activate(param);
+                }
+                case AbilityType::Scan: { 
+                    char c;
+                    iss >> c;
+                    std::cout << c;
+                    Link *l = getLink(c);
+                    if (!l) {
+                        std::cout << "Invalid link symbol." << std::endl;
+                        return false;
+                    }
+                    else if (l->isImmune()) {
+                        std::cout << "Link is immune." << std::endl;
+                        return false;
+                    }
+                    AbilityParam param{player, l, nullptr, nullptr};
+                    targetAbility->setAvailable(false);
+                    return targetAbility->activate(param);
+                }
+                case AbilityType::Upgrade: {
+                    char c;
+                    iss >> c;
+                    std::cout << c;
+                    Link *l = getLink(c);
+                    if (!l) {
+                        std::cout << "Invalid link symbol." << std::endl;
+                        return false;
+                    }
+                    else if (l->getStrength() == 4) {
+                        std::cout << "Link is already at max strength." << std::endl;
+                        return false;
+                    }
+                    AbilityParam param{player, l, nullptr, nullptr};
+                    targetAbility->setAvailable(false);
+                    return targetAbility->activate(param);
+                }
+                case AbilityType::Wall: {
+                    int x, y;
+                    iss >> x >> y;
+                    Tile *tile = board->getTile(x, y);
+                    if (tile->getIsWalled()) {
+                        std::cout << "Tile is already walled." << endl;
+                        return false;
+                    }
+                    AbilityParam param{player, nullptr, nullptr, tile};
+                    targetAbility->setAvailable(false);
+                    return targetAbility->activate(param);
+
                 }
             }
             return false;
@@ -215,6 +303,24 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
         std::cout << "Invalid command." << std::endl;
     }
     return false;
+}
+
+Link* Game::getLink(char c) {
+    std::vector<Link*>& p1Links = players[0]->getLinks();
+    for (int i = 0; i < p1Links.size(); i++) {
+        Link* currLink = p1Links[i];
+        if (currLink->getSymbol() == c) {
+            return currLink;
+        }
+    }
+    std::vector<Link*>& p2Links = players[1]->getLinks();
+    for (int i = 0; i < p2Links.size(); i++) {
+        Link* currLink = p2Links[i];
+        if (currLink->getSymbol() == c) {
+            return currLink;
+        }
+    }
+    return nullptr;
 }
 
 bool Game::moveLink(Link *link, int x, int y) {
@@ -302,8 +408,14 @@ bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
 void Game::executeAbilitiesCommand(Player *player) {
     std::cout << "Abilities:" << std::endl;
     for (size_t i = 0; i < player->getAbilities().size(); ++i) {
-        std::cout << i + 1 << ". " << player->getAbilities()[i]->getType() << std::endl;
+        if (!player->getAbilities()[i]->isAvailable()) {
+            //std::cout << "not avail";
+        }
+        else {
+            std::cout << i << ". " << player->getAbilities()[i]->getType() << std::endl;
+        }
     }
+        
 }
 
 bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istream &in) {
