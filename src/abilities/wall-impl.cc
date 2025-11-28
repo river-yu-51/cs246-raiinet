@@ -15,10 +15,10 @@ bool Wall::activate(AbilityParam param) {
 
     int owner = param.player->getPlayerNum();
     if (owner == 0){
-        t->setSymbol('m');
+        t->setSymbol('M');
     } 
     else{
-         t->setSymbol('w');
+         t->setSymbol('W');
     }        
 
     return true;

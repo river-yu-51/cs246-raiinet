@@ -8,6 +8,9 @@ void Ability::setPlayer(Player *p) { player = p; }
 
 Player *Ability::getPlayer() { return player; } 
 
+bool Ability::isAvailable() { return available; }
+void Ability::setAvailable(bool avail) { available = avail; }
+
 std::ostream &operator<<(std::ostream &os, AbilityType type) {
     switch (type) {
         case AbilityType::LinkBoost:

@@ -31,6 +31,7 @@ public:
 
     Board *getBoard();
     Player *getPlayer(int playerNum);
+    Link *getLink(char c);
     int getMoveNumber();
     bool getHasStarted();
     bool getIsGameOver();

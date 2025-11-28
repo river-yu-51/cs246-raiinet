@@ -165,5 +165,6 @@ public:
     virtual bool activate(AbilityParam param) = 0;
     virtual AbilityType getType() = 0;
 
-    bool isAvailable() { return available; }
+    bool isAvailable();
+    void setAvailable(bool avail);
 };
