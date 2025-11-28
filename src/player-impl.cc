@@ -40,7 +40,6 @@ void Player::moveLink(Link *link) {
 
 void Player::download(Link *link) {
     if (!link) return;
-
     if (link->isDownloaded()) { return; }
 
     link->reveal();
@@ -59,6 +58,7 @@ void Player::download(Link *link) {
     }
 
     link->setDownloaded(true);
+
 
     checkWinLose();
 
