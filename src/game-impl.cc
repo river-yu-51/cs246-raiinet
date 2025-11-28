@@ -229,6 +229,12 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         std::cout << "Tile is already walled." << std::endl;
                         return false;
                     }
+                    else if (tile->getLink()) {
+                        std::cout << "Tile is currently occupied by a link." << std::endl;
+                    }
+                    else if (tile->getFirewallPlayer() == 0 || tile->getFirewallPlayer() == 1) {
+                        std::cout << "Tile is firewalled." << std::endl;
+                    }
                     AbilityParam param{player, nullptr, nullptr, tile};
                     targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
