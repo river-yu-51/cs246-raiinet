@@ -165,6 +165,19 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         std::cout << "Invalid tile coordinates." << std::endl;
                         return false;
                     }
+                    else if (tile->getIsWalled()) {
+                        std::cout << "Tile is already walled." << std::endl;
+                        return false;
+                    }
+                    else if (tile->getLink()) {
+                        std::cout << "Tile is currently occupied by a link." << std::endl;
+                        return false;
+                    }
+                    else if (tile->getFirewallPlayer() == 0 || tile->getFirewallPlayer() == 1) {
+                        std::cout << "Tile is firewalled." << std::endl;
+                        return false;
+                    }
+                    std::cout << tile->getFirewallPlayer() << std::endl;
                     AbilityParam param{player, nullptr, nullptr, tile};
                     targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
@@ -246,13 +259,18 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     int x, y;
                     iss >> x >> y;
                     Tile *tile = board->getTile(x, y);
+                    if (!tile) {
+                        std::cout << "Invalid tile coordinates." << std::endl;
+                        return false;
+                    }
                     if (tile->getIsWalled()) {
                         std::cout << "Tile is already walled." << std::endl;
                         return false;
                     } else if (tile->getLink()) {
                         std::cout << "Tile is currently occupied by a link." << std::endl;
                         return false;
-                    } else if (tile->getFirewallPlayer() == 0 || tile->getFirewallPlayer() == 1) {
+                    }
+                    else if (tile->getFirewallPlayer() == 0 || tile->getFirewallPlayer() == 1) {
                         std::cout << "Tile is firewalled." << std::endl;
                         return false;
                     }
@@ -370,6 +388,15 @@ bool Game::moveLink(Link *link, int x, int y) {
     if (targetTile->getIsWalled()) {
         std::cout << "Invalid move: tile is walled." << std::endl;
         return false;
+    }
+    Player *player = link->getPlayer();
+    if (targetTile->getFirewallPlayer() != player->getPlayerNum() && targetTile->getFirewallPlayer() != -1) {
+        // player stepped on a firewall
+        if (link->getType() == "virus") {
+            std::cout << "firewall virus" << std::endl;
+            player->download(link);
+            return true;
+        }
     }
 
     if (targetTile->getLink() &&
