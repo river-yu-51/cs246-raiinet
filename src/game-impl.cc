@@ -269,7 +269,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
         executeBoardCommand(player);
         return false;
     } else if (action == "sequence") {
-        std::cout << "sequence";
+        // std::cout << "sequence";
         std::string filename;
         iss >> filename;
         executeSequenceCommand(filename, player);
@@ -287,8 +287,8 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
             std::cout << "Invalid link order." << std::endl;
             return false;
         }
-        p1Links = true;
-        initL1 = true;
+        // p1Links = true;
+        // initL1 = true;
         return true;
     } else if (action == "-link2") {
         // std::string order;
@@ -297,8 +297,8 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
             std::cout << "Invalid link order." << std::endl;
             return false;
         }
-        p2Links = true;
-        initL2 = true;
+        // p2Links = true;
+        // initL2 = true;
         return true;
     } else if (action == "-ability1") {
         // std::string order;
@@ -307,8 +307,8 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
             std::cout << "Invalid ability string." << std::endl;
             return false;
         }
-        p1Ability = true;
-        initA1 = true;
+        // p1Ability = true;
+        // initA1 = true;
         return true;
     } else if (action == "-ability2") {
         // std::string order;
@@ -317,8 +317,8 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
             std::cout << "Invalid ability string." << std::endl;
             return false;
         }
-        p2Ability = true;
-        initA2 = true;
+        // p2Ability = true;
+        // initA2 = true;
         return true;
     }
 
@@ -616,9 +616,12 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
     while (std::getline(file, line) && !isGameOver) {
         if (line.empty()) continue;
 
+        std::cout << "Executing command: " << line << std::endl;
         bool endTurn = executeCommand(line, currentPlayer);
 
         if (isGameOver) { return true; }
+
+        executeBoardCommand(currentPlayer);
 
         if (endTurn) {
             int idx = currentPlayer->getPlayerNum(); // 2 players only
@@ -626,13 +629,6 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
             incrementMoveNumber();
         }
 
-        // if (currentPlayer->getIsWon()) {
-        //     std::cout << "Player " << currentPlayer->getPlayerNum() + 1 << " has won the game!" << std::endl;
-        //     gameOver();
-        // } else if (currentPlayer->getIsEliminated()) {
-        //     std::cout << "Player " << currentPlayer->getPlayerNum() + 1 << " has been eliminated!\nPlayer " << 1 - currentPlayer->getPlayerNum() + 1 << " wins!" << std::endl;
-        //     gameOver();
-        // }
         if (currentPlayer->getIsWon() || currentPlayer->getIsEliminated()) {
             return true;
         }
@@ -640,6 +636,7 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
 
     return true;
 }
+
 
 
 void Game::executeQuitCommand() {
@@ -685,21 +682,30 @@ void Game::battle(Link *attacker, Link *defender) {
             oldAttackerTile->setLink(nullptr);
         }
     }
+
+    board->notifyObservers();
 }
 
-bool Game::getAbility1() { return p1Ability; }
-bool Game::getAbility2() { return p2Ability; }
-bool Game::getLinks1() { return p1Links; }
-bool Game::getLinks2() { return p2Links; }
-void Game::setAbility1(bool set) { p1Ability = set; }
-void Game::setAbility2(bool set) { p2Ability = set; }
-void Game::setLinks1(bool set) { p1Links = set; }
-void Game::setLinks2(bool set) { p2Links = set; }
+// bool Game::getAbility1() { return p1Ability; }
+// bool Game::getAbility2() { return p2Ability; }
+// bool Game::getLinks1() { return p1Links; }
+// bool Game::getLinks2() { return p2Links; }
+// void Game::setAbility1(bool set) { p1Ability = set; }
+// void Game::setAbility2(bool set) { p2Ability = set; }
+// void Game::setLinks1(bool set) { p1Links = set; }
+// void Game::setLinks2(bool set) { p2Links = set; }
 
 void Game::incrementMoveNumber() { moveNumber++; }
 
-bool Game::gameReady() {
-    return p1Ability && p2Ability && p1Links && p2Links;
-}
+// bool Game::gameReady() {
+//     return p1Ability && p2Ability && p1Links && p2Links;
+// }
 
 void Game::gameOver() { isGameOver = true; }
+
+Game::~Game() {
+    for (Player *player : players) {
+        delete player;
+    }
+    delete board;
+}

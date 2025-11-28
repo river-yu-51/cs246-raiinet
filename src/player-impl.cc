@@ -21,6 +21,7 @@ Player::Player(int playerNum,
       abilities{abilities},
       usage{usage},
       isEliminated{isEliminated},
+      isWon{isWon},
       downloadedData{downloadedData},
       downloadedViruses{downloadedViruses} {}
 

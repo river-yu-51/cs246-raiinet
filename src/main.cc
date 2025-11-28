@@ -28,11 +28,11 @@ void drawGameState(Game *game, Display *display, ostream &os) {
 }
 
 int main(int argc, char * argv[]) {
-    int playerCount = 0;
-    while (playerCount != 2  /*&& playerCount != 4 */) {
-        cout << "Enter number of players [ONLY 2]: ";
-        cin >> playerCount;
-    }
+    int playerCount = 2; // default to 2 players
+    // while (playerCount != 2  /*&& playerCount != 4 */) {
+    //     cout << "Enter number of players [ONLY 2]: ";
+    //     cin >> playerCount;
+    // }
     vector<Player*> players;
     for (int i = 0; i < playerCount; ++i) {
         // For simplicity, players have no links or abilities initially
@@ -60,7 +60,7 @@ int main(int argc, char * argv[]) {
     game->initializeGame(playerCount);
 
     //clearConsole();
-    cin.ignore();
+    // cin.ignore();
 
     std::string command;
     std::string order;
@@ -70,20 +70,10 @@ int main(int argc, char * argv[]) {
         game->executeCommand(command, game->getPlayer(0), order);
     }
 
-    if (!game->gameReady()) {
-        if (!game->getAbility1()) {
-            game->executeCommand("-ability1", game->getPlayer(0), "LFDSP");
-        }
-        if (!game->getAbility2()) {
-            game->executeCommand("-ability2", game->getPlayer(1), "LFDSP");
-        }
-        if (!game->getLinks1()) {
-            game->executeCommand("-link1", game->getPlayer(0), "V1V2V3V4D1D2D3D4");
-        }
-        if (!game->getLinks2()) {
-            game->executeCommand("-link2", game->getPlayer(1), "V1V2V3V4D1D2D3D4");
-        }
-    }
+    game->executeCommand("-ability1", game->getPlayer(0), "LFDSP");
+    game->executeCommand("-ability2", game->getPlayer(1), "LFDSP");
+    game->executeCommand("-link1", game->getPlayer(0), "V1V2V3V4D1D2D3D4");
+    game->executeCommand("-link2", game->getPlayer(1), "V1V2V3V4D1D2D3D4");
     
     game->startGame(0);
 
@@ -115,6 +105,6 @@ int main(int argc, char * argv[]) {
         }
     }
     
-
+    delete textDisplay;
     delete game;
 }

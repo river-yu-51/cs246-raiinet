@@ -129,6 +129,8 @@ public:
     void setTile(int x, int y, Tile *tile);
 
     void moveLink(Link *link, int x, int y);
+
+    ~Board();
 };
 
 export enum class AbilityType {

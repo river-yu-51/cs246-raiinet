@@ -29,6 +29,8 @@ bool Polarize::activate(AbilityParam param) {
         polarized = new Virus{symbol, owner, strength, tile, distance, immune, downloaded, revealed};
     } else if (link->getType() == "virus") {
         polarized = new Data{symbol, owner, strength, tile, distance, immune, downloaded, revealed};
+    } else {
+        return false;
     }
 
     polarized->setTile(tile);
