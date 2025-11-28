@@ -123,21 +123,16 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
         } else {
             switch(targetAbility->getType()) {
                 case AbilityType::Download: {
-                    int x, y;
-                    iss >> x >> y;
-                    Tile *tile = board->getTile(x, y);
-                    if (!tile) {
-                        std::cout << "Invalid tile coordinates." << std::endl;
+                    char c;
+                    iss >> c;
+                    std::cout << c;
+                    Link *l = getLink(c);
+                    if (!l) {
+                        std::cout << "Invalid link symbol." << std::endl;
                         return false;
                     }
-                    Link *link = tile->getLink();
-                    if (!link) {
-                        std::cout << "No link on specified tile." << std::endl;
-                        return false;
-                    }
-
-                    AbilityParam param{player, link, nullptr, nullptr};
-                    
+                    AbilityParam param{player, l, nullptr, nullptr};
+                    targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
                 }
                 case AbilityType::LinkBoost: {
