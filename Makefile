@@ -1,7 +1,7 @@
 CXX      := g++-14
 CXXFLAGS := -std=c++20 -fmodules-ts -Wall -g
 
-TARGET := raiinet
+TARGET := RAIInet
 
 .PHONY: all clean rebuild
 
