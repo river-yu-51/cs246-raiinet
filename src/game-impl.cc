@@ -162,7 +162,8 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
         std::cout << "sequence";
         std::string filename;
         iss >> filename;
-        return executeSequenceCommand(filename, player);
+        executeSequenceCommand(filename, player);
+        return false;
     } else if (action == "quit") {
         executeQuitCommand();
         return true;
@@ -224,10 +225,10 @@ bool Game::moveLink(Link *link, int x, int y) {
     // top/bottom: download, left/right: out of bounds
     if (x < 0 || x >= rows || y < 0 || y >= cols) {
         if (x == -1 && link->getPlayer()->getPlayerNum() == 1) {
-            players[1]->download(link);
+            players[0]->download(link);
             return true;
         } else if (x == rows && link->getPlayer()->getPlayerNum() == 0) {
-            players[0]->download(link);
+            players[1]->download(link);
             return true;
         }
 
@@ -258,11 +259,6 @@ bool Game::moveLink(Link *link, int x, int y) {
             std::cout << "Invalid move: cannot enter own server port." << std::endl;
             return false;
         } else {
-            Tile *cur = link->getTile();
-            if (cur) {
-                cur->setLink(nullptr);
-            }
-            link->setTile(nullptr);
             link->getPlayer()->download(link);
         }
     } else {
@@ -510,25 +506,36 @@ bool Game::getHasStarted() { return hasStarted; }
 bool Game::getIsGameOver() { return isGameOver; }
 
 void Game::battle(Link *attacker, Link *defender) {
+    if (!attacker || !defender) return;
+
     Tile *attackerTile = attacker->getTile();
     Tile *defenderTile = defender->getTile();
 
-    bool successfulAttack = (attacker->getStrength() >= defender->getStrength());
+    if (!attackerTile || !defenderTile) { return; }
 
-    if (successfulAttack) {
-        auto &defenderPlayerLinks = defender->getPlayer()->getLinks();
-        for (auto it = defenderPlayerLinks.begin(); it != defenderPlayerLinks.end(); ++it) {
-            if (*it == defender) {
-                defenderPlayerLinks.erase(it);
-                break;
-            }
+    attacker->reveal();
+    defender->reveal();
+
+    bool attackerWins = (attacker->getStrength() >= defender->getStrength());
+
+    if (attackerWins) {
+        Tile *oldDefenderTile = defenderTile;
+        attacker->getPlayer()->download(defender);
+
+        if (attackerTile->getLink() == attacker) { attackerTile->setLink(nullptr); }
+
+        attacker->setTile(oldDefenderTile);
+        if (oldDefenderTile) {
+            oldDefenderTile->setLink(attacker);
         }
 
-        attackerTile->setLink(nullptr);
-        attacker->setTile(defenderTile);
-        defenderTile->setLink(attacker);
+    } else {
+        Tile *oldAttackerTile = attackerTile;
+        defender->getPlayer()->download(attacker);
 
-        attacker->getPlayer()->download(defender);  // will delete defender
+        if (oldAttackerTile && oldAttackerTile->getLink() == attacker) {
+            oldAttackerTile->setLink(nullptr);
+        }
     }
 }
 

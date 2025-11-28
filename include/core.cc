@@ -46,6 +46,7 @@ export class Link {
     int distance; // number of "moves per move"
     bool immune;
     bool downloaded;
+    bool revealed = false;
 public:
     virtual ~Link() = default;
 
@@ -57,6 +58,7 @@ public:
     Tile *getTile();
     bool isImmune();
     bool isDownloaded();
+    bool isRevealed();
     int getDistance();
 
     void setStrength(int value);
@@ -64,6 +66,8 @@ public:
     void setDistance(int distance);
     void setImmune(bool immune);
     void setDownloaded(bool downloaded);
+    void reveal();
+
     virtual std::string getType() = 0;
 
     virtual void download() = 0;
@@ -110,6 +114,8 @@ public:
     bool getIsEliminated();
     bool getIsWon();
     void checkWinLose();
+
+    ~Player();
 };
 
 export class Board : public Subject {
