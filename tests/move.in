@@ -1,0 +1,28 @@
+move f down
+move H right
+move H down
+move H up
+
+move f down
+move H up
+
+move f down
+move H up
+
+move f down
+move H up
+
+move f down
+move H up
+
+move f down
+move H up
+
+move g left
+move E up
+
+move f left
+move H left
+
+move f down # go into opponent port
+move H up # segmentation fault

@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
 
     game->initializeGame(playerCount);
 
-    clearConsole();
+    //clearConsole();
     cin.ignore();
 
     std::string command;
@@ -88,7 +88,7 @@ int main(int argc, char * argv[]) {
     game->startGame(0);
 
     while (!game->getIsGameOver()) {
-        clearConsole();
+        //clearConsole();
         drawGameState(game, textDisplay, cout);
 
         Player *currentPlayer = game->getPlayer((game->getMoveNumber()) % playerCount);
@@ -103,7 +103,6 @@ int main(int argc, char * argv[]) {
 
             endTurn = game->executeCommand(command, currentPlayer);
         }
-        
 
         game->incrementMoveNumber();
     }
