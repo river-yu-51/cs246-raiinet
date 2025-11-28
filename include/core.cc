@@ -46,11 +46,11 @@ export class Link {
     int distance; // number of "moves per move"
     bool immune;
     bool downloaded;
-    bool revealed = false;
+    bool revealed;
 public:
     virtual ~Link() = default;
 
-    Link(Player *player, char symbol, int strength, Tile *tile, int distance, bool immune, bool downloaded);
+    Link(Player *player, char symbol, int strength, Tile *tile, int distance, bool immune, bool downloaded, bool revealed);
 
     Player *getPlayer();
     char getSymbol();
@@ -75,14 +75,14 @@ public:
 
 export class Data : public Link {
 public:
-    Data(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
+    Data(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded, bool revealed);
     std::string getType() override;
     void download() override;
 };
 
 export class Virus : public Link {
 public:
-    Virus(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded);
+    Virus(char symbol, Player *player, int strength, Tile *tile, int distance, bool immune, bool downloaded, bool revealed);
     std::string getType() override;
     void download() override;
 };

@@ -18,7 +18,7 @@ bool Wall::activate(AbilityParam param) {
         t->setSymbol('M');
     } 
     else{
-         t->setSymbol('W');
+        t->setSymbol('W');
     }        
 
     return true;

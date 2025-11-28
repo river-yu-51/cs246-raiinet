@@ -9,44 +9,40 @@ Polarize::Polarize(Player *player) : Ability(player) {}
 
 bool Polarize::activate(AbilityParam param) {
 
-    Link *target = param.primaryLink;
-    if (!target) return false;
+    Link *link = param.primaryLink;
+    if (!link) return false;
+    if (link->isImmune()) return false;
+    if (link->isDownloaded()) return false;
 
-    if (target->getType() == "data") {
-        
+    // Link(Player *player, char symbol, int strength, Tile *tile, int distance, bool immune, bool downloaded, bool revealed);
+    Player *owner = link->getPlayer();
+    char symbol = link->getSymbol();
+    int strength = link->getStrength();
+    Tile *tile = link->getTile();
+    int distance = link->getDistance();
+    bool immune = link->isImmune();
+    bool downloaded = link->isDownloaded();
+    bool revealed = link->isRevealed();
+
+    Link *polarized = nullptr;
+    if (link->getType() == "data") {
+        polarized = new Virus{symbol, owner, strength, tile, distance, immune, downloaded, revealed};
+    } else if (link->getType() == "virus") {
+        polarized = new Data{symbol, owner, strength, tile, distance, immune, downloaded, revealed};
     }
-    else if (target->getType() == "virus") {
 
+    polarized->setTile(tile);
+    tile->setLink(polarized);
+
+    auto &ownerLinks = owner->getLinks();
+    for (auto it = ownerLinks.begin(); it != ownerLinks.end(); ++it) {
+        if (*it == link) {
+            *it = polarized;
+            break;
+        }
     }
 
-    // Player *owner = target->getPlayer();
-    // Tile *tile = target->getTile();
-    // char symbol = target->getSymbol();
-    // int strength = target->getStrength();
-
-    // if (tile) tile->setLink(nullptr);
-
-    // auto &links = owner->getLinks();
-    // for (size_t i = 0; i < links.size(); ++i) {
-    //     if (links[i] == target) {
-    //         links.erase(links.begin() + i);
-    //         break;
-    //     }
-    // }
-
-    // Link *replacement = nullptr;
-    // if (target->getType() == "data") {
-    //     replacement = new Virus{owner, strength, symbol};
-    // } else {
-    //     replacement = new Data{owner, strength, symbol};
-    // }
-
-    // if (tile) {
-    //     replacement->setTile(tile);
-    //     tile->setLink(replacement);
-    // }
-
-    // owner->addLink(replacement);
+    delete link;
 
     return true;
 }
