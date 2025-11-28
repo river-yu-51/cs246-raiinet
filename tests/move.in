@@ -24,8 +24,5 @@ move E up
 move f left
 move H left
 
-move f down # p1 go into opponent port
+move f down
 move H up
-
-move e down
-move H up # segmentation fault

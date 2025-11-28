@@ -331,10 +331,10 @@ bool Game::moveLink(Link *link, int x, int y) {
     // top/bottom: download, left/right: out of bounds
     if (x < 0 || x >= rows || y < 0 || y >= cols) {
         if (x == -1 && link->getPlayer()->getPlayerNum() == 1) {
-            players[0]->download(link);
+            players[1]->download(link);
             return true;
         } else if (x == rows && link->getPlayer()->getPlayerNum() == 0) {
-            players[1]->download(link);
+            players[0]->download(link);
             return true;
         }
 
@@ -365,7 +365,8 @@ bool Game::moveLink(Link *link, int x, int y) {
             std::cout << "Invalid move: cannot enter own server port." << std::endl;
             return false;
         } else {
-            link->getPlayer()->download(link);
+            players[portSideOwner]->download(link);
+            return true;
         }
     } else {
         board->moveLink(link, x, y);
@@ -588,7 +589,7 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
     Player *currentPlayer = startingPlayer;
     std::string line;
 
-    while (std::getline(file, line)) {
+    while (std::getline(file, line) && !isGameOver) {
         if (line.empty()) continue;
 
         bool endTurn = executeCommand(line, currentPlayer);
@@ -596,8 +597,7 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
         if (isGameOver) { return true; }
 
         if (endTurn) {
-            // swap to the other player
-            int idx = currentPlayer->getPlayerNum();   // 0 or 1
+            int idx = currentPlayer->getPlayerNum(); // 2 players only
             currentPlayer = players[1 - idx];
             incrementMoveNumber();
         }
@@ -605,6 +605,7 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
 
     return true;
 }
+
 
 void Game::executeQuitCommand() {
     isGameOver = true;
