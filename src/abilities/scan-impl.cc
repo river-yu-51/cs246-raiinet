@@ -8,14 +8,16 @@ import Core;
 
 Scan::Scan(Player *player) : Ability(player) {}
 
-void Scan::activate(AbilityParam param) {
+bool Scan::activate(AbilityParam param) {
     Link *target = param.primaryLink;
-    if (!target) return;
+    if (!target) return false;
 
     std::cout << "Scan: Link " << target->getSymbol()
               << " is a " << target->getType()
               << " with strength " << target->getStrength()
               << std::endl;
+    
+    return true;
 }
 
 AbilityType Scan::getType() { 

@@ -7,9 +7,9 @@ import Core;
 
 Wall::Wall(Player *player) : Ability(player) {}
 
-void Wall::activate(AbilityParam param) {
+bool Wall::activate(AbilityParam param) {
     Tile *t = param.tile;
-    if (!t) return;
+    if (!t) return false;
 
     t->setIsWalled(true);
 
@@ -22,6 +22,8 @@ void Wall::activate(AbilityParam param) {
     else{
          t->setSymbol('@');
     }        
+
+    return true;
 }
 
 AbilityType Wall::getType() { 

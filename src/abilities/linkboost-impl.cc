@@ -7,11 +7,13 @@ import Core;
 
 LinkBoost::LinkBoost(Player *player) : Ability(player) {}
 
-void LinkBoost::activate(AbilityParam param) {
+bool LinkBoost::activate(AbilityParam param) {
     Link *target = param.primaryLink;
-    if (!target) return;
+    if (!target) return false;
 
     target->setDistance(target->getDistance() + 1);
+
+    return true;
 }
 
 AbilityType LinkBoost::getType() { 
