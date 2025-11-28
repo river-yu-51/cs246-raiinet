@@ -105,6 +105,14 @@ int main(int argc, char * argv[]) {
         }
 
         game->incrementMoveNumber();
+
+        if (currentPlayer->getIsWon()) {
+            cout << "Player " << currentPlayer->getPlayerNum() + 1 << " has won the game!" << endl;
+            game->gameOver();
+        } else if (currentPlayer->getIsEliminated()) {
+            cout << "Player " << currentPlayer->getPlayerNum() + 1 << " has been eliminated!\nPlayer " << 1 - currentPlayer->getPlayerNum() + 1 << " wins!" << endl;
+            game->gameOver();
+        }
     }
     
 

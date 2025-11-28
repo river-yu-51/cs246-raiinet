@@ -246,7 +246,8 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
         std::string filename;
         iss >> filename;
         executeSequenceCommand(filename, player);
-        return false;
+        incrementMoveNumber();
+        return true;
     } else if (action == "quit") {
         executeQuitCommand();
         return true;
@@ -596,6 +597,17 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
             currentPlayer = players[1 - idx];
             incrementMoveNumber();
         }
+
+        // if (currentPlayer->getIsWon()) {
+        //     std::cout << "Player " << currentPlayer->getPlayerNum() + 1 << " has won the game!" << std::endl;
+        //     gameOver();
+        // } else if (currentPlayer->getIsEliminated()) {
+        //     std::cout << "Player " << currentPlayer->getPlayerNum() + 1 << " has been eliminated!\nPlayer " << 1 - currentPlayer->getPlayerNum() + 1 << " wins!" << std::endl;
+        //     gameOver();
+        // }
+        if (currentPlayer->getIsWon() || currentPlayer->getIsEliminated()) {
+            return true;
+        }
     }
 
     return true;
@@ -662,7 +674,4 @@ bool Game::gameReady() {
     return p1Ability && p2Ability && p1Links && p2Links;
 }
 
-void Game::gameOver() {
-    isGameOver = true;
-    // other stuff idk
-}
+void Game::gameOver() { isGameOver = true; }
