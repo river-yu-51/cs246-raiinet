@@ -231,7 +231,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     iss >> x >> y;
                     Tile *tile = board->getTile(x, y);
                     if (tile->getIsWalled()) {
-                        std::cout << "Tile is already walled." << endl;
+                        std::cout << "Tile is already walled." << std::endl;
                         return false;
                     }
                     AbilityParam param{player, nullptr, nullptr, tile};
