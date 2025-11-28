@@ -13,14 +13,12 @@ bool Wall::activate(AbilityParam param) {
 
     t->setIsWalled(true);
 
-    // choose a symbol for a wall
-
     int owner = param.player->getPlayerNum();
     if (owner == 0){
-        t->setSymbol('#');
+        t->setSymbol('m');
     } 
     else{
-         t->setSymbol('@');
+         t->setSymbol('w');
     }        
 
     return true;

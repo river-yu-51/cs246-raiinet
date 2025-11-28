@@ -8,8 +8,16 @@ import Core;
 Polarize::Polarize(Player *player) : Ability(player) {}
 
 bool Polarize::activate(AbilityParam param) {
-    // Link *target = param.primaryLink;
-    // if (!target) return;
+
+    Link *target = param.primaryLink;
+    if (!target) return false;
+
+    if (target->getType() == "data") {
+        
+    }
+    else if (target->getType() == "virus") {
+
+    }
 
     // Player *owner = target->getPlayer();
     // Tile *tile = target->getTile();
