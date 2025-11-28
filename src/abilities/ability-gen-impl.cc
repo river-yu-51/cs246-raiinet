@@ -45,6 +45,12 @@ bool generateAbilitiesForPlayer(Player *player, std::string order) {
         abilities.push_back(ability);
     }
 
+    // in case the command is called twice - probably not needed
+    auto &existingAbilities = player->getAbilities();
+    for (Ability *a : existingAbilities) {
+        delete a;
+    }
+
     // if we get here, the order is valid; assign to the player
     player->getAbilities() = abilities;
     return true;

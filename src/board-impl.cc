@@ -28,3 +28,11 @@ void Board::moveLink(Link *link, int x, int y) {
 
     notifyObservers();
 }
+
+Board::~Board() {
+    for (auto &row : grid) {
+        for (Tile *tile : row) {
+            delete tile;
+        }
+    }
+}
