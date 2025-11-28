@@ -368,6 +368,15 @@ bool Game::moveLink(Link *link, int x, int y) {
         std::cout << "Invalid move: tile is walled." << std::endl;
         return false;
     }
+    Player *player = link->getPlayer();
+    if (targetTile->getFirewallPlayer() != player->getPlayerNum() && targetTile->getFirewallPlayer() != -1) {
+        // player stepped on a firewall
+        if (link->getType() == "virus") {
+            std::cout << "firewall virus" << std::endl;
+            player->download(link);
+            return true;
+        }
+    }
 
     if (targetTile->getLink() &&
         targetTile->getLink()->getPlayer() == link->getPlayer()) {
