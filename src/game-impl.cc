@@ -156,7 +156,19 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         std::cout << "Invalid tile coordinates." << std::endl;
                         return false;
                     }
-
+                    else if (tile->getIsWalled()) {
+                        std::cout << "Tile is already walled." << std::endl;
+                        return false;
+                    }
+                    else if (tile->getLink()) {
+                        std::cout << "Tile is currently occupied by a link." << std::endl;
+                        return false;
+                    }
+                    else if (tile->getFirewallPlayer() == 0 || tile->getFirewallPlayer() == 1) {
+                        std::cout << "Tile is firewalled." << std::endl;
+                        return false;
+                    }
+                    std::cout << tile->getFirewallPlayer() << std::endl;
                     AbilityParam param{player, nullptr, nullptr, tile};
                     targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
@@ -225,15 +237,21 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     int x, y;
                     iss >> x >> y;
                     Tile *tile = board->getTile(x, y);
+                    if (!tile) {
+                        std::cout << "Invalid tile coordinates." << std::endl;
+                        return false;
+                    }
                     if (tile->getIsWalled()) {
                         std::cout << "Tile is already walled." << std::endl;
                         return false;
                     }
                     else if (tile->getLink()) {
                         std::cout << "Tile is currently occupied by a link." << std::endl;
+                        return false;
                     }
                     else if (tile->getFirewallPlayer() == 0 || tile->getFirewallPlayer() == 1) {
                         std::cout << "Tile is firewalled." << std::endl;
+                        return false;
                     }
                     AbilityParam param{player, nullptr, nullptr, tile};
                     targetAbility->setAvailable(false);
