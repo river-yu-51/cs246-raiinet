@@ -8,8 +8,9 @@ import Core;
 Immunity::Immunity(Player *player) : Ability(player) {}
 
 bool Immunity::activate(AbilityParam param) {
-    // implementation needed
-
+    Link *target = param.primaryLink;
+    if (!target) return false;
+    target->setImmune(true);
     return true;
 }
 

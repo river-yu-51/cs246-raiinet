@@ -11,11 +11,12 @@ Scan::Scan(Player *player) : Ability(player) {}
 bool Scan::activate(AbilityParam param) {
     Link *target = param.primaryLink;
     if (!target) return false;
+    
 
-    std::cout << "Scan: Link " << target->getSymbol()
-              << " is a " << target->getType()
-              << " with strength " << target->getStrength()
-              << std::endl;
+    // std::cout << "Scan: Link " << target->getSymbol()
+    //           << " is a " << target->getType()
+    //           << " with strength " << target->getStrength()
+    //           << std::endl;
     
     return true;
 }
