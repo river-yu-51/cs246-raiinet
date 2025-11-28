@@ -123,12 +123,12 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
 
         if (letter == 'D') {
             // data
-            Link *newLink = new Data{symbols[i/2], this, strength, nullptr, 1, false, false};
+            Link *newLink = new Data{symbols[i/2], this, strength, nullptr, 1, false, false, false};
             links.push_back(newLink);
         }
         else if (letter == 'V') {
             // virus
-            Link *newLink = new Virus{symbols[i/2], this, strength, nullptr, 1, false, false};
+            Link *newLink = new Virus{symbols[i/2], this, strength, nullptr, 1, false, false, false};
             links.push_back(newLink);
         }
 
