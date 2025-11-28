@@ -40,7 +40,7 @@ void displayLinkSummary(std::ostream &os,
 
         os << sym << ": ";
 
-        if (reveal) {
+        if (reveal || link->isRevealed()) {
             char typeChar = (link->getType() == "data") ? 'D' : 'V';
             os << typeChar << link->getStrength();
         } else {

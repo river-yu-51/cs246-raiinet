@@ -106,8 +106,6 @@ int main(int argc, char * argv[]) {
 
         game->incrementMoveNumber();
     }
-
-
     
 
     delete game;

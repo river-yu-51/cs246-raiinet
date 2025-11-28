@@ -15,6 +15,8 @@ bool Link::isImmune() { return immune; }
 
 bool Link::isDownloaded() { return downloaded; }
 
+bool Link::isRevealed() { return revealed; }
+
 int Link::getDistance() { return distance; }
 
 void Link::setStrength(int val) { strength = val; }
@@ -26,3 +28,5 @@ void Link::setDistance(int dist) { distance = dist; }
 void Link::setImmune(bool im) { immune = im; }
 
 void Link::setDownloaded(bool dl) { downloaded = dl; }
+
+void Link::reveal() { revealed = true; }

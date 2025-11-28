@@ -40,15 +40,28 @@ void Player::moveLink(Link *link) {
 void Player::download(Link *link) {
     if (!link) return;
 
+    if (link->isDownloaded()) { return; }
+
+    link->reveal();
+
+    // detach from board if still on a tile
+    Tile *tile = link->getTile();
+    if (tile && tile->getLink() == link) {
+        tile->setLink(nullptr);
+    }
+    link->setTile(nullptr);
+
     if (link->getType() == "data") {
         downloadedData++;
     } else if (link->getType() == "virus") {
         downloadedViruses++;
     }
 
+    link->setDownloaded(true);
+
     checkWinLose();
 
-    delete link;
+    // delete link;
 }
 
 int Player::getPlayerNum() { return playerNum; }
@@ -161,3 +174,12 @@ void Player::checkWinLose() {
 
 bool Player::getIsWon() { return isWon; }
 bool Player::getIsEliminated() { return isEliminated; }
+
+Player::~Player() {
+    for (Link *link : links) {
+        delete link;
+    }
+    for (Ability *ability : abilities) {
+        delete ability;
+    }
+}
