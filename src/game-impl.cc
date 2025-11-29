@@ -494,8 +494,6 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
 
         if (isGameOver) { return true; }
 
-        executeBoardCommand(currentPlayer);
-
         // switch player
         if (endTurn) {
             int idx = currentPlayer->getPlayerNum(); // 2 players only

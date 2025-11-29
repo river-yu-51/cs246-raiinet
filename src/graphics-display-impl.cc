@@ -70,15 +70,27 @@ void GraphicsDisplay::drawBoard() {
 
             // draw symbol
             char c;
+            int textColour = Xwindow::Black;
             if (Link *link = t->getLink()) {
                 c = link->getSymbol();
+
+                bool isOwner = (link->getPlayer()->getPlayerNum() == currentPlayer);
+                bool isPublic = link->isRevealed();
+
+                if (isOwner || isPublic) {
+                    if (link->getType() == "data") {
+                        textColour = Xwindow::Green;
+                    } else if (link->getType() == "virus") {
+                        textColour = Xwindow::Red;
+                    }
+                }
             } else {
                 c = t->getSymbol();
             }
 
             // center character in cell
             std::string s(1, c);
-            win->drawString(x + cellSize / 2 - 4, y + cellSize / 2 + 4, s);
+            win->drawString(x + cellSize / 2 - 4, y + cellSize / 2 + 4, s, textColour);
         }
         y += cellSize; // move to next row
     }
