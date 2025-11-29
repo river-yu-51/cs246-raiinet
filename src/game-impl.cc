@@ -139,8 +139,11 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         return false;
                     }
                     AbilityParam param{player, l, nullptr, nullptr};
+                    if (!targetAbility->activate(param)) {
+                        return false;
+                    }
                     targetAbility->setAvailable(false);
-                    return targetAbility->activate(param);
+                    return true;
                 }
                 case AbilityType::LinkBoost: {
                     char c;
@@ -356,6 +359,7 @@ Link* Game::getLink(char c) {
         }
     }
     std::vector<Link*>& p2Links = players[1]->getLinks();
+    std::cout << p2Links.size();
     for (size_t i = 0; i < p2Links.size(); i++) {
         Link* currLink = p2Links[i];
         if (currLink->getSymbol() == c) {
