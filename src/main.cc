@@ -18,8 +18,10 @@ void clearConsole() {
     cout << "\033[2J\033[1;1H";
 }
 
+// Displays the current game state to the given output stream
 void drawGameState(Game *game, Display *display, ostream &os, bool isGraphics) {
     os << "Current game state:" << endl;
+    // set current player in display
     Player *currentPlayer = game->getPlayer(game->getMoveNumber() % 2);
     display->setCurrentPlayer(currentPlayer->getPlayerNum());
 
@@ -74,6 +76,7 @@ int main(int argc, char * argv[]) {
     std::string command;
     std::string order;
 
+    // process command line arguments
     int i = 1;
     while (i < argc) {
         std::string arg = argv[i];
