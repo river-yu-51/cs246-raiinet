@@ -156,11 +156,6 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
         if (!tileForSymbol->getIsPort() && !tileForSymbol->getIsWalled()) {
             tileForSymbol->setSymbol('.'); // clear temp marker
         }
-
-        std::cout << "Placed link " << links.back()->getSymbol() << " of type "
-             << (letter == 'D' ? "Data" : "Virus") << " with strength "
-             << strength << " at (" << tileForSymbol->getX() << ", "
-             << tileForSymbol->getY() << ")\n";
     }
 
     return true;
