@@ -158,8 +158,11 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         return false;
                     }
                     AbilityParam param{player, l, nullptr, nullptr};
+                    if (!targetAbility->activate(param)) {
+                        return false;
+                    }
                     targetAbility->setAvailable(false);
-                    return targetAbility->activate(param);
+                    return true;
                 }
                 case AbilityType::Firewall: { // not done
                     int x, y;
@@ -198,8 +201,11 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         return false;
                     }
                     AbilityParam param{player, l, nullptr, nullptr};
+                    if (!targetAbility->activate(param)) {
+                        return false;
+                    }
                     targetAbility->setAvailable(false);
-                    return targetAbility->activate(param);
+                    return true;
                 }
                 case AbilityType::Polarize: { // not done
                     char c;
@@ -217,8 +223,11 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         return false;
                     }
                     AbilityParam param{player, l, nullptr, nullptr};
+                    if (!targetAbility->activate(param)) {
+                        return false;
+                    }
                     targetAbility->setAvailable(false);
-                    return targetAbility->activate(param);
+                    return true;
                 }
                 case AbilityType::Scan: { 
                     char c;
@@ -247,16 +256,16 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
                         return false;
-                    } else if (l->getStrength() == 4) {
-                        std::cout << "Link is already at max strength." << std::endl;
-                        return false;
                     } else if (l->isDownloaded()) {
                         std::cout << "Link is already downloaded." << std::endl;
                         return false;
                     }
                     AbilityParam param{player, l, nullptr, nullptr};
+                    if (!targetAbility->activate(param)) {
+                        return false;
+                    }
                     targetAbility->setAvailable(false);
-                    return targetAbility->activate(param);
+                    return true;
                 }
                 case AbilityType::Wall: {
                     int x, y;

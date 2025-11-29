@@ -2,12 +2,22 @@ module Abilities;
 
 import <vector>;
 import <string>;
+import <iostream>;
 
 import Core;
 
 Polarize::Polarize(Player *player) : Ability(player) {}
 
 bool Polarize::activate(AbilityParam param) {
+    Player *caster = param.player;
+    Link *target = param.primaryLink;
+
+    if (!caster || !target) return false;
+
+    if (target->getPlayer() != caster) {
+        std::cout << "Must use Polarize on your own link\n";
+        return false;
+    }
 
     Link *link = param.primaryLink;
     if (!link) return false;
