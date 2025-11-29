@@ -25,6 +25,8 @@ bool generateAbilitiesForPlayer(Player *player, std::string order) {
     std::vector<Ability*> abilities;
     abilities.reserve(order.size());
 
+    AbilityFactory factory;
+
     for (char c : order) {
         auto it = abilityMap.find(c);
         if (it == abilityMap.end()) {
@@ -39,8 +41,7 @@ bool generateAbilitiesForPlayer(Player *player, std::string order) {
             for (Ability *a : abilities) { delete a; }
             return false;
         }
-
-        AbilityFactory factory;
+        
         Ability *ability = factory.createAbility(player, it->second);
         abilities.push_back(ability);
     }

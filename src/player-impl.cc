@@ -12,31 +12,29 @@ import <algorithm>;
 Player::Player(int playerNum,
                std::vector<Link*> links,
                std::vector<Ability*> abilities,
-               std::map<Ability*, int> usage,
                bool isEliminated, bool isWon,
                int downloadedData,
-               int downloadedViruses)
-    : playerNum{playerNum},
-      links{links},
-      abilities{abilities},
-      usage{usage},
-      isEliminated{isEliminated},
-      isWon{isWon},
-      downloadedData{downloadedData},
-      downloadedViruses{downloadedViruses} {}
+               int downloadedViruses):
+    playerNum{playerNum},
+    links{links},
+    abilities{abilities},
+    isEliminated{isEliminated},
+    isWon{isWon},
+    downloadedData{downloadedData},
+    downloadedViruses{downloadedViruses} {}
 
-void Player::useAbility(Ability *ability) {
-    // prompt player
-    // check if available/valid
-    ability->activate(AbilityParam{ /* STUFF HERE IDK */ });
-    usage[ability]++;
-}
+// void Player::useAbility(Ability *ability) {
+//     // prompt player
+//     // check if available/valid
+//     ability->activate(AbilityParam{ /* STUFF HERE IDK */ });
+//     usage[ability]++;
+// }
 
-void Player::moveLink(Link *link) { 
-    // prompt player
-    // get destination tile
-    // move link to destination tile
-}
+// void Player::moveLink(Link *link) { 
+//     // prompt player
+//     // get destination tile
+//     // move link to destination tile
+// }
 
 void Player::download(Link *link) {
     if (!link) return;
@@ -108,9 +106,9 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
 
     const std::vector<std::vector<char>> symbolSets = {
         {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'},
-        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'},
-        {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
-        {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}
+        // {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
+        // {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
 
     const auto &symbols = symbolSets[playerNum];

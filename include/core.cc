@@ -91,16 +91,16 @@ export class Player {
     int playerNum;
     std::vector<Link*> links;
     std::vector<Ability*> abilities;
-    std::map<Ability*, int> usage;
+    // std::map<Ability*, int> usage;
     bool isEliminated;
     bool isWon;
     int downloadedData;
     int downloadedViruses;
 public:
-    Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities, std::map<Ability*, int> usage, bool isEliminated, bool isWon, int downloadedData, int downloadedViruses);
+    Player(int playerNum, std::vector<Link*> links, std::vector<Ability*> abilities, bool isEliminated, bool isWon, int downloadedData, int downloadedViruses);
 
-    void useAbility(Ability* ability);
-    void moveLink(Link* link);
+    // void useAbility(Ability* ability);
+    // void moveLink(Link* link);
     void download(Link* link);
 
     int getPlayerNum();

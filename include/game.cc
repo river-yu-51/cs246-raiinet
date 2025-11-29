@@ -15,19 +15,15 @@ export class Game {
     int moveNumber;
     bool hasStarted;
     bool isGameOver;
-    // bool p1Ability;
-    // bool p2Ability;
-    // bool p1Links;
-    // bool p2Links;
 public:
-    // bool initL1 = false, initL2 = false, initA1 = false, initA2 = false;
+    bool initL1 = false, initL2 = false, initA1 = false, initA2 = false;
 
     Game(Board *board, std::vector<Player*> players, int moveNumber, bool hasStarted, bool isGameOver);
 
     void startGame(int);
     bool executeCommand(std::string command, Player *player, std::string order = "");
     bool moveLink(Link *link, int x, int y);
-    void useAbility(Ability *ability, const AbilityParam &param);
+    // void useAbility(Ability *ability, const AbilityParam &param);
 
     Board *getBoard();
     Player *getPlayer(int playerNum);

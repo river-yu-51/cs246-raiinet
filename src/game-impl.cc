@@ -8,6 +8,7 @@ import <fstream>;
 
 import Core;
 import Abilities;
+import Display;
 
 Game::Game(Board *board, std::vector<Player*> players, int moveNumber,
            bool hasStarted, bool isGameOver)
@@ -291,6 +292,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
         std::string filename;
         iss >> filename;
         executeSequenceCommand(filename, player);
+        // sequence toggled the turn once at the end of execution, so we need to change it back
         incrementMoveNumber();
         return true;
     } else if (action == "quit") {
@@ -426,9 +428,9 @@ bool Game::moveLink(Link *link, int x, int y) {
 }
 
 
-void Game::useAbility(Ability *ability, const AbilityParam &param) {
-    ability->activate(param);
-}
+// void Game::useAbility(Ability *ability, const AbilityParam &param) {
+//     ability->activate(param);
+// }
 
 bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
     for (Link *link : player->getLinks()) {
@@ -621,12 +623,12 @@ void Game::executeBoardCommand(Player *viewer) {
     bool viewerIsP2 = (viewer == p2);
 
     // player 1 info (reveal if viewer is P1)
-    displayInfo(std::cout, p1, viewerIsP1);
+    Display::displayInfo(std::cout, p1, viewerIsP1);
 
     board->notifyObservers(); // draws board
 
     // player 2 info (reveal if viewer is P2)
-    displayInfo(std::cout, p2, viewerIsP2);
+    Display::displayInfo(std::cout, p2, viewerIsP2);
 }
 
 bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) {
