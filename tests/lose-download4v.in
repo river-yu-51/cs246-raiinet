@@ -1,0 +1,40 @@
+move a down
+move A up
+
+move a down
+move A up
+
+move a down
+move A up
+
+move a down
+move A up
+
+move a down # a beats A
+move B up
+
+move a down
+move B up
+
+move a down
+move B up
+
+move a down
+move B up
+
+move a down # a downloads itself
+move B up
+
+move b down
+move C up
+
+move b down # b beats b
+move C up
+
+move c down
+move C up
+
+move c down
+move C up
+
+move c down # c beats C
