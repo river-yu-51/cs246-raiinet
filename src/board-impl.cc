@@ -16,19 +16,16 @@ void Board::setTile(int x, int y, Tile *tile) {
 }
 
 void Board::moveLink(Link *link, int x, int y) {
+    // detach from current tile
     link->getTile()->setLink(nullptr);
     Tile *dest = getTile(x, y);
+    // attach to destination tile
     dest->setLink(link);
     link->setTile(dest);
-
-    // firewall stuff
-    // if (link->getTile()->getFirewallPlayer() != link->getPlayerNum()) {
-    //     // reveal link, auto-download if virus
-    // }
-
     notifyObservers();
 }
 
+// Board owns its tiles
 Board::~Board() {
     for (auto &row : grid) {
         for (Tile *tile : row) {

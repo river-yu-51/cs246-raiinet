@@ -6,11 +6,14 @@ import <string>;
 
 import Core;
 
+// Factory class to create abilities
 export class AbilityFactory {
 public:
+    // Creates an ability of the specified type for the given player
     Ability *createAbility(Player *player, AbilityType type);
 };
 
+// Download ability - can download an opponent's link
 export class Download : public Ability {
 public:
     Download(Player *player) : Ability(player) {}
@@ -20,6 +23,7 @@ public:
     AbilityType getType() override;
 };
 
+// Firewall ability - can place a firewall on an empty tile to reveal information and download viruses
 export class Firewall : public Ability {
     AbilityType type = AbilityType::Firewall;
 public:
@@ -30,6 +34,7 @@ public:
     AbilityType getType() override;
 };
 
+// Immunity ability - can grant immunity to a link from external effects
 export class Immunity : public Ability {
     AbilityType type = AbilityType::Immunity;
 public:
@@ -40,6 +45,7 @@ public:
     AbilityType getType() override;
 };
 
+// Upgrade ability - can upgrade a link's strength by 1 (unusable on strength 4 links)
 export class Upgrade : public Ability {
     AbilityType type = AbilityType::Upgrade;
 public:
@@ -50,6 +56,7 @@ public:
     AbilityType getType() override;
 };
 
+// LinkBoost ability - can increase a link's movement distance by 1
 export class LinkBoost : public Ability {
     AbilityType type = AbilityType::LinkBoost;
 public:
@@ -60,6 +67,7 @@ public:
     AbilityType getType() override;
 };
 
+// Polarize ability - swaps data/virus type of a link
 export class Polarize : public Ability {
     AbilityType type = AbilityType::Polarize;
 public:
@@ -70,6 +78,7 @@ public:
     AbilityType getType() override;
 };
 
+// Scan ability - reveals information about a link
 export class Scan : public Ability {    
     AbilityType type = AbilityType::Scan;
 public:
@@ -80,6 +89,7 @@ public:
     AbilityType getType() override;
 };
 
+// Wall ability - places a wall on an empty tile that obstructs all movement
 export class Wall : public Ability {
     AbilityType type = AbilityType::Wall;
 public:

@@ -5,6 +5,7 @@ import <vector>;
 
 import Observer;
 
+// Base Subject class for Observer pattern
 export class Subject {
     std::vector<Observer*> observers;
 public:

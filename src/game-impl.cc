@@ -10,10 +10,12 @@ import Core;
 import Abilities;
 import Display;
 
-Game::Game(Board *board, std::vector<Player*> players, int moveNumber,
-           bool hasStarted, bool isGameOver)
-    : board{board}, players{players}, moveNumber{moveNumber},
-      hasStarted{hasStarted}, isGameOver{isGameOver} {}
+Game::Game(
+    Board *board,
+    std::vector<Player*> players,
+    int moveNumber,
+    bool hasStarted,
+    bool isGameOver) : board{board}, players{players}, moveNumber{moveNumber}, hasStarted{hasStarted}, isGameOver{isGameOver} {}
 
 void Game::initializeGame(int playerCount) {
     // for now - only 2 player mode
@@ -22,6 +24,7 @@ void Game::initializeGame(int playerCount) {
         return;
     }
 
+    // set up board
     auto &grid = board->getGrid();
     int rows = grid.size();
     if (rows == 0) return;
@@ -53,31 +56,28 @@ void Game::initializeGame(int playerCount) {
         {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
 
+    // assign symbols to players
     const auto &p1Symbols = symbolSets[players[0]->getPlayerNum() % symbolSets.size()];
     const auto &p2Symbols = symbolSets[players[1]->getPlayerNum() % symbolSets.size()];
 
-    {
-        int mainRow = topRow;
-        int altRow  = topRow + 1;
-        for (int i = 0; i < (int)p1Symbols.size() && i < cols; ++i) {
-            int c = i;
-            int r = board->getTile(mainRow, c)->getIsPort() ? altRow : mainRow;
-            Tile *t = board->getTile(r, c);
-            t->setSymbol(p1Symbols[i]);
-            // DO NOT setLink yet – will be attached when links are created
-        }
+    int mainRow = topRow;
+    int altRow  = topRow + 1;
+    for (int i = 0; i < (int)p1Symbols.size() && i < cols; ++i) {
+        int c = i;
+        int r = board->getTile(mainRow, c)->getIsPort() ? altRow : mainRow;
+        Tile *t = board->getTile(r, c);
+        t->setSymbol(p1Symbols[i]);
+        // DO NOT setLink yet – will be attached when links are created
     }
 
-    {
-        int mainRow = bottomRow;
-        int altRow  = bottomRow - 1;
-        for (int i = 0; i < (int)p2Symbols.size() && i < cols; ++i) {
-            int c = i;
-            int r = board->getTile(mainRow, c)->getIsPort() ? altRow : mainRow;
-            Tile *t = board->getTile(r, c);
-            t->setSymbol(p2Symbols[i]);
-            // DO NOT setLink yet
-        }
+    mainRow = bottomRow;
+    altRow  = bottomRow - 1;
+    for (int i = 0; i < (int)p2Symbols.size() && i < cols; ++i) {
+        int c = i;
+        int r = board->getTile(mainRow, c)->getIsPort() ? altRow : mainRow;
+        Tile *t = board->getTile(r, c);
+        t->setSymbol(p2Symbols[i]);
+        // DO NOT setLink yet - will be attached when links are created
     }
 
     board->notifyObservers();
@@ -86,31 +86,27 @@ void Game::initializeGame(int playerCount) {
 void Game::startGame(int startingPlayer) {
     hasStarted = true;
     moveNumber = 0;
-    // All board geometry should already be set up by initializeGame,
-    // and link->tile attachments should be done when players choose placements
 }
 
+// Executes a command string for the given player
 bool Game::executeCommand(std::string command, Player *player, std::string order) {
-    //if (!hasStarted || isGameOver) return false;
     std::istringstream iss{command};
     std::string action;
     iss >> action;
 
-    // std::cout << "EXECUTING " << command << std::endl;
-
-    if (!iss) {
+    if (!iss) { // empty command
         std::cout << "Please enter a command." << std::endl;
         return false;
     }
-    if (action == "move") {
+    if (action == "move") { // move command
         char A;
         std::string dir;
         iss >> A >> dir;
         return executeMoveCommand(A, dir, player);
-    } else if (action == "abilities") {
+    } else if (action == "abilities") { // display abilities
         executeAbilitiesCommand(player);
         return false;
-    } else if (action == "ability") {
+    } else if (action == "ability") { // use ability
         int abilityIndex;
         iss >> abilityIndex;
         if (abilityIndex < 0 || abilityIndex > static_cast<int>(player->getAbilities().size()) - 1) {
@@ -126,7 +122,6 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Download: {
                     char c;
                     iss >> c;
-                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -145,7 +140,6 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::LinkBoost: {
                     char c;
                     iss >> c;
-                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -158,7 +152,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
                 }
-                case AbilityType::Firewall: { // not done
+                case AbilityType::Firewall: {
                     int x, y;
                     iss >> x >> y;
                     Tile *tile = board->getTile(x, y);
@@ -185,7 +179,6 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Immunity: {
                     char c;
                     iss >> c;
-                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -198,10 +191,9 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                     targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
                 }
-                case AbilityType::Polarize: { // not done
+                case AbilityType::Polarize: {
                     char c;
                     iss >> c;
-                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -220,7 +212,6 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Scan: { 
                     char c;
                     iss >> c;
-                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -239,7 +230,6 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Upgrade: {
                     char c;
                     iss >> c;
-                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -283,71 +273,54 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
             return false;
         }
         return false;
-    } else if (action == "board") {
+    } else if (action == "board") { // display board
         executeBoardCommand(player);
         return false;
-    } else if (action == "sequence") {
-        // std::cout << "sequence";
+    } else if (action == "sequence") { // execute sequence from file
         std::string filename;
         iss >> filename;
         executeSequenceCommand(filename, player);
         // sequence toggled the turn once at the end of execution, so we need to change it back
         incrementMoveNumber();
         return true;
-    } else if (action == "quit") {
+    } else if (action == "quit") { // quit game
         executeQuitCommand();
         return true;
-    } else if (action == "-link1") {
-        // std::string order;
-        // iss >> order;
+    } else if (action == "-link1") { // generate links for player 1
         if (!getPlayer(0)->generateLinks(order, std::cout, board)) {
             std::cout << "hello";
             std::cout << order;
             std::cout << "Invalid link order." << std::endl;
             return false;
         }
-        // p1Links = true;
-        // initL1 = true;
         return true;
-    } else if (action == "-link2") {
-        // std::string order;
-        // iss >> order;
+    } else if (action == "-link2") { // generate links for player 2
         if (!getPlayer(1)->generateLinks(order, std::cout, board)) {
             std::cout << "Invalid link order." << std::endl;
             return false;
         }
-        // p2Links = true;
-        // initL2 = true;
         return true;
-    } else if (action == "-ability1") {
-        // std::string order;
-        // iss >> order;
+    } else if (action == "-ability1") { // generate abilities for player 1
         if (!generateAbilitiesForPlayer(getPlayer(0), order)) {
             std::cout << "Invalid ability string." << std::endl;
             return false;
         }
-        // p1Ability = true;
-        // initA1 = true;
         return true;
-    } else if (action == "-ability2") {
-        // std::string order;
-        // iss >> order;
+    } else if (action == "-ability2") { // generate abilities for player 2
         if (!generateAbilitiesForPlayer(getPlayer(1), order)) {
             std::cout << "Invalid ability string." << std::endl;
             return false;
         }
-        // p2Ability = true;
-        // initA2 = true;
         return true;
-    }
-
-    else {
+    } else { // invalid command
         std::cout << "Invalid command." << std::endl;
     }
     return false;
 }
 
+// Gets the link with the given symbol
 Link* Game::getLink(char c) {
+    // search both players' links
     std::vector<Link*>& p1Links = players[0]->getLinks();
     for (size_t i = 0; i < p1Links.size(); i++) {
         Link* currLink = p1Links[i];
@@ -362,9 +335,10 @@ Link* Game::getLink(char c) {
             return currLink;
         }
     }
-    return nullptr;
+    return nullptr; // not found
 }
 
+// Increments the move number
 bool Game::moveLink(Link *link, int x, int y) {
     auto &grid = board->getGrid();
     int rows = static_cast<int>(grid.size());
@@ -400,13 +374,14 @@ bool Game::moveLink(Link *link, int x, int y) {
         }
     }
 
+    // Check if the target tile has a link belonging to the same player
     if (targetTile->getLink() &&
         targetTile->getLink()->getPlayer() == link->getPlayer()) {
         std::cout << "Invalid move: cannot attack own link." << std::endl;
         return false;
     }
 
-    if (targetTile->getLink()) {
+    if (targetTile->getLink()) { // target tile has a link - must be opponent's
         battle(link, targetTile->getLink());
     } else if (targetTile->getIsPort()) {
         int portSideOwner = (targetTile->getX() == 0 ? 0 : 1);  // top row -> player 0, bottom row -> player 1
@@ -419,18 +394,14 @@ bool Game::moveLink(Link *link, int x, int y) {
             players[portSideOwner]->download(link);
             return true;
         }
-    } else {
+    } else { // empty tile - move link
         board->moveLink(link, x, y);
     }
 
     return true;
 }
 
-
-// void Game::useAbility(Ability *ability, const AbilityParam &param) {
-//     ability->activate(param);
-// }
-
+// Executes a move command for the given player
 bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
     for (Link *link : player->getLinks()) {
         if (link->getSymbol() == A && link->getTile()) {
@@ -458,11 +429,12 @@ bool Game::executeMoveCommand(char A, std::string dir, Player *player) {
     return false;
 }
 
+// Displays the abilities of the given player
 void Game::executeAbilitiesCommand(Player *player) {
     std::cout << "Abilities:" << std::endl;
     for (size_t i = 0; i < player->getAbilities().size(); ++i) {
         if (!player->getAbilities()[i]->isAvailable()) {
-            //std::cout << "not avail";
+            std::cout << i << ". " << player->getAbilities()[i]->getType() << " [used]" << std::endl;
         }
         else {
             std::cout << i << ". " << player->getAbilities()[i]->getType() << std::endl;
@@ -471,148 +443,7 @@ void Game::executeAbilitiesCommand(Player *player) {
         
 }
 
-// bool Game::executeAbilityUseCommand(int abilityIndex, Player *player, std::istream &in) {
-//     if (abilityIndex < 1 || abilityIndex > static_cast<int>(player->getAbilities().size())) {
-//         std::cout << "Invalid ability index." << std::endl;
-//         return false;
-//     }
-//     Ability *ability = player->getAbilities()[abilityIndex - 1];
-
-//     if (ability->getType() == AbilityType::Download) {
-
-//     } else if (ability->getType() == AbilityType::Firewall) {
-//         Tile *targetTile = nullptr;
-//         while (!targetTile) {
-//             std::cout << "Specify tile to place firewall (x y): ";
-//             int x, y;
-//             in >> x >> y;
-//             if (x < 0 || x >= static_cast<int>(board->getGrid().size()) ||
-//                 y < 0 || y >= static_cast<int>(board->getGrid()[0].size())) {
-//                 std::cout << "Invalid tile coordinates." << std::endl;
-//                 continue;
-//             }
-//             targetTile = board->getTile(x, y);
-//         }
-//         AbilityParam param{player, nullptr, nullptr, targetTile};
-//         useAbility(ability, param);
-//         return true;
-
-//     } else if (ability->getType() == AbilityType::LinkBoost) {
-//         Link *targetLink = nullptr;
-//         while (!targetLink) {
-//             std::cout << "Specify link to boost (symbol): ";
-//             char linkSymbol;
-//             in >> linkSymbol;
-//             for (Link *link : player->getLinks()) {
-//                 if (link->getSymbol() == linkSymbol) {
-//                     targetLink = link;
-//                     break;
-//                 }
-//             }
-//             if (!targetLink) {
-//                 std::cout << "Link not found." << std::endl;
-//             }
-//         }
-//         AbilityParam param{player, targetLink, nullptr, nullptr};
-//         useAbility(ability, param);
-//         return true;
-
-//     } else if (ability->getType() == AbilityType::Scan) {
-//         Tile *targetTile = nullptr;
-//         while (!targetTile) {
-//             std::cout << "Specify tile to scan (x y): ";
-//             int x, y;
-//             in >> x >> y;
-//             if (x < 0 || x >= static_cast<int>(board->getGrid().size()) ||
-//                 y < 0 || y >= static_cast<int>(board->getGrid()[0].size())) {
-//                 std::cout << "Invalid tile coordinates." << std::endl;
-//                 continue;
-//             }
-//             targetTile = board->getTile(x, y);
-//         }
-//         AbilityParam param{player, nullptr, nullptr, targetTile};
-//         useAbility(ability, param);
-//         return true;
-
-//     } else if (ability->getType() == AbilityType::Upgrade) {
-//         Link *targetLink = nullptr;
-//         while (!targetLink) {
-//             std::cout << "Specify link to upgrade (symbol): ";
-//             char linkSymbol;
-//             in >> linkSymbol;
-//             for (Link *link : player->getLinks()) {
-//                 if (link->getSymbol() == linkSymbol) {
-//                     targetLink = link;
-//                     break;
-//                 }
-//             }
-//             if (!targetLink) {
-//                 std::cout << "Link not found." << std::endl;
-//             }
-//         }
-//         AbilityParam param{player, targetLink, nullptr, nullptr};
-//         useAbility(ability, param);
-//         return true;
-
-//     } else if (ability->getType() == AbilityType::Polarize) {
-//         Tile *targetTile = nullptr;
-//         while (!targetTile) {
-//             std::cout << "Specify tile to polarize (x y): ";
-//             int x, y;
-//             in >> x >> y;
-//             if (x < 0 || x >= static_cast<int>(board->getGrid().size()) ||
-//                 y < 0 || y >= static_cast<int>(board->getGrid()[0].size())) {
-//                 std::cout << "Invalid tile coordinates." << std::endl;
-//                 continue;
-//             }
-//             targetTile = board->getTile(x, y);
-//         }
-//         AbilityParam param{player, nullptr, nullptr, targetTile};
-//         useAbility(ability, param);
-//         return true;
-
-//     } else if (ability->getType() == AbilityType::Immunity) {
-//         Link *targetLink = nullptr;
-//         while (!targetLink) {
-//             std::cout << "Specify link to grant immunity (symbol): ";
-//             char linkSymbol;
-//             in >> linkSymbol;
-//             for (Link *link : player->getLinks()) {
-//                 if (link->getSymbol() == linkSymbol) {
-//                     targetLink = link;
-//                     break;
-//                 }
-//             }
-//             if (!targetLink) {
-//                 std::cout << "Link not found." << std::endl;
-//             }
-//         }
-//         AbilityParam param{player, targetLink, nullptr, nullptr};
-//         useAbility(ability, param);
-//         return true;
-
-//     } else if (ability->getType() == AbilityType::Wall) {
-//         Tile *targetTile = nullptr;
-//         while (!targetTile) {
-//             std::cout << "Specify tile to place wall (x y): ";
-//             int x, y;
-//             in >> x >> y;
-//             if (x < 0 || x >= static_cast<int>(board->getGrid().size()) ||
-//                 y < 0 || y >= static_cast<int>(board->getGrid()[0].size())) {
-//                 std::cout << "Invalid tile coordinates." << std::endl;
-//                 continue;
-//             }
-//             targetTile = board->getTile(x, y);
-//         }
-//         AbilityParam param{player, nullptr, nullptr, targetTile};
-//         useAbility(ability, param);
-//         return true;
-//     }
-
-//     std::cout << "Ability not found." << std::endl;
-//     return false;
-// }
-
+// Displays the board and player info for the given viewer
 void Game::executeBoardCommand(Player *viewer) {
     // assume players[0] is Player 1, players[1] is Player 2
     Player *p1 = players[0];
@@ -630,10 +461,11 @@ void Game::executeBoardCommand(Player *viewer) {
     Display::displayInfo(std::cout, p2, viewerIsP2);
 }
 
+// Executes a sequence of commands from a file for the given starting player
 bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) {
     std::ifstream file{filename};
 
-    if (!file) {
+    if (!file) { // file could not be opened
         std::cout << "Could not open file: " << filename << std::endl;
         return false;
     }
@@ -644,29 +476,29 @@ bool Game::executeSequenceCommand(std::string filename, Player *startingPlayer) 
     while (std::getline(file, line) && !isGameOver) {
         if (line.empty()) continue;
 
-        std::cout << "Executing command: " << line << std::endl;
+        // execute command
         bool endTurn = executeCommand(line, currentPlayer);
 
         if (isGameOver) { return true; }
 
         executeBoardCommand(currentPlayer);
 
+        // switch player
         if (endTurn) {
             int idx = currentPlayer->getPlayerNum(); // 2 players only
             currentPlayer = players[1 - idx];
             incrementMoveNumber();
         }
 
-        if (currentPlayer->getIsWon() || currentPlayer->getIsEliminated()) {
-            return true;
-        }
+        // check for win/elimination
+        if (currentPlayer->getIsWon() || currentPlayer->getIsEliminated()) { return true; }
     }
 
     return true;
 }
 
 
-
+// Quit game
 void Game::executeQuitCommand() {
     isGameOver = true;
     std::cout << "Game over. Thanks for playing!" << std::endl;
@@ -678,20 +510,22 @@ int Game::getMoveNumber() { return moveNumber; }
 bool Game::getHasStarted() { return hasStarted; }
 bool Game::getIsGameOver() { return isGameOver; }
 
+// Handles a battle between two links
 void Game::battle(Link *attacker, Link *defender) {
-    if (!attacker || !defender) return;
+    if (!attacker || !defender) return; // safety check
 
     Tile *attackerTile = attacker->getTile();
     Tile *defenderTile = defender->getTile();
 
-    if (!attackerTile || !defenderTile) { return; }
+    if (!attackerTile || !defenderTile) { return; } // safety check
 
+    // reveal both links to both players
     attacker->reveal();
     defender->reveal();
 
-    bool attackerWins = (attacker->getStrength() >= defender->getStrength());
+    bool attackerWins = (attacker->getStrength() >= defender->getStrength()); // attacker wins ties
 
-    if (attackerWins) {
+    if (attackerWins) { // move attacker to defender's tile, download defender
         Tile *oldDefenderTile = defenderTile;
         attacker->getPlayer()->download(defender);
 
@@ -701,8 +535,7 @@ void Game::battle(Link *attacker, Link *defender) {
         if (oldDefenderTile) {
             oldDefenderTile->setLink(attacker);
         }
-
-    } else {
+    } else { // download attacker, defender stays in place
         Tile *oldAttackerTile = attackerTile;
         defender->getPlayer()->download(attacker);
 
@@ -714,23 +547,11 @@ void Game::battle(Link *attacker, Link *defender) {
     board->notifyObservers();
 }
 
-// bool Game::getAbility1() { return p1Ability; }
-// bool Game::getAbility2() { return p2Ability; }
-// bool Game::getLinks1() { return p1Links; }
-// bool Game::getLinks2() { return p2Links; }
-// void Game::setAbility1(bool set) { p1Ability = set; }
-// void Game::setAbility2(bool set) { p2Ability = set; }
-// void Game::setLinks1(bool set) { p1Links = set; }
-// void Game::setLinks2(bool set) { p2Links = set; }
-
 void Game::incrementMoveNumber() { moveNumber++; }
-
-// bool Game::gameReady() {
-//     return p1Ability && p2Ability && p1Links && p2Links;
-// }
 
 void Game::gameOver() { isGameOver = true; }
 
+// Game owns its players and board
 Game::~Game() {
     for (Player *player : players) {
         delete player;
