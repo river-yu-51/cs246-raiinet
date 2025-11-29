@@ -126,7 +126,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Download: {
                     char c;
                     iss >> c;
-                    std::cout << c;
+                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -145,7 +145,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::LinkBoost: {
                     char c;
                     iss >> c;
-                    std::cout << c;
+                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -178,7 +178,6 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                         std::cout << "Tile is firewalled." << std::endl;
                         return false;
                     }
-                    std::cout << tile->getFirewallPlayer() << std::endl;
                     AbilityParam param{player, nullptr, nullptr, tile};
                     targetAbility->setAvailable(false);
                     return targetAbility->activate(param);
@@ -186,7 +185,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Immunity: {
                     char c;
                     iss >> c;
-                    std::cout << c;
+                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -202,7 +201,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Polarize: { // not done
                     char c;
                     iss >> c;
-                    std::cout << c;
+                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -221,7 +220,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Scan: { 
                     char c;
                     iss >> c;
-                    std::cout << c;
+                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
@@ -240,7 +239,7 @@ bool Game::executeCommand(std::string command, Player *player, std::string order
                 case AbilityType::Upgrade: {
                     char c;
                     iss >> c;
-                    std::cout << c;
+                    // std::cout << c;
                     Link *l = getLink(c);
                     if (!l) {
                         std::cout << "Invalid link symbol." << std::endl;
