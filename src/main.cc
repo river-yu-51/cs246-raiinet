@@ -21,6 +21,7 @@ void clearConsole() {
 void drawGameState(Game *game, Display *display, ostream &os, bool isGraphics) {
     os << "Current game state:" << endl;
     Player *currentPlayer = game->getPlayer(game->getMoveNumber() % 2);
+    display->setCurrentPlayer(currentPlayer->getPlayerNum());
 
     if (!isGraphics) Display::displayInfo(os, game->getPlayer(0), currentPlayer == game->getPlayer(0));
     game->getBoard()->notifyObservers();
