@@ -20,16 +20,16 @@ void Display::notify() {
     drawBoard();
 }
 
-void displayWall(std::ostream &os, int n) {
+void Display::displayWall(std::ostream &os, int n) {
     for (int i = 0; i < n; ++i) {
         os << "=";
     }
     os << std::endl;
 }
 
-void displayLinkSummary(std::ostream &os,
-                        const std::vector<Link*> &links,
-                        bool reveal) {
+void Display::displayLinkSummary(std::ostream &os,
+                                 const std::vector<Link*> &links,
+                                 bool reveal) {
     const int perRow = 4;
 
     for (std::size_t i = 0; i < links.size(); ++i) {
@@ -37,7 +37,6 @@ void displayLinkSummary(std::ostream &os,
         if (!link) continue;
 
         char sym = link->getSymbol();
-
         os << sym << ": ";
 
         if (reveal || link->isRevealed()) {
@@ -50,20 +49,21 @@ void displayLinkSummary(std::ostream &os,
         bool endOfRow = ((i + 1) % perRow == 0) || (i + 1 == links.size());
         if (endOfRow && i != links.size() - 1) {
             os << '\n';
+        } else if (reveal || link->isRevealed()) {
+            os << " ";
         } else {
-            os << "    ";
+            os << "  ";
         }
     }
 }
 
-void displayInfo(std::ostream &os, Player *player, bool reveal) {
+void Display::displayInfo(std::ostream &os, Player *player, bool reveal) {
     os << "Player " << player->getPlayerNum() + 1 << ":\n";
     os << "Downloaded: " << player->getDataCount() << "D, "
        << player->getVirusCount() << "V\n";
 
     os << "Abilities: " << player->getAbilities().size() << "\n";
 
-    displayLinkSummary(os, player->getLinks(), reveal);
+    Display::displayLinkSummary(os, player->getLinks(), reveal);
     os << std::endl;
 }
-

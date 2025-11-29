@@ -1,12 +1,90 @@
 module Display;
 
+import <vector>;
 import <iostream>;
+import <sstream>;
 
 import Core;
+import xwindow;
 
-GraphicsDisplay::GraphicsDisplay(Board *board, int currentPlayer, bool isAlternating)
-    : Display{board, currentPlayer, isAlternating} {}
+GraphicsDisplay::GraphicsDisplay(Board *board, std::vector<Player*> players, int currentPlayer, bool isAlternating)
+    : Display{board, currentPlayer, isAlternating},
+      win{new Xwindow{400, 600}}, // default size 400x600
+      players{players}
+{
+    // style if needed
+}
 
 void GraphicsDisplay::drawBoard() {
-    // nothing yet
+    auto &grid = board->getGrid();
+    if (grid.empty()) return;
+
+    int rows = static_cast<int>(grid.size());
+    int cols = static_cast<int>(grid[0].size());
+
+    int cellSize = 40;
+    int margin = 10;
+    int lineHeight = 15;
+
+    win->fillRectangle(0, 0, 1000, 1000, Xwindow::White);
+
+    int textX = margin;
+    int yStart = margin;
+
+    win->drawString(textX, yStart, "Current game state:");
+    int y = yStart + lineHeight;
+
+    // get player info
+    std::ostringstream oss1, oss2;
+    bool revealP1 = (currentPlayer == 0);
+    bool revealP2 = (currentPlayer == 1);
+    displayInfo(oss2, players[1], revealP2);    
+    displayInfo(oss1, players[0], revealP1);
+
+    std::istringstream iss1(oss1.str());
+    std::string line;
+    while (std::getline(iss1, line)) {
+        if (!line.empty()) {
+            win->drawString(textX, y, line);
+        }
+        y += lineHeight;
+    }
+
+    // draw board
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            Tile *t = grid[row][col];
+            int x = margin + col * cellSize;
+
+            win->fillRectangle(x, y, cellSize, cellSize, Xwindow::Black); // tile border
+
+            int fillColour = Xwindow::White;
+
+            win->fillRectangle(x + 1, y + 1, cellSize - 2, cellSize - 2, fillColour); // tile fill
+
+            // draw symbol
+            char c;
+            if (Link *link = t->getLink()) {
+                c = link->getSymbol();
+            } else {
+                c = t->getSymbol();
+            }
+
+            std::string s(1, c);
+            win->drawString(x + cellSize / 2 - 4, y + cellSize / 2 + 4, s);
+        }
+        y += cellSize;
+    }
+
+    y += lineHeight;
+
+    std::istringstream iss2(oss2.str());
+    while (std::getline(iss2, line)) {
+        if (!line.empty()) {
+            win->drawString(textX, y, line);
+        }
+        y += lineHeight;
+    }
 }
+
+GraphicsDisplay::~GraphicsDisplay() { delete win; }

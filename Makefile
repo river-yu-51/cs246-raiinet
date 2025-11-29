@@ -1,5 +1,21 @@
-CXX      := g++-14
-CXXFLAGS := -std=c++20 -fmodules-ts -Wall -g
+CXX := g++-14
+UNAME_S := $(shell uname -s)
+
+# X11 include/lib paths
+ifeq ($(UNAME_S),Darwin)
+    X11_LIBX11_PREFIX := $(shell brew --prefix libx11)
+    X11_PROTO_PREFIX  := $(shell brew --prefix xorgproto)
+
+    X11_INCLUDES := -I$(X11_LIBX11_PREFIX)/include -I$(X11_PROTO_PREFIX)/include
+    X11_LIBDIRS  := -L$(X11_LIBX11_PREFIX)/lib
+else
+    X11_INCLUDES := -I/usr/include
+    X11_LIBDIRS  := -L/usr/lib
+endif
+
+CXXFLAGS := -std=c++20 -Wall -g -fmodules-ts $(X11_INCLUDES)
+LDFLAGS  := $(X11_LIBDIRS)
+LDLIBS   := -lX11
 
 TARGET := RAIInet
 
@@ -8,16 +24,18 @@ TARGET := RAIInet
 all: $(TARGET)
 
 $(TARGET):
-	# Precompile standard headers as header units
+	# Precompile standard library headers as header units
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header iostream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header sstream
+	$(CXX) $(CXXFLAGS) -c -x c++-system-header cstdlib
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header fstream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header vector
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header algorithm
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header map
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header string
 
-	# Compile module interfaces in dependency order
+	# Compile module interfaces
+	$(CXX) $(CXXFLAGS) -c ./include/window.cc
 	$(CXX) $(CXXFLAGS) -c ./include/observer.cc
 	$(CXX) $(CXXFLAGS) -c ./include/subject.cc
 	$(CXX) $(CXXFLAGS) -c ./include/core.cc
@@ -26,6 +44,7 @@ $(TARGET):
 	$(CXX) $(CXXFLAGS) -c ./include/game.cc
 
 	# Compile implementation units
+	$(CXX) $(CXXFLAGS) -c ./src/window-impl.cc
 	$(CXX) $(CXXFLAGS) -c ./src/subject-impl.cc
 	$(CXX) $(CXXFLAGS) -c ./src/tile-impl.cc
 	$(CXX) $(CXXFLAGS) -c ./src/link-impl.cc
@@ -37,6 +56,7 @@ $(TARGET):
 	$(CXX) $(CXXFLAGS) -c ./src/ability-factory-impl.cc
 	$(CXX) $(CXXFLAGS) -c ./src/display-impl.cc
 	$(CXX) $(CXXFLAGS) -c ./src/text-display-impl.cc
+	$(CXX) $(CXXFLAGS) -c ./src/graphics-display-impl.cc
 	$(CXX) $(CXXFLAGS) -c ./src/game-impl.cc
 
 	# Ability impls
@@ -54,7 +74,7 @@ $(TARGET):
 	$(CXX) $(CXXFLAGS) -c src/main.cc
 
 	# Link everything
-	$(CXX) $(CXXFLAGS) *.o -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) *.o $(LDLIBS) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET) *.o
