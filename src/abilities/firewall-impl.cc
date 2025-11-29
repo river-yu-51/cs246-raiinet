@@ -10,8 +10,8 @@ Firewall::Firewall(Player *player) : Ability(player) {}
 bool Firewall::activate(AbilityParam param) {
     Tile *tile = param.tile;
     if (!tile) return false;
-
     tile->setFirewallPlayer(param.player->getPlayerNum());
+    // set firewall symbol based on player who casted ability
     tile->setSymbol(param.player->getPlayerNum() == 0 ? 'm' : 'w');
     return true;
 }

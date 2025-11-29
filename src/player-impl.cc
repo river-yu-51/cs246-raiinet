@@ -23,23 +23,10 @@ Player::Player(int playerNum,
     downloadedData{downloadedData},
     downloadedViruses{downloadedViruses} {}
 
-// void Player::useAbility(Ability *ability) {
-//     // prompt player
-//     // check if available/valid
-//     ability->activate(AbilityParam{ /* STUFF HERE IDK */ });
-//     usage[ability]++;
-// }
-
-// void Player::moveLink(Link *link) { 
-//     // prompt player
-//     // get destination tile
-//     // move link to destination tile
-// }
-
 void Player::download(Link *link) {
     if (!link) return;
     if (link->isDownloaded()) { return; }
-
+    // reveal link type and strength to opponent once downloaded
     link->reveal();
 
     // detach from board if still on a tile
@@ -49,6 +36,7 @@ void Player::download(Link *link) {
     }
     link->setTile(nullptr);
 
+    // add to counter based on type of link
     if (link->getType() == "data") {
         downloadedData++;
     } else if (link->getType() == "virus") {
@@ -56,11 +44,7 @@ void Player::download(Link *link) {
     }
 
     link->setDownloaded(true);
-
-
     checkWinLose();
-
-    // delete link;
 }
 
 int Player::getPlayerNum() { return playerNum; }
@@ -85,20 +69,21 @@ bool isValidLinkOrder(const std::string &order) {
 
     std::vector<std::string> playerLinks;
 
+    // every 2 characters = 1 link
     for (int i = 0; i < 16; i += 2) { playerLinks.push_back(order.substr(i, 2)); }
-
     std::sort(playerLinks.begin(), playerLinks.end());
 
+    // check all 8 link types were included in string
     if (playerLinks != std::vector<std::string>{
             "D1", "D2", "D3", "D4",
             "V1", "V2", "V3", "V4"}) {
         return false;
     }
-
     return true;
 }
 
 bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
+    // check if link order is valid
     if (!isValidLinkOrder(order)) { return false; }
 
     const int NUM_LINKS = 8;
@@ -107,26 +92,25 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
     const std::vector<std::vector<char>> symbolSets = {
         {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'},
         {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}
-        // {'s', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
-        // {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
     };
 
     const auto &symbols = symbolSets[playerNum];
 
+    // go through string by every 2 characters
     for (int i = 0; i < 2*NUM_LINKS; i += 2) {
         char letter = order[i];
         int strength = order[i + 1] - '0';
+        // check for invalid numbers/letters
         if ((letter != 'D' && letter != 'V') || strength < 1 || strength > 4) {
             return false;
         }
-
+        
+        // create new link based on letter type
         if (letter == 'D') {
-            // data
             Link *newLink = new Data{symbols[i/2], this, strength, nullptr, 1, false, false, false};
             links.push_back(newLink);
         }
         else if (letter == 'V') {
-            // virus
             Link *newLink = new Virus{symbols[i/2], this, strength, nullptr, 1, false, false, false};
             links.push_back(newLink);
         }
@@ -135,6 +119,7 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
         auto &grid = board->getGrid();
         for (auto &row : grid) {
             for (Tile *t : row) {
+                // get tile the link is on
                 if (t->getSymbol() == symbols[i/2]) {
                     tileForSymbol = t;
                     break;
@@ -149,8 +134,9 @@ bool Player::generateLinks(std::string order, std::ostream &os, Board *board) {
             os << "Internal error: no tile for symbol " << symbols[i/2] << "\n";
             return false;
         }
-
+        // add tile to link
         links.back()->setTile(tileForSymbol);
+        // add link to tile
         tileForSymbol->setLink(links.back());
 
         if (!tileForSymbol->getIsPort() && !tileForSymbol->getIsWalled()) {

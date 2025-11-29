@@ -18,9 +18,11 @@ void TextDisplay::drawBoard() {
 
     for (const auto &row : grid) {
         for (const auto &tile : row) {
+            // if there is a link on the tile, return the link's symbol
             if (Link *link = tile->getLink()) {
                 std::cout << link->getSymbol();
             } else {
+                // otherwise, return the symbol on the tile (wall/firewall/empty tile)
                 std::cout << tile->getSymbol();
             }
         }
